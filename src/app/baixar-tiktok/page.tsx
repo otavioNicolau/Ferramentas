@@ -5,7 +5,7 @@ export default function BaixarTiktokPage() {
   return (
     <ToolLayout
       title="Download de Vídeos do TikTok"
-      description="Baixe vídeos do TikTok sem marca d'água em alta qualidade de forma rápida e fácil."
+                  description="Baixe vídeos do TikTok sem marca d&apos;água em alta qualidade de forma rápida e fácil."
     >
       <div className="space-y-6">
         {/* URL Input */}
@@ -53,7 +53,7 @@ export default function BaixarTiktokPage() {
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <p className="text-yellow-800">
             <strong>🚧 Em desenvolvimento:</strong> A funcionalidade de download será implementada usando 
-            APIs ou bibliotecas específicas para TikTok, removendo automaticamente as marcas d'água.
+            APIs ou bibliotecas específicas para TikTok, removendo automaticamente as marcas d&apos;água.
           </p>
         </div>
       </div>
