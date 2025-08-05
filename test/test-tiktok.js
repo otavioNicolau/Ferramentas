@@ -1,0 +1,1 @@
+const Tiktok = require('@tobyg74/tiktok-api-dl'); const url = 'https://vm.tiktok.com/ZMjnLJLpq/'; Tiktok.Downloader(url, { version: 'v3' }).then((result) => console.log(JSON.stringify(result, null, 2))).catch(err => console.error(err));
