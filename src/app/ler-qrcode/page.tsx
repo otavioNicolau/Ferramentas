@@ -1,8 +1,9 @@
-﻿'use client';
+'use client';
 
 import { useState, useRef, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { QrCode, Upload, Camera, Copy, ExternalLink, Scan, X } from 'lucide-react';
+import { QrCode, Upload, Camera, Copy, ExternalLink, Scan, X, CheckCircle } from 'lucide-react';
+import { Html5QrcodeScanner, Html5Qrcode } from 'html5-qrcode';
 
 interface QRResult {
   text: string;
@@ -18,15 +19,17 @@ export default function LerQRCodePage() {
   const [useCamera, setUseCamera] = useState(false);
   const [copied, setCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
+  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+  const html5QrCodeRef = useRef<Html5Qrcode | null>(null);
 
   useEffect(() => {
     return () => {
-      // Limpar stream da câmera quando o componente desmontar
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop());
+      // Limpar scanner quando o componente desmontar
+      if (scannerRef.current) {
+        scannerRef.current.clear();
+      }
+      if (html5QrCodeRef.current) {
+        html5QrCodeRef.current.stop();
       }
     };
   }, []);
@@ -37,27 +40,37 @@ export default function LerQRCodePage() {
     setResult(null);
 
     try {
-      // Simular leitura de QR code
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      if (!html5QrCodeRef.current) {
+        html5QrCodeRef.current = new Html5Qrcode('qr-reader');
+      }
+
+      const qrCodeMessage = await html5QrCodeRef.current.scanFile(file, true);
       
-      // Simular resultado baseado no nome do arquivo
-      const mockResults = [
-        { text: 'https://www.google.com', format: 'URL' },
-        { text: 'mailto:contato@exemplo.com', format: 'Email' },
-        { text: 'Texto simples do QR Code', format: 'Texto' },
-        { text: 'tel:+5511999999999', format: 'Telefone' },
-        { text: 'wifi:T:WPA;S:MinhaRede;P:minhasenha123;;', format: 'WiFi' },
-      ];
-      
-      const randomResult = mockResults[Math.floor(Math.random() * mockResults.length)];
+      // Determinar o formato do conteúdo
+      let format = 'Texto';
+      if (qrCodeMessage.startsWith('http://') || qrCodeMessage.startsWith('https://')) {
+        format = 'URL';
+      } else if (qrCodeMessage.startsWith('mailto:')) {
+        format = 'Email';
+      } else if (qrCodeMessage.startsWith('tel:')) {
+        format = 'Telefone';
+      } else if (qrCodeMessage.startsWith('WIFI:')) {
+        format = 'WiFi';
+      } else if (qrCodeMessage.startsWith('BEGIN:VCARD')) {
+        format = 'vCard';
+      } else if (qrCodeMessage.startsWith('sms:')) {
+        format = 'SMS';
+      }
       
       setResult({
-        ...randomResult,
+        text: qrCodeMessage,
+        format,
         timestamp: new Date()
       });
 
     } catch (err) {
-      setError('Não foi possível ler o QR Code da imagem. Verifique se a imagem contém um código QR válido.');
+      console.error('Erro ao ler QR Code:', err);
+      setError('Não foi possível ler o QR Code da imagem. Verifique se a imagem contém um código QR válido e legível.');
     } finally {
       setIsScanning(false);
     }
@@ -78,50 +91,77 @@ export default function LerQRCodePage() {
   const startCamera = async () => {
     setError(null);
     setUseCamera(true);
+    setResult(null);
     
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          facingMode: 'environment' // Preferir câmera traseira
-        } 
-      });
-      
-      streamRef.current = stream;
-      
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
+      // Limpar scanner anterior se existir
+      if (scannerRef.current) {
+        await scannerRef.current.clear();
       }
-      
-      // Simular escaneamento contínuo
-      setTimeout(() => {
-        scanFromCamera();
-      }, 3000);
+
+      const config = {
+        fps: 10,
+        qrbox: { width: 250, height: 250 },
+        aspectRatio: 1.0
+      };
+
+      scannerRef.current = new Html5QrcodeScanner(
+        'qr-reader',
+        config,
+        false
+      );
+
+      scannerRef.current.render(
+        (decodedText) => {
+          // Sucesso na leitura
+          let format = 'Texto';
+          if (decodedText.startsWith('http://') || decodedText.startsWith('https://')) {
+            format = 'URL';
+          } else if (decodedText.startsWith('mailto:')) {
+            format = 'Email';
+          } else if (decodedText.startsWith('tel:')) {
+            format = 'Telefone';
+          } else if (decodedText.startsWith('WIFI:')) {
+            format = 'WiFi';
+          } else if (decodedText.startsWith('BEGIN:VCARD')) {
+            format = 'vCard';
+          } else if (decodedText.startsWith('sms:')) {
+            format = 'SMS';
+          }
+
+          setResult({
+            text: decodedText,
+            format,
+            timestamp: new Date()
+          });
+
+          // Parar o scanner após sucesso
+          stopCamera();
+        },
+        (errorMessage) => {
+          // Erro na leitura (pode ser ignorado se for apenas "não encontrado")
+          console.log('QR Code scan error:', errorMessage);
+        }
+      );
       
     } catch (err) {
-      setError('Não foi possível acessar a câmera. Verifique as permissões.');
+      console.error('Erro ao iniciar câmera:', err);
+      setError('Erro ao acessar a câmera. Verifique se você deu permissão para usar a câmera.');
       setUseCamera(false);
     }
   };
 
-  const scanFromCamera = () => {
-    // Simular leitura bem-sucedida
-    const mockResult = {
-      text: 'QR Code lido pela câmera: https://exemplo.com/qr-camera',
-      format: 'URL',
-      timestamp: new Date()
-    };
-    
-    setResult(mockResult);
-    stopCamera();
-  };
-
-  const stopCamera = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
+  const stopCamera = async () => {
+    try {
+      if (scannerRef.current) {
+        await scannerRef.current.clear();
+        scannerRef.current = null;
+      }
+      setUseCamera(false);
+    } catch (err) {
+      console.error('Erro ao parar câmera:', err);
+      setUseCamera(false);
     }
-    setUseCamera(false);
   };
 
   const copyToClipboard = async () => {
@@ -146,6 +186,18 @@ export default function LerQRCodePage() {
     } else if (result.text.startsWith('tel:')) {
       window.location.href = result.text;
     }
+  };
+
+  const formatResultText = (text: string, format: string) => {
+    if (format === 'WiFi' && text.startsWith('WIFI:')) {
+      // Parse WiFi QR code format: WIFI:T:WPA;S:NetworkName;P:Password;;
+      const parts = text.split(';');
+      const ssid = parts.find(p => p.startsWith('S:'))?.substring(2) || 'N/A';
+      const password = parts.find(p => p.startsWith('P:'))?.substring(2) || 'N/A';
+      const security = parts.find(p => p.startsWith('T:'))?.substring(2) || 'N/A';
+      return `Rede: ${ssid}\nSegurança: ${security}\nSenha: ${password}`;
+    }
+    return text;
   };
 
   const reset = () => {
@@ -232,26 +284,7 @@ export default function LerQRCodePage() {
               </button>
             </div>
             
-            <div className="relative">
-              <video
-                ref={videoRef}
-                className="w-full max-w-md mx-auto rounded-lg bg-gray-900"
-                autoPlay
-                playsInline
-                muted
-              />
-              <canvas ref={canvasRef} className="hidden" />
-              
-              {/* Overlay de scanner */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-48 h-48 border-2 border-blue-500 rounded-lg relative">
-                  <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-blue-500"></div>
-                  <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-blue-500"></div>
-                  <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-blue-500"></div>
-                  <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-blue-500"></div>
-                </div>
-              </div>
-            </div>
+            <div id="qr-reader" className="w-full max-w-md mx-auto"></div>
             
             <div className="text-center mt-4 text-gray-600">
               <Scan className="inline-block w-5 h-5 mr-2" />
@@ -259,6 +292,8 @@ export default function LerQRCodePage() {
             </div>
           </div>
         )}
+
+
 
         {/* Estado de Carregamento */}
         {isScanning && (
@@ -290,8 +325,8 @@ export default function LerQRCodePage() {
                   Conteúdo ({result.format})
                 </label>
                 <div className="bg-gray-50 rounded-lg p-4 border">
-                  <p className="text-gray-900 break-all font-mono text-sm">
-                    {result.text}
+                  <p className="text-gray-900 break-all font-mono text-sm whitespace-pre-wrap">
+                    {formatResultText(result.text, result.format)}
                   </p>
                 </div>
               </div>
@@ -303,7 +338,7 @@ export default function LerQRCodePage() {
                     copied ? 'bg-green-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'
                   }`}
                 >
-                  <Copy size={16} />
+                  {copied ? <CheckCircle size={16} /> : <Copy size={16} />}
                   {copied ? 'Copiado!' : 'Copiar Texto'}
                 </button>
 
@@ -319,7 +354,7 @@ export default function LerQRCodePage() {
               </div>
 
               <div className="text-xs text-gray-500">
-                Lido em {result.timestamp.toLocaleString()}
+                Lido em {result.timestamp.toLocaleString('pt-BR')}
               </div>
             </div>
           </div>
@@ -348,12 +383,12 @@ export default function LerQRCodePage() {
         )}
 
         {/* Informações */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h4 className="font-semibold text-yellow-900 mb-2">⚠️ Importante:</h4>
-          <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• Esta é uma simulação de leitor de QR Code para demonstração</li>
-            <li>• Os resultados são gerados aleatoriamente, não leem QR Codes reais</li>
-            <li>• Para uso real, considere bibliotecas como ZXing ou QuaggaJS</li>
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <h4 className="font-semibold text-green-900 mb-2">✅ Funcional:</h4>
+          <ul className="text-sm text-green-800 space-y-1">
+            <li>• Este leitor de QR Code é totalmente funcional</li>
+            <li>• Suporta leitura de arquivos de imagem e câmera em tempo real</li>
+            <li>• Utiliza a biblioteca html5-qrcode para máxima compatibilidade</li>
             <li>• A câmera solicita permissões do navegador</li>
           </ul>
         </div>
