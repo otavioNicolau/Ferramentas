@@ -17,6 +17,7 @@
     "canvas": "^3.1.2",
     "cors": "^2.8.5",
     "docx": "^9.5.1",
+    "epubjs": "^0.3.93",
     "express": "^5.1.0",
     "ffmpeg-static": "^5.2.0",
     "file-saver": "^2.0.5",
@@ -28,6 +29,7 @@
     "jspdf-autotable": "^5.0.2",
     "jszip": "^3.10.1",
     "lucide-react": "^0.536.0",
+    "mammoth": "^1.10.0",
     "next": "15.4.5",
     "pdf-lib": "^1.17.1",
     "pdf2pic": "^3.2.0",
@@ -39,7 +41,8 @@
     "react-webcam": "^7.2.0",
     "tesseract.js": "^6.0.1",
     "tiktok-downloader": "^0.0.4",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
