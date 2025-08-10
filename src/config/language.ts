@@ -156,6 +156,38 @@ export const getTranslations = () => {
         estimatedSpeakingTime: 'Tempo estimado de fala',
         averageWordsPerSentence: 'Média de palavras por frase',
         averageCharsPerWord: 'Média de caracteres por palavra'
+      },
+
+      // QR Code Generator
+      qrGeneratorTitle: 'Gerador de QR Code',
+      qrGeneratorDescription: 'Crie códigos QR personalizados.',
+      qrGenerator: {
+        enterContent: 'Digite o conteúdo para gerar o QR Code',
+        errorGenerating: 'Erro ao gerar QR Code.',
+        settings: 'Configurações',
+        contentType: 'Tipo de conteúdo',
+        contentTypes: {
+          text: 'Texto',
+          url: 'URL',
+          wifi: 'Wi-Fi',
+          vcard: 'vCard',
+          sms: 'SMS'
+        },
+        content: 'Conteúdo',
+        placeholders: {
+          text: 'Digite o texto aqui...',
+          url: 'Digite a URL aqui...',
+          wifi: 'SSID;senha;criptografia',
+          vcard: 'Informações do contato',
+          sms: 'Número;Mensagem'
+        },
+        size: 'Tamanho',
+        color: 'Cor',
+        generate: 'Gerar QR Code',
+        preview: 'Pré-visualização',
+        generated: 'QR Code gerado',
+        download: 'Baixar',
+        previewText: 'O QR Code aparecerá aqui após a geração.'
       }
     },
     'en': {
@@ -287,6 +319,38 @@ export const getTranslations = () => {
         estimatedSpeakingTime: 'Estimated speaking time',
         averageWordsPerSentence: 'Average words per sentence',
         averageCharsPerWord: 'Average characters per word'
+      },
+
+      // QR Code Generator
+      qrGeneratorTitle: 'QR Code Generator',
+      qrGeneratorDescription: 'Create custom QR codes.',
+      qrGenerator: {
+        enterContent: 'Enter content to generate the QR Code',
+        errorGenerating: 'Error generating QR Code.',
+        settings: 'Settings',
+        contentType: 'Content type',
+        contentTypes: {
+          text: 'Text',
+          url: 'URL',
+          wifi: 'Wi-Fi',
+          vcard: 'vCard',
+          sms: 'SMS'
+        },
+        content: 'Content',
+        placeholders: {
+          text: 'Enter text here...',
+          url: 'Enter URL here...',
+          wifi: 'SSID;password;encryption',
+          vcard: 'Contact information',
+          sms: 'Number;Message'
+        },
+        size: 'Size',
+        color: 'Color',
+        generate: 'Generate QR Code',
+        preview: 'Preview',
+        generated: 'QR Code generated',
+        download: 'Download',
+        previewText: 'The QR Code will appear here after generation.'
       }
     }
   };
