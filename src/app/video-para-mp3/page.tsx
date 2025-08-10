@@ -4,8 +4,10 @@ import { useState, useRef, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Music, Download, AlertCircle, CheckCircle, Loader2, X, Settings, FileVideo } from 'lucide-react';
 import { saveAs } from 'file-saver';
+import { getTranslations } from '@/config/language';
 
 export default function VideoParaMp3Page() {
+  const t = getTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -208,8 +210,8 @@ export default function VideoParaMp3Page() {
 
   return (
     <ToolLayout
-      title="Conversor de Vídeo para MP3"
-      description="Converta seus vídeos em arquivos de áudio MP3 com alta qualidade. Suporte para MP4, AVI, MOV e outros formatos."
+      title={t.videoToMp3Title}
+      description={t.videoToMp3Description}
     >
       <div className="space-y-6">
         {/* Upload Area */}

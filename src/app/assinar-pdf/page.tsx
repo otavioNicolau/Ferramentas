@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, PenTool, Type, Image, Download, X, RotateCw, Move, Trash2, Save } from 'lucide-react';
 import { saveAs } from 'file-saver';
+import { getTranslations } from '@/config/language';
 
 interface Signature {
   id: string;
@@ -25,6 +26,7 @@ interface PDFPage {
 }
 
 export default function AssinarPdfPage() {
+  const t = getTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -63,7 +65,7 @@ export default function AssinarPdfPage() {
       setSelectedFile(file);
       await loadPDF(file);
     } else {
-      alert('Por favor, selecione um arquivo PDF válido.');
+      alert(t.pdfSignature?.invalidFile || 'Por favor, selecione um arquivo PDF válido.');
     }
   };
 
@@ -118,7 +120,7 @@ export default function AssinarPdfPage() {
       setCurrentPage(1);
     } catch (error) {
       console.error('Erro ao carregar PDF:', error);
-      alert('Erro ao carregar PDF. Verifique se o arquivo não está corrompido.');
+      alert(t.pdfSignature?.loadError || 'Erro ao carregar PDF. Verifique se o arquivo não está corrompido.');
     } finally {
       setIsLoading(false);
     }
@@ -361,8 +363,8 @@ export default function AssinarPdfPage() {
 
   return (
     <ToolLayout
-      title="Assinar PDF"
-      description="Adicione assinatura digital aos seus documentos PDF de forma segura e profissional."
+      title={t.pdfSignature?.title || "Assinar PDF"}
+      description={t.pdfSignature?.description || "Adicione assinatura digital aos seus documentos PDF de forma segura e profissional."}
     >
       <div className="space-y-6">
         {/* Upload Area */}
@@ -374,14 +376,14 @@ export default function AssinarPdfPage() {
         >
           <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-lg font-bold text-gray-800 mb-2">
-            Selecione ou arraste um arquivo PDF
+            {t.pdfSignature?.selectFile || "Selecione ou arraste um arquivo PDF"}
           </h3>
           <p className="text-gray-600 mb-4">
-            Adicione assinaturas digitais ao seu documento
+            {t.pdfSignature?.addSignatures || "Adicione assinaturas digitais ao seu documento"}
           </p>
           <div className="flex items-center justify-center gap-3">
             <Upload size={20} className="text-blue-600" />
-            <span className="text-blue-600 font-medium">Escolher PDF</span>
+            <span className="text-blue-600 font-medium">{t.pdfSignature?.choosePdf || "Escolher PDF"}</span>
           </div>
           <input
             ref={fileInputRef}
@@ -398,14 +400,14 @@ export default function AssinarPdfPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h4 className="font-semibold text-blue-900">{selectedFile.name}</h4>
-                <p className="text-sm text-blue-700">{pageCount} página{pageCount !== 1 ? 's' : ''}</p>
+                <p className="text-sm text-blue-700">{pageCount} {pageCount !== 1 ? (t.pdfSignature?.pages || 'páginas') : (t.pdfSignature?.page || 'página')}</p>
               </div>
               <button
                 onClick={() => setShowSignatureModal(true)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
               >
                 <PenTool size={16} />
-                Adicionar Assinatura
+                {t.pdfSignature?.addSignature || "Adicionar Assinatura"}
               </button>
             </div>
           </div>
@@ -416,7 +418,7 @@ export default function AssinarPdfPage() {
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-800">
-                Página {currentPage} de {pageCount}
+                {t.pdfSignature?.pageOf || "Página"} {currentPage} {t.pdfSignature?.of || "de"} {pageCount}
               </h3>
               <div className="flex items-center gap-2">
                 <button
@@ -442,20 +444,20 @@ export default function AssinarPdfPage() {
             {isPositioning && (
               <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                 <p className="text-green-800 text-sm">
-                  📍 Clique na posição onde deseja adicionar a assinatura
+                  📍 {t.pdfSignature?.clickPosition || "Clique na posição onde deseja adicionar a assinatura"}
                 </p>
                 <div className="flex gap-2 mt-2">
                   <button
                     onClick={addSignature}
                     className="bg-green-600 text-white px-3 py-1 rounded text-sm"
                   >
-                    Confirmar Posição
+                    {t.pdfSignature?.confirmPosition || "Confirmar Posição"}
                   </button>
                   <button
                     onClick={() => setIsPositioning(false)}
                     className="bg-gray-600 text-white px-3 py-1 rounded text-sm"
                   >
-                    Cancelar
+                    {t.pdfSignature?.cancel || "Cancelar"}
                   </button>
                 </div>
               </div>
@@ -473,7 +475,7 @@ export default function AssinarPdfPage() {
                   className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-8 py-3 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200 flex items-center gap-3 mx-auto shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <Download size={20} />
-                  <span className="font-medium">Salvar PDF Assinado</span>
+                  <span className="font-medium">{t.pdfSignature?.savePdf || "Salvar PDF Assinado"}</span>
                 </button>
               </div>
             )}
@@ -485,7 +487,7 @@ export default function AssinarPdfPage() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold">Criar Assinatura</h3>
+                <h3 className="text-xl font-semibold">{t.pdfSignature?.createSignature || "Criar Assinatura"}</h3>
                 <button
                   onClick={() => setShowSignatureModal(false)}
                   className="text-gray-500 hover:text-gray-700"
@@ -503,7 +505,7 @@ export default function AssinarPdfPage() {
                   }`}
                 >
                   <PenTool className="mx-auto mb-2" size={24} />
-                  <div>Desenhar</div>
+                  <div>{t.pdfSignature?.draw || "Desenhar"}</div>
                 </button>
                 <button
                   onClick={() => setSignatureMode('text')}
@@ -512,7 +514,7 @@ export default function AssinarPdfPage() {
                   }`}
                 >
                   <Type className="mx-auto mb-2" size={24} />
-                  <div>Digitar</div>
+                  <div>{t.pdfSignature?.type || "Digitar"}</div>
                 </button>
                 <button
                   onClick={() => setSignatureMode('image')}
@@ -521,14 +523,14 @@ export default function AssinarPdfPage() {
                   }`}
                 >
                   <Image className="mx-auto mb-2" size={24} />
-                  <div>Upload</div>
+                  <div>{t.pdfSignature?.upload || "Upload"}</div>
                 </button>
               </div>
 
               {/* Interface para desenhar */}
               {signatureMode === 'draw' && (
                 <div className="space-y-4">
-                  <h4 className="font-semibold">Desenhe sua assinatura:</h4>
+                  <h4 className="font-semibold">{t.pdfSignature?.drawSignature || "Desenhe sua assinatura:"}</h4>
                   <canvas
                     ref={drawCanvasRef}
                     width={500}
@@ -544,14 +546,14 @@ export default function AssinarPdfPage() {
                       onClick={clearDrawing}
                       className="bg-red-600 text-white px-4 py-2 rounded"
                     >
-                      Limpar
+                      {t.pdfSignature?.clear || "Limpar"}
                     </button>
                     <button
                       onClick={() => prepareSignature('draw')}
                       disabled={!drawingData}
                       className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
                     >
-                      Usar Assinatura
+                      {t.pdfSignature?.useSignature || "Usar Assinatura"}
                     </button>
                   </div>
                 </div>
@@ -560,12 +562,12 @@ export default function AssinarPdfPage() {
               {/* Interface para texto */}
               {signatureMode === 'text' && (
                 <div className="space-y-4">
-                  <h4 className="font-semibold">Digite sua assinatura:</h4>
+                  <h4 className="font-semibold">{t.pdfSignature?.typeSignature || "Digite sua assinatura:"}</h4>
                   <input
                     type="text"
                     value={textSignature}
                     onChange={(e) => setTextSignature(e.target.value)}
-                    placeholder="Digite seu nome"
+                    placeholder={t.pdfSignature?.typeName || "Digite seu nome"}
                     className="w-full p-3 border border-gray-300 rounded-lg"
                   />
                   <div className="grid grid-cols-3 gap-4">
@@ -602,7 +604,7 @@ export default function AssinarPdfPage() {
                         color: textColor
                       }}
                     >
-                      {textSignature || 'Preview da assinatura'}
+                      {textSignature || (t.pdfSignature?.signaturePreview || 'Preview da assinatura')}
                     </div>
                   </div>
                   <button
@@ -610,7 +612,7 @@ export default function AssinarPdfPage() {
                     disabled={!textSignature}
                     className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
                   >
-                    Usar Assinatura
+                    {t.pdfSignature?.useSignature || "Usar Assinatura"}
                   </button>
                 </div>
               )}
@@ -618,7 +620,7 @@ export default function AssinarPdfPage() {
               {/* Interface para upload */}
               {signatureMode === 'image' && (
                 <div className="space-y-4">
-                  <h4 className="font-semibold">Faça upload de uma imagem:</h4>
+                  <h4 className="font-semibold">{t.pdfSignature?.uploadImage || "Faça upload de uma imagem:"}</h4>
                   <input
                     ref={imageInputRef}
                     type="file"
@@ -645,7 +647,7 @@ export default function AssinarPdfPage() {
                     disabled={!imageSignature}
                     className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
                   >
-                    Usar Assinatura
+                    {t.pdfSignature?.useSignature || "Usar Assinatura"}
                   </button>
                 </div>
               )}
@@ -657,20 +659,20 @@ export default function AssinarPdfPage() {
         {!selectedFile && (
           <div className="text-center py-8 text-gray-600">
             <PenTool className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-            <p className="font-medium text-gray-700">Nenhum PDF selecionado</p>
-            <p className="text-sm mt-1 text-gray-500">Selecione um arquivo PDF para adicionar assinaturas</p>
+            <p className="font-medium text-gray-700">{t.pdfSignature?.noPdfSelected || "Nenhum PDF selecionado"}</p>
+            <p className="text-sm mt-1 text-gray-500">{t.pdfSignature?.selectPdfToSign || "Selecione um arquivo PDF para adicionar assinaturas"}</p>
           </div>
         )}
 
         {/* Informações */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">💡 Dicas de Uso:</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">💡 {t.pdfSignature?.usageTips || "Dicas de Uso:"}:</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Desenhe: Use o mouse ou touch para criar uma assinatura à mão livre</li>
-            <li>• Digite: Crie uma assinatura tipográfica personalizada</li>
-            <li>• Upload: Use uma imagem existente da sua assinatura</li>
-            <li>• Clique na posição desejada para adicionar a assinatura</li>
-            <li>• Você pode adicionar múltiplas assinaturas em diferentes páginas</li>
+            <li>• {t.pdfSignature?.drawTip || "Desenhe: Use o mouse ou touch para criar uma assinatura à mão livre"}</li>
+            <li>• {t.pdfSignature?.typeTip || "Digite: Crie uma assinatura tipográfica personalizada"}</li>
+            <li>• {t.pdfSignature?.uploadTip || "Upload: Use uma imagem existente da sua assinatura"}</li>
+            <li>• {t.pdfSignature?.clickTip || "Clique na posição desejada para adicionar a assinatura"}</li>
+            <li>• {t.pdfSignature?.multipleTip || "Você pode adicionar múltiplas assinaturas em diferentes páginas"}</li>
           </ul>
         </div>
       </div>

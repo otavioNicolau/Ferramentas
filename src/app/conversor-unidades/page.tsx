@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
+import { getTranslations } from '@/config/language';
 
 export default function ConversorUnidadesPage() {
+  const t = getTranslations();
   const [fromValue, setFromValue] = useState('');
   const [toValue, setToValue] = useState('');
   const [fromUnit, setFromUnit] = useState('m');
@@ -35,8 +37,8 @@ export default function ConversorUnidadesPage() {
 
   return (
     <ToolLayout
-      title="Conversor de Unidades"
-      description="Converta medidas de comprimento de forma rápida e precisa."
+      title={t.unitConverterTitle}
+      description={t.unitConverterDescription}
     >
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

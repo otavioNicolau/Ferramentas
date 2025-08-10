@@ -1,8 +1,9 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { DollarSign, ArrowLeftRight, TrendingUp, Clock } from 'lucide-react';
+import { getTranslations } from '@/config/language';
 
 interface Currency {
   code: string;
@@ -19,6 +20,7 @@ interface ExchangeRate {
 }
 
 export default function ConversorMoedaPage() {
+  const t = getTranslations();
   const [amount, setAmount] = useState('100');
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('BRL');
@@ -149,8 +151,8 @@ export default function ConversorMoedaPage() {
 
   return (
     <ToolLayout
-      title="Conversor de Moedas"
-      description="Converta moedas com taxas de câmbio simuladas em tempo real."
+      title={t.currencyConverterTitle}
+      description={t.currencyConverterDescription}
     >
       <div className="space-y-6">
         {/* Conversor Principal */}

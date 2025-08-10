@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
+import { getTranslations } from '@/config/language';
 import { Upload, Plus, Trash2, FileText, Download, ArrowUp, ArrowDown } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
@@ -14,6 +15,7 @@ interface PdfFile {
 }
 
 export default function JuntarPdfsPage() {
+  const t = getTranslations();
   const [selectedFiles, setSelectedFiles] = useState<PdfFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState<number>(0);
@@ -193,8 +195,8 @@ export default function JuntarPdfsPage() {
 
   return (
     <ToolLayout
-      title="Juntar PDFs"
-      description="Una múltiplos arquivos PDF em um só documento. Reorganize as páginas na ordem desejada."
+      title={t.mergePdfsTitle}
+      description={t.mergePdfsDescription}
     >
       <div className="space-y-6">
         {/* Upload Area */}

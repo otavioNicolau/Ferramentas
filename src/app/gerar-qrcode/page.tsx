@@ -4,8 +4,10 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { QrCode, Download } from 'lucide-react';
 import QRCode from 'qrcode';
+import { getTranslations } from '@/config/language';
 
 export default function GerarQrcodePage() {
+  const t = getTranslations();
   const [qrContent, setQrContent] = useState('');
   const [contentType, setContentType] = useState('text');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
@@ -15,7 +17,7 @@ export default function GerarQrcodePage() {
 
   const generateQRCode = async () => {
     if (!qrContent.trim()) {
-      alert('Por favor, insira um conteúdo para gerar o QR Code');
+      alert(t.qrGenerator.enterContent);
       return;
     }
 
@@ -35,7 +37,7 @@ export default function GerarQrcodePage() {
       }
     } catch (err) {
       console.error('Erro ao gerar QR Code:', err);
-      alert('Erro ao gerar QR Code');
+      alert(t.qrGenerator.errorGenerating);
     }
   };
 
@@ -55,41 +57,41 @@ export default function GerarQrcodePage() {
 
   const getPlaceholder = () => {
     switch (contentType) {
-      case 'url': return 'https://exemplo.com';
-      case 'wifi': return 'WIFI:T:WPA;S:NomeDaRede;P:senha123;H:false;;';
-      case 'vcard': return 'BEGIN:VCARD\nVERSION:3.0\nFN:João Silva\nTEL:+55 11 99999-9999\nEMAIL:joao@email.com\nEND:VCARD';
-      case 'sms': return 'sms:+5511999999999?body=Olá, como vai?';
-      default: return 'Digite o texto aqui...';
+      case 'url': return t.qrGenerator.placeholders.url;
+      case 'wifi': return t.qrGenerator.placeholders.wifi;
+      case 'vcard': return t.qrGenerator.placeholders.vcard;
+      case 'sms': return t.qrGenerator.placeholders.sms;
+      default: return t.qrGenerator.placeholders.text;
     }
   };
   return (
     <ToolLayout
-      title="Gerar QR Code"
-      description="Crie códigos QR personalizados para textos, URLs, WiFi e muito mais."
+      title={t.qrGeneratorTitle}
+      description={t.qrGeneratorDescription}
     >
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h3 className="text-lg font-semibold mb-4">Configurações</h3>
+            <h3 className="text-lg font-semibold mb-4">{t.qrGenerator.settings}</h3>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Conteúdo</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.qrGenerator.contentType}</label>
                 <select 
                   className="w-full border border-gray-300 rounded-md px-3 py-2"
                   value={contentType}
                   onChange={(e) => handleContentTypeChange(e.target.value)}
                 >
-                  <option value="text">Texto</option>
-                  <option value="url">URL</option>
-                  <option value="wifi">WiFi</option>
-                  <option value="vcard">vCard</option>
-                  <option value="sms">SMS</option>
+                  <option value="text">{t.qrGenerator.contentTypes.text}</option>
+                  <option value="url">{t.qrGenerator.contentTypes.url}</option>
+                  <option value="wifi">{t.qrGenerator.contentTypes.wifi}</option>
+                  <option value="vcard">{t.qrGenerator.contentTypes.vcard}</option>
+                  <option value="sms">{t.qrGenerator.contentTypes.sms}</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Conteúdo</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.qrGenerator.content}</label>
                 <textarea 
                   placeholder={getPlaceholder()}
                   value={qrContent}
@@ -100,7 +102,7 @@ export default function GerarQrcodePage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Tamanho</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t.qrGenerator.size}</label>
                   <select 
                     className="w-full border border-gray-300 rounded-md px-3 py-2"
                     value={size}
@@ -113,7 +115,7 @@ export default function GerarQrcodePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Cor</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t.qrGenerator.color}</label>
                   <input 
                     type="color" 
                     value={color}
@@ -127,13 +129,13 @@ export default function GerarQrcodePage() {
                 onClick={generateQRCode}
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Gerar QR Code
+                {t.qrGenerator.generate}
               </button>
             </div>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4">Preview</h3>
+            <h3 className="text-lg font-semibold mb-4">{t.qrGenerator.preview}</h3>
             <div className="bg-gray-100 rounded-lg p-8 text-center">
               {qrCodeUrl ? (
                 <div>
@@ -143,7 +145,7 @@ export default function GerarQrcodePage() {
                   />
                   <img 
                     src={qrCodeUrl} 
-                    alt="QR Code gerado" 
+                    alt={t.qrGenerator.generated} 
                     className="mx-auto mb-4 max-w-full h-auto"
                   />
                   <button 
@@ -151,13 +153,13 @@ export default function GerarQrcodePage() {
                     className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 mx-auto"
                   >
                     <Download size={16} />
-                    Baixar QR Code
+                    {t.qrGenerator.download}
                   </button>
                 </div>
               ) : (
                 <div>
                   <QrCode size={150} className="mx-auto text-gray-400 mb-4" />
-                  <p className="text-gray-500">QR Code aparecerá aqui</p>
+                  <p className="text-gray-500">{t.qrGenerator.previewText}</p>
                 </div>
               )}
             </div>

@@ -5,6 +5,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Upload, FileText, Download, Copy, Trash2, Eye, Search, Type } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
+import { getTranslations } from '@/config/language';
 
 // Configurar o worker do PDF.js
 if (typeof window !== 'undefined') {
@@ -29,6 +30,7 @@ interface PdfInfo {
 }
 
 export default function PdfToTextPage() {
+  const t = getTranslations();
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfInfo, setPdfInfo] = useState<PdfInfo | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -229,8 +231,8 @@ export default function PdfToTextPage() {
 
   return (
     <ToolLayout
-      title="PDF para Texto"
-      description="Extraia texto de documentos PDF para formato de texto puro"
+      title={t.pdfToTextTitle}
+      description={t.pdfToTextDescription}
     >
       <div className="space-y-6">
         {/* Upload de Arquivo */}
@@ -358,7 +360,7 @@ export default function PdfToTextPage() {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Digite para buscar no texto extraído..."
+                  placeholder={t.searchPlaceholderText}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>

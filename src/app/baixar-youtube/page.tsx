@@ -3,6 +3,20 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Search, Download, Video, Music, AlertCircle, Loader2, X, Info, ExternalLink, Youtube } from 'lucide-react';
 import { saveAs } from 'file-saver';
+import { getTranslations } from '@/config/language';
+
+// Hook para evitar problemas de hidratação com traduções
+const useClientTranslations = () => {
+  const [translations, setTranslations] = useState<any>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    setTranslations(getTranslations());
+  }, []);
+
+  return { translations, isClient };
+};
 
 // Hook customizado para gerenciar downloads individuais
 const useDownloadManager = () => {
@@ -91,6 +105,7 @@ type VideoInfo = {
 };
 
 export default function BaixarYoutubePage() {
+  const { translations: t, isClient } = useClientTranslations();
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -118,14 +133,14 @@ export default function BaixarYoutubePage() {
   // Função para analisar a URL do vídeo
   const analyzeVideo = async () => {
     if (!url) {
-      setError('Por favor, insira uma URL do YouTube');
+      setError(t.youtubeDownloader?.urlRequired || 'Por favor, insira uma URL do YouTube');
       return;
     }
     
     // Validação básica da URL
     const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|m\.youtube\.com)\/.+/;
     if (!youtubeRegex.test(url.trim())) {
-      setError('Por favor, insira uma URL válida do YouTube');
+      setError(t.youtubeDownloader?.invalidUrl || 'Por favor, insira uma URL válida do YouTube');
       return;
     }
     
@@ -146,7 +161,7 @@ export default function BaixarYoutubePage() {
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.error || data.message || 'Erro ao obter informações do vídeo');
+        throw new Error(data.error || data.message || t.youtubeDownloader?.videoInfoError || 'Erro ao obter informações do vídeo');
       }
       
       // A API já retorna os formatos processados com sizeInMB
@@ -289,6 +304,20 @@ export default function BaixarYoutubePage() {
     };
   }, [downloadManager]);
 
+  // Renderizar loading enquanto as traduções não estão carregadas
+  if (!isClient || !t) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-3xl shadow-lg mb-6 animate-pulse">
+            <Youtube className="w-10 h-10 text-white" />
+          </div>
+          <div className="text-lg text-black/70">Carregando...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -298,11 +327,10 @@ export default function BaixarYoutubePage() {
             <Youtube className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-black mb-4">
-            📺 Baixar Vídeos do YouTube
+            📺 {t.youtubeDownloader?.title || 'Baixar Vídeos do YouTube'}
           </h1>
           <p className="text-lg text-black/70 max-w-2xl mx-auto">
-            Faça o download de vídeos do YouTube em diferentes formatos e qualidades. 
-            Rápido, fácil e sem marcas d'água.
+            {t.youtubeDownloader?.description || 'Faça o download de vídeos do YouTube em diferentes formatos e qualidades. Rápido, fácil e sem marcas d\'água.'}
           </p>
         </div>
 
@@ -311,10 +339,10 @@ export default function BaixarYoutubePage() {
           <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20">
             <div className="mb-4">
               <label className="block text-lg font-bold text-black mb-2">
-                🎬 URL do Vídeo do YouTube
+                🎬 {t.youtubeDownloader?.urlLabel || 'URL do Vídeo do YouTube'}
               </label>
               <p className="text-sm text-black/70 mb-4">
-                Cole aqui o link do vídeo que você deseja baixar
+                {t.youtubeDownloader?.urlDescription || 'Cole aqui o link do vídeo que você deseja baixar'}
               </p>
             </div>
             
@@ -330,7 +358,7 @@ export default function BaixarYoutubePage() {
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="https://www.youtube.com/watch?v=..."
+                    placeholder={t.youtubeDownloader?.urlPlaceholder || "https://www.youtube.com/watch?v=..."}
                     className="block w-full pl-12 pr-4 py-4 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 text-black placeholder-gray-500"
                   />
                 </div>
@@ -339,7 +367,7 @@ export default function BaixarYoutubePage() {
                 <div className="mt-3">
                   <details className="group">
                     <summary className="text-xs text-black/60 cursor-pointer hover:text-black/80 transition-colors">
-                      💡 Ver exemplos de URLs suportadas
+                      💡 {t.youtubeDownloader?.examplesLabel || 'Ver exemplos de URLs suportadas'}
                     </summary>
                     <div className="mt-2 text-xs text-black/70 bg-gray-50 rounded-lg p-3 space-y-1">
                       <div>• https://www.youtube.com/watch?v=dQw4w9WgXcQ</div>
@@ -358,12 +386,12 @@ export default function BaixarYoutubePage() {
                 {isLoading ? (
                   <>
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    <span className="font-semibold">Analisando...</span>
+                    <span className="font-semibold">{t.youtubeDownloader?.analyzing || 'Analisando...'}</span>
                   </>
                 ) : (
                   <>
                     <Search className="h-5 w-5" />
-                    <span className="font-semibold">Analisar Vídeo</span>
+                    <span className="font-semibold">{t.youtubeDownloader?.analyzeButton || 'Analisar Vídeo'}</span>
                   </>
                 )}
               </button>
@@ -400,17 +428,17 @@ export default function BaixarYoutubePage() {
                   <AlertCircle className="text-white w-6 h-6" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-bold text-red-800 mb-2 text-lg">❌ Erro ao analisar vídeo</h4>
+                  <h4 className="font-bold text-red-800 mb-2 text-lg">❌ {t.youtubeDownloader?.errorTitle || 'Erro ao analisar vídeo'}</h4>
                   <p className="text-red-700 mb-4">{error}</p>
                   
                   <div className="bg-white/70 rounded-xl p-4 border border-red-100">
-                    <div className="font-semibold text-red-800 mb-2">💡 Possíveis soluções:</div>
+                    <div className="font-semibold text-red-800 mb-2">💡 {t.youtubeDownloader?.solutionsTitle || 'Possíveis soluções:'}</div>
                     <ul className="text-sm text-red-700 space-y-1">
-                      <li>• Verifique se a URL está correta e completa</li>
-                      <li>• Certifique-se de que o vídeo é público e não privado</li>
-                      <li>• Tente usar uma URL diferente (youtu.be ou youtube.com)</li>
-                      <li>• O vídeo pode ter restrições geográficas ou de idade</li>
-                      <li>• A API do YouTube pode estar temporariamente indisponível</li>
+                      <li>• {t.youtubeDownloader?.solution1 || 'Verifique se a URL está correta e completa'}</li>
+                      <li>• {t.youtubeDownloader?.solution2 || 'Certifique-se de que o vídeo é público e não privado'}</li>
+                      <li>• {t.youtubeDownloader?.solution3 || 'Tente usar uma URL diferente (youtu.be ou youtube.com)'}</li>
+                      <li>• {t.youtubeDownloader?.solution4 || 'O vídeo pode ter restrições geográficas ou de idade'}</li>
+                      <li>• {t.youtubeDownloader?.solution5 || 'A API do YouTube pode estar temporariamente indisponível'}</li>
                     </ul>
                   </div>
                   
@@ -424,7 +452,7 @@ export default function BaixarYoutubePage() {
                     }}
                     className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
                   >
-                    🔄 Tentar Novamente
+                    🔄 {t.youtubeDownloader?.tryAgain || 'Tentar Novamente'}
                   </button>
                 </div>
               </div>
@@ -461,7 +489,7 @@ export default function BaixarYoutubePage() {
                       <button 
                         onClick={clearResults}
                         className="flex-shrink-0 w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105"
-                        title="Limpar resultados"
+                        title={t.youtubeDownloader?.clearResults || "Limpar resultados"}
                       >
                         <X size={18} />
                       </button>
@@ -475,7 +503,7 @@ export default function BaixarYoutubePage() {
                         className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 font-medium transition-colors duration-200"
                       >
                         <ExternalLink size={16} />
-                        🔗 Ver no YouTube
+                        🔗 {t.youtubeDownloader?.viewOnYoutube || 'Ver no YouTube'}
                       </a>
                     </div>
                     
@@ -489,7 +517,7 @@ export default function BaixarYoutubePage() {
                         }`}
                       >
                         <Video size={18} />
-                        📹 Vídeo
+                        📹 {t.youtubeDownloader?.videoType || 'Vídeo'}
                       </button>
                       <button 
                         onClick={() => setDownloadType('audio')}
@@ -500,7 +528,7 @@ export default function BaixarYoutubePage() {
                         }`}
                       >
                         <Music size={18} />
-                        🎵 Áudio
+                        🎵 {t.youtubeDownloader?.audioType || 'Áudio'}
                       </button>
                     </div>
                   </div>
@@ -654,16 +682,16 @@ export default function BaixarYoutubePage() {
                                 title={`Baixar vídeo ${format.qualityLabel} ${format.container.toUpperCase()}`}
                               >
                                 {downloadManager.downloads[`${format.itag}-video`]?.isDownloading ? (
-                                  <>
-                                    <Loader2 size={18} className="animate-spin" />
-                                    {downloadManager.downloads[`${format.itag}-video`]?.progress > 0 ? `${downloadManager.downloads[`${format.itag}-video`]?.progress}%` : 'Baixando...'}
-                                  </>
-                                ) : (
-                                  <>
-                                    <Download size={18} />
-                                    {isDemoMode ? 'Demo' : needsMerge ? 'Baixar + Áudio' : 'Baixar'}
-                                  </>
-                                )}
+                                <>
+                                  <Loader2 size={18} className="animate-spin" />
+                                  {downloadManager.downloads[`${format.itag}-video`]?.progress > 0 ? `${downloadManager.downloads[`${format.itag}-video`]?.progress}%` : (t.youtubeDownloader?.downloading || 'Baixando...')}
+                                </>
+                              ) : (
+                                <>
+                                  <Download size={18} />
+                                  {isDemoMode ? (t.youtubeDownloader?.demo || 'Demo') : (t.youtubeDownloader?.download || 'Baixar')}
+                                </>
+                              )}
                               </button>
                             </div>
                           </div>
@@ -708,12 +736,12 @@ export default function BaixarYoutubePage() {
                               {downloadManager.downloads[`${format.itag}-audio`]?.isDownloading ? (
                                 <>
                                   <Loader2 size={18} className="animate-spin" />
-                                  {downloadManager.downloads[`${format.itag}-audio`]?.progress > 0 ? `${downloadManager.downloads[`${format.itag}-audio`]?.progress}%` : 'Baixando...'}
+                                  {downloadManager.downloads[`${format.itag}-audio`]?.progress > 0 ? `${downloadManager.downloads[`${format.itag}-audio`]?.progress}%` : (t.youtubeDownloader?.downloading || 'Baixando...')}
                                 </>
                               ) : (
                                 <>
                                   <Download size={18} />
-                                  {isDemoMode ? 'Demo' : 'Baixar'}
+                                  {isDemoMode ? (t.youtubeDownloader?.demo || 'Demo') : (t.youtubeDownloader?.download || 'Baixar')}
                                 </>
                               )}
                             </button>
@@ -734,31 +762,31 @@ export default function BaixarYoutubePage() {
                   <Youtube className="w-12 h-12 text-red-500" />
                 </div>
                 <h3 className="text-2xl font-bold text-black mb-3">
-                  🔗 Cole o link de um vídeo do YouTube
+                  🔗 {t.youtubeDownloader?.emptyStateTitle || 'Cole o link de um vídeo do YouTube'}
                 </h3>
                 <p className="text-lg text-black/70 max-w-md mx-auto mb-4">
-                  Analisaremos o vídeo e mostraremos as opções de download em diferentes qualidades
+                  {t.youtubeDownloader?.emptyStateDescription || 'Analisaremos o vídeo e mostraremos as opções de download em diferentes qualidades'}
                 </p>
                 <div className="text-sm text-black/50 italic">
-                  Exemplo: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+                  {t.youtubeDownloader?.exampleUrl || 'Exemplo: https://www.youtube.com/watch?v=dQw4w9WgXcQ'}
                 </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
                 <div className="group bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-white/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
                   <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-200">🎬</div>
-                  <div className="font-bold text-black mb-2">Múltiplas Qualidades</div>
-                  <div className="text-sm text-black/70">HD, Full HD, 4K e mais formatos disponíveis</div>
+                  <div className="font-bold text-black mb-2">{t.youtubeDownloader?.feature1Title || 'Múltiplas Qualidades'}</div>
+                  <div className="text-sm text-black/70">{t.youtubeDownloader?.feature1Desc || 'HD, Full HD, 4K e mais formatos disponíveis'}</div>
                 </div>
                 <div className="group bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-white/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
                   <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-200">🎵</div>
-                  <div className="font-bold text-black mb-2">Áudio MP3</div>
-                  <div className="text-sm text-black/70">Extraia apenas o áudio em alta qualidade</div>
+                  <div className="font-bold text-black mb-2">{t.youtubeDownloader?.feature2Title || 'Áudio MP3'}</div>
+                  <div className="text-sm text-black/70">{t.youtubeDownloader?.feature2Desc || 'Extraia apenas o áudio em alta qualidade'}</div>
                 </div>
                 <div className="group bg-white/60 backdrop-blur-sm rounded-xl p-6 border border-white/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
                   <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-200">⚡</div>
-                  <div className="font-bold text-black mb-2">Rápido e Seguro</div>
-                  <div className="text-sm text-black/70">Download direto sem publicidade</div>
+                  <div className="font-bold text-black mb-2">{t.youtubeDownloader?.feature3Title || 'Rápido e Seguro'}</div>
+                  <div className="text-sm text-black/70">{t.youtubeDownloader?.feature3Desc || 'Download direto sem publicidade'}</div>
                 </div>
               </div>
 
@@ -766,24 +794,24 @@ export default function BaixarYoutubePage() {
               <div className="mt-12 max-w-2xl mx-auto">
                 <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-white/30">
                   <h4 className="font-bold text-black mb-4 flex items-center justify-center gap-2">
-                    📋 Como usar:
+                    📋 {t.youtubeDownloader?.howToUseTitle || 'Como usar:'}
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
-                      <span className="text-black/80">Copie a URL do YouTube</span>
+                      <span className="text-black/80">{t.youtubeDownloader?.step1 || 'Copie a URL do YouTube'}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
-                      <span className="text-black/80">Cole aqui e clique em Analisar</span>
+                      <span className="text-black/80">{t.youtubeDownloader?.step2 || 'Cole aqui e clique em Analisar'}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
-                      <span className="text-black/80">Escolha a qualidade desejada</span>
+                      <span className="text-black/80">{t.youtubeDownloader?.step3 || 'Escolha a qualidade desejada'}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold">4</div>
-                      <span className="text-black/80">Baixe o arquivo automaticamente</span>
+                      <span className="text-black/80">{t.youtubeDownloader?.step4 || 'Baixe o arquivo automaticamente'}</span>
                     </div>
                   </div>
                 </div>
@@ -799,7 +827,7 @@ export default function BaixarYoutubePage() {
               </div>
               <div className="flex-1">
                 <h4 className="font-bold text-blue-900 mb-4 text-xl flex items-center gap-2">
-                  💡 Informações importantes
+                  💡 {t.youtubeDownloader?.importantInfoTitle || 'Informações importantes'}
                 </h4>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -808,9 +836,9 @@ export default function BaixarYoutubePage() {
                       <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
                         <span className="text-orange-600 font-bold">🔧</span>
                       </div>
-                      <span className="font-semibold text-blue-900">Status da API</span>
+                      <span className="font-semibold text-blue-900">{t.youtubeDownloader?.apiStatusTitle || 'Status da API'}</span>
                     </div>
-                    <p className="text-sm text-blue-800">Esta ferramenta requer uma API do YouTube configurada no servidor para funcionar corretamente</p>
+                    <p className="text-sm text-blue-800">{t.youtubeDownloader?.apiStatusDesc || 'Esta ferramenta requer uma API do YouTube configurada no servidor para funcionar corretamente'}</p>
                   </div>
                   
                   <div className="bg-white/60 rounded-xl p-4 border border-white/30">
@@ -818,9 +846,9 @@ export default function BaixarYoutubePage() {
                       <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
                         <span className="text-green-600 font-bold">�</span>
                       </div>
-                      <span className="font-semibold text-blue-900">Privacidade</span>
+                      <span className="font-semibold text-blue-900">{t.youtubeDownloader?.privacyTitle || 'Privacidade'}</span>
                     </div>
-                    <p className="text-sm text-blue-800">Não armazenamos nenhum conteúdo em nossos servidores. Tudo é processado em tempo real</p>
+                    <p className="text-sm text-blue-800">{t.youtubeDownloader?.privacyDesc || 'Não armazenamos nenhum conteúdo em nossos servidores. Tudo é processado em tempo real'}</p>
                   </div>
                   
                   <div className="bg-white/60 rounded-xl p-4 border border-white/30">
@@ -828,9 +856,9 @@ export default function BaixarYoutubePage() {
                       <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
                         <span className="text-red-600 font-bold">⚖️</span>
                       </div>
-                      <span className="font-semibold text-blue-900">Uso Legal</span>
+                      <span className="font-semibold text-blue-900">{t.youtubeDownloader?.legalUseTitle || 'Uso Legal'}</span>
                     </div>
-                    <p className="text-sm text-blue-800">Use apenas para vídeos com permissão de download ou de domínio público, respeitando os termos do YouTube</p>
+                    <p className="text-sm text-blue-800">{t.youtubeDownloader?.legalUseDesc || 'Use apenas para vídeos com permissão de download ou de domínio público, respeitando os termos do YouTube'}</p>
                   </div>
                   
                   <div className="bg-white/60 rounded-xl p-4 border border-white/30">
@@ -838,9 +866,9 @@ export default function BaixarYoutubePage() {
                       <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
                         <span className="text-purple-600 font-bold">🎯</span>
                       </div>
-                      <span className="font-semibold text-blue-900">Qualidade</span>
+                      <span className="font-semibold text-blue-900">{t.youtubeDownloader?.qualityTitle || 'Qualidade'}</span>
                     </div>
-                    <p className="text-sm text-blue-800">A qualidade disponível depende do que o YouTube oferece para cada vídeo específico</p>
+                    <p className="text-sm text-blue-800">{t.youtubeDownloader?.qualityDesc || 'A qualidade disponível depende do que o YouTube oferece para cada vídeo específico'}</p>
                   </div>
                 </div>
 
@@ -848,10 +876,9 @@ export default function BaixarYoutubePage() {
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">⚠️</span>
                     <div>
-                      <div className="font-bold text-yellow-900 mb-1">Aviso Legal</div>
+                      <div className="font-bold text-yellow-900 mb-1">{t.youtubeDownloader?.legalWarningTitle || 'Aviso Legal'}</div>
                       <p className="text-sm text-yellow-800">
-                        Este serviço é apenas para uso pessoal e educacional. 
-                        Respeite sempre os direitos autorais e não utilize o conteúdo para fins comerciais.
+                        {t.youtubeDownloader?.legalWarningDesc || 'Este serviço é apenas para uso pessoal e educacional. Respeite sempre os direitos autorais e não utilize o conteúdo para fins comerciais.'}
                       </p>
                     </div>
                   </div>

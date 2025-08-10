@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { FileEdit, Save, Download, Trash2 } from 'lucide-react';
+import { getTranslations } from '@/config/language';
 
 export default function BlocoNotasPage() {
+  const t = getTranslations();
   const [content, setContent] = useState('');
   const [saved, setSaved] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -52,7 +54,7 @@ export default function BlocoNotasPage() {
   };
 
   const clearNotes = () => {
-    if (confirm('Tem certeza que deseja limpar todas as notas? Esta ação não pode ser desfeita.')) {
+    if (confirm(t.notebook.confirmClear)) {
       setContent('');
       localStorage.removeItem('utilidadeweb-notes');
       localStorage.removeItem('utilidadeweb-notes-time');
@@ -66,16 +68,16 @@ export default function BlocoNotasPage() {
   };
   return (
     <ToolLayout
-      title="Bloco de Notas"
-      description="Editor de texto simples para notas rápidas no navegador. Suas notas são salvas localmente."
+      title={t.notebookTitle}
+      description={t.notebookDescription}
     >
       <div className="space-y-6">
         <div className="flex justify-between items-center flex-wrap gap-4">
           <div>
-            <h3 className="text-lg font-semibold">Suas Notas</h3>
+            <h3 className="text-lg font-semibold">{t.notebook?.yourNotes || 'Suas Notas'}</h3>
             {lastSaved && (
               <p className="text-sm text-gray-500">
-                Última alteração: {formatLastSaved()}
+                {t.notebook?.lastModified || 'Última alteração'}: {formatLastSaved()}
               </p>
             )}
           </div>
@@ -87,61 +89,57 @@ export default function BlocoNotasPage() {
               }`}
             >
               <Save size={16} />
-              {saved ? 'Salvo!' : 'Salvar'}
+              {saved ? t.notebook.saved : t.notebook.save}
             </button>
             <button 
               onClick={downloadAsFile}
               className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
             >
               <Download size={16} />
-              Baixar
+              {t.notebook.download}
             </button>
             <button 
               onClick={clearNotes}
               className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
             >
               <Trash2 size={16} />
-              Limpar
+              {t.notebook.clear}
             </button>
           </div>
         </div>
 
         <div className="relative">
           <textarea
-            placeholder="Digite suas notas aqui... 
-
-📝 Suas notas são salvas automaticamente no navegador
-💾 Use o botão 'Baixar' para salvar como arquivo .txt
-🔄 O conteúdo é recuperado automaticamente quando você voltar"
+            placeholder={t.notebook.placeholder}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             className="w-full h-96 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono"
           />
           
           <div className="absolute bottom-4 right-4 text-xs text-gray-400 bg-white/80 px-2 py-1 rounded">
-            {content.length} caracteres
+            {content.length} {t.notebook.characterCount}
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <h4 className="font-semibold text-green-800 mb-2">💾 Auto-salvamento</h4>
+            <h4 className="font-semibold text-green-800 mb-2">💾 {t.notebook.autoSaveTitle}</h4>
             <p className="text-green-700">
-              Suas notas são salvas automaticamente no armazenamento local do navegador a cada 2 segundos.
+              {t.notebook.autoSaveDescription}
             </p>
           </div>
           
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-semibold text-blue-800 mb-2">🔒 Privacidade</h4>
+            <h4 className="font-semibold text-blue-800 mb-2">🔒 {t.notebook.privacyTitle}</h4>
             <p className="text-blue-700">
-              Todas as notas ficam apenas no seu navegador. Nada é enviado para servidores externos.
+              {t.notebook.privacyDescription}
             </p>
           </div>
           
           <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-            <h4 className="font-semibold text-purple-800 mb-2">📁 Export</h4>
+            <h4 className="font-semibold text-purple-800 mb-2">📁 {t.notebook.exportTitle}</h4>
             <p className="text-purple-700">
-              Use o botão &apos;Baixar&apos; para salvar suas notas como arquivo de texto no seu computador.
+              {t.notebook.exportDescription}
             </p>
           </div>
         </div>

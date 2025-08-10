@@ -3,8 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Timer, Play, Pause, RotateCcw } from 'lucide-react';
+import { getTranslations } from '@/config/language';
 
 export default function CronometroPage() {
+  const t = getTranslations();
   const [time, setTime] = useState(0); // tempo em milissegundos
   const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState<number[]>([]);
@@ -59,8 +61,8 @@ export default function CronometroPage() {
   };
   return (
     <ToolLayout
-      title="Cronômetro Online"
-      description="Cronômetro preciso com controles de start, pause e reset para suas atividades."
+      title={t.stopwatchTitle}
+      description={t.stopwatchDescription}
     >
       <div className="space-y-6">
         <div className="text-center">
@@ -69,7 +71,7 @@ export default function CronometroPage() {
               {formatTime(time)}
             </div>
             <div className="text-gray-400 text-lg mt-2">
-              horas : minutos : segundos . centésimos
+              {t.stopwatchTimeFormat || 'horas : minutos : segundos . centésimos'}
             </div>
           </div>
         </div>
@@ -81,7 +83,7 @@ export default function CronometroPage() {
               className="bg-green-600 text-white px-8 py-4 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 text-lg font-medium"
             >
               <Play size={20} />
-              Iniciar
+              {t.stopwatchStart || 'Iniciar'}
             </button>
           ) : (
             <button 
@@ -89,7 +91,7 @@ export default function CronometroPage() {
               className="bg-yellow-600 text-white px-8 py-4 rounded-lg hover:bg-yellow-700 transition-colors flex items-center gap-2 text-lg font-medium"
             >
               <Pause size={20} />
-              Pausar
+              {t.stopwatchPause || 'Pausar'}
             </button>
           )}
           
@@ -98,7 +100,7 @@ export default function CronometroPage() {
             className="bg-red-600 text-white px-8 py-4 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 text-lg font-medium"
           >
             <RotateCcw size={20} />
-            Reset
+            {t.stopwatchReset || 'Reset'}
           </button>
 
           {time > 0 && (
@@ -107,24 +109,24 @@ export default function CronometroPage() {
               disabled={!isRunning}
               className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              📍 Volta
+              📍 {t.stopwatchLap || 'Volta'}
             </button>
           )}
         </div>
 
         <div className="bg-gray-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">Voltas Registradas</h3>
+          <h3 className="text-lg font-semibold mb-4">{t.stopwatch?.lapsTitle || 'Voltas Registradas'}</h3>
           <div className="space-y-2 max-h-60 overflow-y-auto">
             {laps.length > 0 ? (
               laps.map((lapTime, index) => (
                 <div key={index} className="flex justify-between items-center p-3 bg-white rounded border">
-                  <span className="font-medium">Volta #{laps.length - index}</span>
+                  <span className="font-medium">{t.stopwatchLapNumber || 'Volta #'}{laps.length - index}</span>
                   <span className="font-mono text-lg">{formatTime(lapTime)}</span>
                 </div>
               ))
             ) : (
               <div className="text-center py-4 text-gray-500">
-                Nenhuma volta registrada ainda
+                {t.stopwatch?.noLaps || 'Nenhuma volta registrada ainda'}
               </div>
             )}
           </div>

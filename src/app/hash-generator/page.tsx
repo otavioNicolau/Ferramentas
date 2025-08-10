@@ -4,8 +4,10 @@ import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Copy, Hash } from 'lucide-react';
 import { copyToClipboard } from '@/lib/utils';
+import { getTranslations } from '@/config/language';
 
 export default function HashGeneratorPage() {
+  const t = getTranslations();
   const [text, setText] = useState('');
   const [hashes, setHashes] = useState({
     md5: '',
@@ -97,8 +99,8 @@ export default function HashGeneratorPage() {
 
   return (
     <ToolLayout
-      title="Gerador de Hash"
-      description="Gere hashes MD5, SHA-1, SHA-256 e SHA-512 para seus textos."
+      title={t.hashGeneratorTitle}
+      description={t.hashGeneratorDescription}
     >
       <div className="space-y-6">
         <div className="bg-gray-50 rounded-lg p-6">

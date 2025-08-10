@@ -4,6 +4,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Download, ExternalLink, AlertCircle, Check, Loader2, Play, Heart, MessageCircle, Share2, Eye, Clock, User, Music, Copy, Share } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { saveAs } from 'file-saver';
+import { getTranslations } from '@/config/language';
 
 interface VideoInfo {
   id: string;
@@ -30,6 +31,7 @@ interface DownloadItem {
 }
 
 export default function BaixarTikTok() {
+  const t = getTranslations();
   const [url, setUrl] = useState('');
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,12 +73,12 @@ export default function BaixarTikTok() {
 
   const fetchVideoInfo = async () => {
     if (!url.trim()) {
-      setError('Por favor, insira uma URL do TikTok');
+      setError(t.tiktokDownloader?.enterUrl || 'Por favor, insira uma URL do TikTok');
       return;
     }
 
     if (!validateTikTokUrl(url.trim())) {
-      setError('Por favor, insira uma URL válida do TikTok');
+      setError(t.tiktokDownloader?.invalidUrl || 'Por favor, insira uma URL válida do TikTok');
       return;
     }
 
@@ -95,14 +97,14 @@ export default function BaixarTikTok() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Erro ao obter informações do vídeo');
+        throw new Error(errorData.error || t.tiktokDownloader?.videoInfoError || 'Erro ao obter informações do vídeo');
       }
 
       const data = await response.json();
       setVideoInfo(data);
     } catch (error) {
       console.error('Erro:', error);
-      setError(error instanceof Error ? error.message : 'Erro desconhecido');
+      setError(error instanceof Error ? error.message : t.tiktokDownloader?.unknownError || 'Erro desconhecido');
     } finally {
       setIsLoading(false);
     }
@@ -164,7 +166,7 @@ export default function BaixarTikTok() {
       
       if (!response.ok) {
         const errorData = await response.json();
-        let errorMessage = errorData.message || `Erro ao baixar ${type === 'video' ? 'vídeo' : 'áudio'}`;
+        let errorMessage = errorData.message || `${t.tiktokDownloader?.downloadError || 'Erro ao baixar'} ${type === 'video' ? (t.tiktokDownloader?.video || 'vídeo') : (t.tiktokDownloader?.audio || 'áudio')}`;
         
         throw new Error(errorMessage);
       }
@@ -210,7 +212,7 @@ export default function BaixarTikTok() {
 
     } catch (error) {
       console.error('Erro no download:', error);
-      setError(error instanceof Error ? error.message : 'Erro no download');
+      setError(error instanceof Error ? error.message : t.tiktokDownloader?.downloadFailed || 'Erro no download');
     } finally {
       setIsDownloading(false);
       setDownloadProgress(0);
@@ -230,8 +232,8 @@ export default function BaixarTikTok() {
 
   return (
     <ToolLayout
-      title="Baixar Vídeos do TikTok"
-      description="Baixe vídeos do TikTok em alta qualidade ou extraia apenas o áudio em MP3"
+      title={t.tiktokDownloader?.title || "Baixar Vídeos do TikTok"}
+      description={t.tiktokDownloader?.description || "Baixe vídeos do TikTok em alta qualidade ou extraia apenas o áudio em MP3"}
     >
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Seção de Entrada */}
@@ -239,7 +241,7 @@ export default function BaixarTikTok() {
           <div className="space-y-4">
             <div>
               <label htmlFor="tiktok-url" className="block text-sm font-semibold text-gray-900 mb-3">
-                🎵 URL do TikTok
+                🎵 {t.tiktokDownloader?.urlLabel || "URL do TikTok"}
               </label>
               <div className="flex gap-3">
                 <input
@@ -249,7 +251,7 @@ export default function BaixarTikTok() {
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Cole aqui a URL do vídeo do TikTok..."
+                  placeholder={t.tiktokDownloader?.urlPlaceholder || "Cole aqui a URL do vídeo do TikTok..."}
                   className="flex-1 px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 transition-all duration-200 placeholder-gray-500"
                   disabled={isLoading}
                 />
@@ -261,12 +263,12 @@ export default function BaixarTikTok() {
                   {isLoading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Analisando...
+                      {t.tiktokDownloader?.analyzing || "Analisando..."}
                     </>
                   ) : (
                     <>
                       <ExternalLink className="w-4 h-4" />
-                      Analisar
+                      {t.tiktokDownloader?.analyze || "Analisar"}
                     </>
                   )}
                 </button>
@@ -343,7 +345,7 @@ export default function BaixarTikTok() {
                   </div>
 
                   <div className="text-xs text-gray-700 italic bg-yellow-100 p-2 rounded-lg border-l-2 border-yellow-400">
-                    ℹ️ As estatísticas são estimadas e podem não refletir os valores reais
+                    ℹ️ {t.tiktokDownloader?.statsDisclaimer || "As estatísticas são estimadas e podem não refletir os valores reais"}
                   </div>
 
                   {/* Botões de Download */}
@@ -357,16 +359,16 @@ export default function BaixarTikTok() {
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
                           <div className="text-left">
-                            <div>Baixando...</div>
-                            <div className="text-xs opacity-80">{downloadProgress}% concluído</div>
+                            <div>{t.tiktokDownloader?.downloading || "Baixando..."}</div>
+                            <div className="text-xs opacity-80">{downloadProgress}% {t.tiktokDownloader?.completed || "concluído"}</div>
                           </div>
                         </>
                       ) : (
                         <>
                           <Download className="w-5 h-5" />
                           <div className="text-left">
-                            <div>Baixar Vídeo</div>
-                            <div className="text-xs opacity-80">Formato MP4</div>
+                            <div>{t.tiktokDownloader?.downloadVideo || "Baixar Vídeo"}</div>
+                            <div className="text-xs opacity-80">{t.tiktokDownloader?.mp4Format || "Formato MP4"}</div>
                           </div>
                         </>
                       )}
@@ -380,16 +382,16 @@ export default function BaixarTikTok() {
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
                           <div className="text-left">
-                            <div>Convertendo...</div>
-                            <div className="text-xs opacity-80">{downloadProgress}% concluído</div>
+                            <div>{t.tiktokDownloader?.converting || "Convertendo..."}</div>
+                            <div className="text-xs opacity-80">{downloadProgress}% {t.tiktokDownloader?.completed || "concluído"}</div>
                           </div>
                         </>
                       ) : (
                         <>
                           <Music className="w-5 h-5" />
                           <div className="text-left">
-                            <div>Baixar Áudio</div>
-                            <div className="text-xs opacity-80">Formato MP3</div>
+                            <div>{t.tiktokDownloader?.downloadAudio || "Baixar Áudio"}</div>
+                            <div className="text-xs opacity-80">{t.tiktokDownloader?.mp3Format || "Formato MP3"}</div>
                           </div>
                         </>
                       )}
@@ -416,13 +418,13 @@ export default function BaixarTikTok() {
           <div className="bg-gray-100 border border-gray-300 rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                📚 Histórico de Downloads
+                📚 {t.tiktokDownloader?.downloadHistory || "Histórico de Downloads"}
               </h3>
               <button
                 onClick={clearHistory}
                 className="text-sm text-red-700 hover:text-red-900 font-medium hover:underline transition-colors"
               >
-                🗑️ Limpar Histórico
+                🗑️ {t.tiktokDownloader?.clearHistory || "Limpar Histórico"}
               </button>
             </div>
             <div className="space-y-3">
@@ -447,14 +449,14 @@ export default function BaixarTikTok() {
                         ? 'bg-red-200 text-red-900'
                         : 'bg-green-200 text-green-900'
                     }`}>
-                      {item.type === 'video' ? '🎥 Vídeo' : '🎵 Áudio'}
+                      {item.type === 'video' ? `🎥 ${t.tiktokDownloader?.video || 'Vídeo'}` : `🎵 ${t.tiktokDownloader?.audio || 'Áudio'}`}
                     </span>
                   </div>
                 </div>
               ))}
               {downloadHistory.length > 3 && (
                 <p className="text-sm text-gray-700 text-center py-2 italic">
-                  ... e mais {downloadHistory.length - 3} downloads
+                  {t.tiktokDownloader?.moreDownloads || "... e mais"} {downloadHistory.length - 3} downloads
                 </p>
               )}
             </div>
@@ -464,33 +466,31 @@ export default function BaixarTikTok() {
         {/* Informações de Uso */}
         <div className="bg-gradient-to-br from-gray-200 to-gray-300 border border-gray-400 rounded-xl p-6 shadow-lg">
           <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            📖 Como usar:
+            📖 {t.tiktokDownloader?.howToUse || "Como usar:"}:
           </h3>
           <ol className="list-decimal list-inside space-y-3 text-gray-800">
             <li className="flex items-start gap-2">
               <span className="font-semibold">1.</span>
-              <span>🔗 Copie a URL do vídeo do TikTok que deseja baixar</span>
+              <span>🔗 {t.tiktokDownloader?.step1 || "Copie a URL do vídeo do TikTok que deseja baixar"}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="font-semibold">2.</span>
-              <span>📋 Cole a URL no campo acima e clique em "Analisar"</span>
+              <span>📋 {t.tiktokDownloader?.step2 || 'Cole a URL no campo acima e clique em "Analisar"'}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="font-semibold">3.</span>
-              <span>🎯 Escolha entre baixar o vídeo completo (MP4) ou apenas o áudio (MP3)</span>
+              <span>🎯 {t.tiktokDownloader?.step3 || "Escolha entre baixar o vídeo completo (MP4) ou apenas o áudio (MP3)"}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="font-semibold">4.</span>
-              <span>⬇️ O download será iniciado automaticamente</span>
+              <span>⬇️ {t.tiktokDownloader?.step4 || "O download será iniciado automaticamente"}</span>
             </li>
           </ol>
           <div className="mt-6 p-4 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 rounded-xl">
             <p className="text-sm text-gray-900 flex items-start gap-2">
               <span className="text-lg">⚠️</span>
               <span>
-                <strong>Nota Importante:</strong> Este serviço é apenas para uso pessoal e educacional. 
-                Respeite sempre os direitos autorais e os termos de uso do TikTok. 
-                Não utilize este conteúdo para fins comerciais.
+                <strong>{t.tiktokDownloader?.importantNote || "Nota Importante:"}:</strong> {t.tiktokDownloader?.disclaimer || "Este serviço é apenas para uso pessoal e educacional. Respeite sempre os direitos autorais e os termos de uso do TikTok. Não utilize este conteúdo para fins comerciais."}
               </span>
             </p>
           </div>

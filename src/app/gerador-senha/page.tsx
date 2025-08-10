@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { RefreshCw, Copy, Check } from 'lucide-react';
+import { Copy, RefreshCw, Shield, Eye, EyeOff } from 'lucide-react';
 import { copyToClipboard } from '@/lib/utils';
+import { getTranslations } from '@/config/language';
 
 interface PasswordConfig {
   length: number;
@@ -15,6 +16,7 @@ interface PasswordConfig {
 }
 
 export default function GeradorSenhaPage() {
+  const t = getTranslations();
   const [password, setPassword] = useState('Gx7$kP9#mL2qR8@nF4');
   const [copied, setCopied] = useState(false);
   const [config, setConfig] = useState<PasswordConfig>({
@@ -39,7 +41,7 @@ export default function GeradorSenhaPage() {
     }
     
     if (!charset) {
-      alert('Selecione pelo menos um tipo de caractere!');
+      alert(t.passwordGenerator.selectAtLeastOne);
       return;
     }
     
@@ -64,7 +66,7 @@ export default function GeradorSenhaPage() {
         passwordInput.select();
         passwordInput.setSelectionRange(0, 99999); // Para mobile
       }
-      alert('Senha selecionada! Use Ctrl+C para copiar.');
+      alert(t.passwordGenerator.passwordSelected);
     }
   };
 
@@ -79,10 +81,10 @@ export default function GeradorSenhaPage() {
     if (/[0-9]/.test(password)) score += 15;
     if (/[^A-Za-z0-9]/.test(password)) score += 15;
     
-    if (score < 30) feedback = 'Fraca 😰';
-    else if (score < 60) feedback = 'Média 😐';
-    else if (score < 80) feedback = 'Forte 😊';
-    else feedback = 'Muito Forte 💪';
+    if (score < 30) feedback = t.passwordGenerator.strengthWeak;
+    else if (score < 60) feedback = t.passwordGenerator.strengthMedium;
+    else if (score < 80) feedback = t.passwordGenerator.strengthStrong;
+    else feedback = t.passwordGenerator.strengthVeryStrong;
     
     return { score, feedback };
   };
@@ -90,12 +92,12 @@ export default function GeradorSenhaPage() {
   const strength = getPasswordStrength();
   return (
     <ToolLayout
-      title="Gerador de Senhas"
-      description="Gere senhas seguras e personalizáveis para proteger suas contas online."
+      title={t.passwordGeneratorTitle}
+      description={t.passwordGeneratorDescription}
     >
       <div className="space-y-6">
         <div className="bg-gray-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">Senha Gerada</h3>
+          <h3 className="text-lg font-semibold mb-4">{t.passwordGenerator.generatedPassword}</h3>
           <div className="flex gap-2">
             <input 
               type="text" 
@@ -108,12 +110,14 @@ export default function GeradorSenhaPage() {
               className={`px-4 py-3 rounded-md transition-colors ${
                 copied ? 'bg-green-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-700'
               }`}
+              title={copied ? t.passwordGenerator.copied : t.passwordGenerator.copy}
             >
               {copied ? <Check size={20} /> : <Copy size={20} />}
             </button>
             <button 
               onClick={generatePassword}
               className="bg-green-600 text-white px-4 py-3 rounded-md hover:bg-green-700 transition-colors"
+              title={t.passwordGenerator.generate}
             >
               <RefreshCw size={20} />
             </button>
@@ -121,12 +125,12 @@ export default function GeradorSenhaPage() {
         </div>
 
         <div className="bg-gray-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">Configurações</h3>
+          <h3 className="text-lg font-semibold mb-4">{t.passwordGenerator.settings}</h3>
           
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Comprimento: <span className="font-bold">{config.length}</span>
+                {t.passwordGenerator.length}: <span className="font-bold">{config.length}</span>
               </label>
               <input 
                 type="range" 
@@ -150,7 +154,7 @@ export default function GeradorSenhaPage() {
                   onChange={(e) => setConfig({...config, includeUppercase: e.target.checked})}
                   className="mr-3" 
                 />
-                <span>Letras maiúsculas (A-Z)</span>
+                <span>{t.passwordGenerator.includeUppercase}</span>
               </label>
               <label className="flex items-center">
                 <input 
@@ -159,7 +163,7 @@ export default function GeradorSenhaPage() {
                   onChange={(e) => setConfig({...config, includeLowercase: e.target.checked})}
                   className="mr-3" 
                 />
-                <span>Letras minúsculas (a-z)</span>
+                <span>{t.passwordGenerator.includeLowercase}</span>
               </label>
               <label className="flex items-center">
                 <input 
@@ -168,7 +172,7 @@ export default function GeradorSenhaPage() {
                   onChange={(e) => setConfig({...config, includeNumbers: e.target.checked})}
                   className="mr-3" 
                 />
-                <span>Números (0-9)</span>
+                <span>{t.passwordGenerator.includeNumbers}</span>
               </label>
               <label className="flex items-center">
                 <input 
@@ -177,7 +181,7 @@ export default function GeradorSenhaPage() {
                   onChange={(e) => setConfig({...config, includeSymbols: e.target.checked})}
                   className="mr-3" 
                 />
-                <span>Símbolos (!@#$%)</span>
+                <span>{t.passwordGenerator.includeSymbols}</span>
               </label>
               <label className="flex items-center">
                 <input 
@@ -186,7 +190,7 @@ export default function GeradorSenhaPage() {
                   onChange={(e) => setConfig({...config, excludeAmbiguous: e.target.checked})}
                   className="mr-3" 
                 />
-                <span>Excluir caracteres ambíguos (0, O, l, I)</span>
+                <span>{t.passwordGenerator.excludeAmbiguous}</span>
               </label>
             </div>
           </div>
@@ -202,7 +206,7 @@ export default function GeradorSenhaPage() {
             strength.score >= 60 ? 'text-yellow-800' :
             'text-red-800'
           }`}>
-            Força da Senha: {strength.feedback}
+            {t.passwordGenerator.passwordStrength}: {strength.feedback}
           </h4>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 

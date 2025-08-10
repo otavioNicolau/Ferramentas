@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { FileText, Type, Hash, Minus } from 'lucide-react';
+import { getTranslations } from '@/config/language';
 
 interface TextStats {
   characters: number;
@@ -14,6 +15,7 @@ interface TextStats {
 }
 
 export default function ContadorCaracteresPage() {
+  const t = getTranslations();
   const [text, setText] = useState('');
   const [stats, setStats] = useState<TextStats>({
     characters: 0,
@@ -97,26 +99,26 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 
   return (
     <ToolLayout
-      title="Contador de Caracteres"
-      description="Conte caracteres, palavras, frases e outras estatísticas do seu texto."
+      title={t.characterCounterTitle}
+      description={t.characterCounterDescription}
     >
       <div className="space-y-6">
         {/* Área de Texto */}
         <div className="bg-gray-50 rounded-lg p-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold">Digite ou Cole seu Texto</h3>
+            <h3 className="text-lg font-semibold">{t.characterCounter.textAreaTitle}</h3>
             <div className="flex gap-2">
               <button
                 onClick={insertSampleText}
                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-sm"
               >
-                Texto de Exemplo
+                {t.characterCounter.sampleText}
               </button>
               <button
                 onClick={clearText}
                 className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm"
               >
-                Limpar
+                {t.characterCounter.clear}
               </button>
             </div>
           </div>
@@ -124,7 +126,7 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Digite ou cole seu texto aqui para ver as estatísticas em tempo real..."
+            placeholder={t.characterCounter.enterText}
             className="w-full h-64 border border-gray-300 rounded-md p-4 resize-y focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
@@ -133,42 +135,42 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <StatCard
             icon={Type}
-            label="Caracteres"
+            label={t.characterCounter.characters}
             value={stats.characters}
             color="bg-blue-600"
           />
           
           <StatCard
             icon={Minus}
-            label="Caracteres (sem espaços)"
+            label={t.characterCounter.charactersNoSpaces}
             value={stats.charactersNoSpaces}
             color="bg-green-600"
           />
           
           <StatCard
             icon={Hash}
-            label="Palavras"
+            label={t.characterCounter.words}
             value={stats.words}
             color="bg-purple-600"
           />
           
           <StatCard
             icon={FileText}
-            label="Frases"
+            label={t.characterCounter.sentences}
             value={stats.sentences}
             color="bg-orange-600"
           />
           
           <StatCard
             icon={FileText}
-            label="Parágrafos"
+            label={t.characterCounter.paragraphs}
             value={stats.paragraphs}
             color="bg-red-600"
           />
           
           <StatCard
             icon={Minus}
-            label="Linhas"
+            label={t.characterCounter.lines}
             value={stats.lines}
             color="bg-gray-600"
           />
@@ -177,20 +179,20 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
         {/* Informações Adicionais */}
         {text && (
           <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">Informações Adicionais</h3>
+            <h3 className="text-lg font-semibold mb-4">{t.characterCounter.additionalInfo}</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <strong>Tempo de leitura estimado:</strong> {Math.max(1, Math.ceil(stats.words / 200))} minuto(s)
+                <strong>{t.characterCounter.estimatedReadingTime}:</strong> {Math.max(1, Math.ceil(stats.words / 200))} {t.characterCounter.minutes}
               </div>
               <div>
-                <strong>Tempo de fala estimado:</strong> {Math.max(1, Math.ceil(stats.words / 150))} minuto(s)
+                <strong>{t.characterCounter.estimatedSpeakingTime}:</strong> {Math.max(1, Math.ceil(stats.words / 150))} {t.characterCounter.minutes}
               </div>
               <div>
-                <strong>Média de palavras por frase:</strong> {stats.sentences > 0 ? (stats.words / stats.sentences).toFixed(1) : 0}
+                <strong>{t.characterCounter.averageWordsPerSentence}:</strong> {stats.sentences > 0 ? (stats.words / stats.sentences).toFixed(1) : 0}
               </div>
               <div>
-                <strong>Média de caracteres por palavra:</strong> {stats.words > 0 ? (stats.charactersNoSpaces / stats.words).toFixed(1) : 0}
+                <strong>{t.characterCounter.averageCharsPerWord}:</strong> {stats.words > 0 ? (stats.charactersNoSpaces / stats.words).toFixed(1) : 0}
               </div>
             </div>
           </div>

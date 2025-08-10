@@ -6,6 +6,7 @@ import { Upload, Download, FileText, CheckCircle, AlertTriangle, Presentation, R
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import JSZip from 'jszip';
 import { parseString } from 'xml2js';
+import { getTranslations } from '@/config/language';
 
 interface ConversionSettings {
   quality: 'low' | 'medium' | 'high';
@@ -37,6 +38,7 @@ interface PresentationMetadata {
 }
 
 export default function PptToPdfPage() {
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -510,8 +512,8 @@ export default function PptToPdfPage() {
 
   return (
     <ToolLayout
-      title="PPT para PDF"
-      description="Converta apresentações PowerPoint para formato PDF"
+      title={t.pptToPdf?.title || "PPT para PDF"}
+      description={t.pptToPdf?.description || "Converta apresentações PowerPoint para formato PDF"}
     >
       <div className="space-y-6">
         {/* Upload Area */}
@@ -528,10 +530,10 @@ export default function PptToPdfPage() {
         >
           <Presentation className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Selecione a apresentação PowerPoint
+            {t.pptToPdf?.selectPresentation || "Selecione a apresentação PowerPoint"}
           </h3>
           <p className="text-gray-600 mb-4">
-            Arraste e solte seu arquivo PPT/PPTX aqui ou clique para selecionar
+            {t.pptToPdf?.dragDropText || "Arraste e solte seu arquivo PPT/PPTX aqui ou clique para selecionar"}
           </p>
           <input
             ref={fileInputRef}
@@ -545,7 +547,7 @@ export default function PptToPdfPage() {
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Upload className="inline-block w-5 h-5 mr-2" />
-            Selecionar Arquivo PowerPoint
+            {t.pptToPdf?.selectFile || "Selecionar Arquivo PowerPoint"}
           </button>
           
           {file && (
@@ -564,22 +566,22 @@ export default function PptToPdfPage() {
         {/* Presentation Metadata */}
         {presentationMetadata && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Informações da Apresentação</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.pptToPdf?.presentationInfo || "Informações da Apresentação"}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium text-gray-700">Título:</span>
+                <span className="font-medium text-gray-700">{t.pptToPdf?.titleLabel || "Título:"}:</span>
                 <span className="ml-2 text-gray-600">{presentationMetadata.title}</span>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Autor:</span>
+                <span className="font-medium text-gray-700">{t.pptToPdf?.authorLabel || "Autor:"}:</span>
                 <span className="ml-2 text-gray-600">{presentationMetadata.author}</span>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Slides:</span>
+                <span className="font-medium text-gray-700">{t.pptToPdf?.slidesLabel || "Slides:"}:</span>
                 <span className="ml-2 text-gray-600">{presentationMetadata.slideCount}</span>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Criado em:</span>
+                <span className="font-medium text-gray-700">{t.pptToPdf?.createdLabel || "Criado em:"}:</span>
                 <span className="ml-2 text-gray-600">{presentationMetadata.createdDate}</span>
               </div>
             </div>
@@ -590,55 +592,55 @@ export default function PptToPdfPage() {
         {file && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Configurações de Conversão</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t.pptToPdf?.conversionSettings || "Configurações de Conversão"}</h3>
               <button
                 onClick={() => setShowAdvanced(!showAdvanced)}
                 className="text-blue-600 hover:text-blue-700 flex items-center text-sm"
               >
                 <Settings className="w-4 h-4 mr-1" />
-                {showAdvanced ? 'Ocultar' : 'Mostrar'} Avançadas
+                {showAdvanced ? (t.pptToPdf?.hide || 'Ocultar') : (t.pptToPdf?.show || 'Mostrar')} {t.pptToPdf?.advanced || 'Avançadas'}
               </button>
             </div>
             
             {/* Basic Settings */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Qualidade</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.pptToPdf?.quality || "Qualidade"}</label>
                 <select
                   value={settings.quality}
                   onChange={(e) => setSettings(prev => ({ ...prev, quality: e.target.value as 'low' | 'medium' | 'high' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="low">Baixa (menor arquivo)</option>
-                  <option value="medium">Média</option>
-                  <option value="high">Alta (melhor qualidade)</option>
+                  <option value="low">{t.pptToPdf?.qualityLow || "Baixa (menor arquivo)"}</option>
+                  <option value="medium">{t.pptToPdf?.qualityMedium || "Média"}</option>
+                  <option value="high">{t.pptToPdf?.qualityHigh || "Alta (melhor qualidade)"}</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Tamanho da Página</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.pptToPdf?.pageSize || "Tamanho da Página"}</label>
                 <select
                   value={settings.pageSize}
                   onChange={(e) => setSettings(prev => ({ ...prev, pageSize: e.target.value as 'original' | 'a4' | 'letter' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="original">Original (4:3)</option>
-                  <option value="a4">A4</option>
-                  <option value="letter">Carta</option>
+                  <option value="original">{t.pptToPdf?.pageSizeOriginal || "Original (4:3)"}</option>
+                  <option value="a4">{t.pptToPdf?.pageSizeA4 || "A4"}</option>
+                  <option value="letter">{t.pptToPdf?.pageSizeLetter || "Carta"}</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Slides por Página</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.pptToPdf?.slidesPerPage || "Slides por Página"}</label>
                 <select
                   value={settings.slidesPerPage}
                   onChange={(e) => setSettings(prev => ({ ...prev, slidesPerPage: parseInt(e.target.value) as 1 | 2 | 4 | 6 }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value={1}>1 slide por página</option>
-                  <option value={2}>2 slides por página</option>
-                  <option value={4}>4 slides por página</option>
-                  <option value={6}>6 slides por página</option>
+                  <option value={1}>{t.pptToPdf?.slidesPerPage1 || "1 slide por página"}</option>
+                  <option value={2}>{t.pptToPdf?.slidesPerPage2 || "2 slides por página"}</option>
+                  <option value={4}>{t.pptToPdf?.slidesPerPage4 || "4 slides por página"}</option>
+                  <option value={6}>{t.pptToPdf?.slidesPerPage6 || "6 slides por página"}</option>
                 </select>
               </div>
             </div>
@@ -648,16 +650,16 @@ export default function PptToPdfPage() {
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Compressão</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.pptToPdf?.compression || "Compressão"}</label>
                     <select
                       value={settings.compression}
                       onChange={(e) => setSettings(prev => ({ ...prev, compression: e.target.value as 'none' | 'low' | 'medium' | 'high' }))}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <option value="none">Sem compressão</option>
-                      <option value="low">Baixa</option>
-                      <option value="medium">Média</option>
-                      <option value="high">Alta</option>
+                      <option value="none">{t.pptToPdf?.compressionNone || "Sem compressão"}</option>
+                      <option value="low">{t.pptToPdf?.compressionLow || "Baixa"}</option>
+                      <option value="medium">{t.pptToPdf?.compressionMedium || "Média"}</option>
+                      <option value="high">{t.pptToPdf?.compressionHigh || "Alta"}</option>
                     </select>
                   </div>
                 </div>
@@ -670,7 +672,7 @@ export default function PptToPdfPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, preserveAnimations: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Preservar animações (como imagens estáticas)</span>
+                    <span className="text-sm">{t.pptToPdf?.preserveAnimations || "Preservar animações (como imagens estáticas)"}</span>
                   </label>
                   
                   <label className="flex items-center">
@@ -680,7 +682,7 @@ export default function PptToPdfPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, includeNotes: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Incluir página de título com informações</span>
+                    <span className="text-sm">{t.pptToPdf?.includeNotes || "Incluir página de título com informações"}</span>
                   </label>
                   
                   <label className="flex items-center">
@@ -690,7 +692,7 @@ export default function PptToPdfPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, addSlideNumbers: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Adicionar números dos slides</span>
+                    <span className="text-sm">{t.pptToPdf?.addSlideNumbers || "Adicionar números dos slides"}</span>
                   </label>
                 </div>
               </div>
@@ -707,7 +709,7 @@ export default function PptToPdfPage() {
               className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 transition-colors flex items-center mx-auto"
             >
               <RefreshCw className={`w-5 h-5 mr-2 ${isProcessing ? 'animate-spin' : ''}`} />
-              {isProcessing ? 'Convertendo...' : 'Converter para PDF'}
+              {isProcessing ? (t.pptToPdf?.converting || 'Convertendo...') : (t.pptToPdf?.convertButton || 'Converter para PDF')}
             </button>
           </div>
         )}
@@ -717,7 +719,7 @@ export default function PptToPdfPage() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-semibold text-blue-900">
-                Convertendo PowerPoint para PDF...
+                {t.pptToPdf?.convertingProgress || "Convertendo PowerPoint para PDF..."}
               </span>
               <span className="text-sm font-bold text-blue-900">
                 {Math.round(progress)}%
@@ -756,19 +758,19 @@ export default function PptToPdfPage() {
               <>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Slides</div>
+                    <div className="font-semibold text-gray-900">{t.pptToPdf?.slides || "Slides"}</div>
                     <div className="text-gray-600">{conversionResult.slideCount}</div>
                   </div>
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Páginas PDF</div>
+                    <div className="font-semibold text-gray-900">{t.pptToPdf?.pdfPages || "Páginas PDF"}</div>
                     <div className="text-gray-600">{conversionResult.pageCount}</div>
                   </div>
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Tamanho Final</div>
+                    <div className="font-semibold text-gray-900">{t.pptToPdf?.finalSize || "Tamanho Final"}</div>
                     <div className="text-gray-600">{formatFileSize(conversionResult.convertedSize)}</div>
                   </div>
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Tempo</div>
+                    <div className="font-semibold text-gray-900">{t.pptToPdf?.time || "Tempo"}</div>
                     <div className="text-gray-600">{conversionResult.processingTime.toFixed(1)}s</div>
                   </div>
                 </div>
@@ -780,14 +782,14 @@ export default function PptToPdfPage() {
                     className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors inline-flex items-center"
                   >
                     <Download className="w-5 h-5 mr-2" />
-                    Baixar PDF
+                    {t.pptToPdf?.downloadPdf || "Baixar PDF"}
                   </a>
                   
                   <button
                     onClick={clearAll}
                     className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    Converter Outra Apresentação
+                    {t.pptToPdf?.convertAnother || "Converter Outra Apresentação"}
                   </button>
                 </div>
               </>
@@ -797,35 +799,33 @@ export default function PptToPdfPage() {
 
         {/* Information */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">ℹ️ Sobre a Conversão PowerPoint para PDF</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">{t.pptToPdf?.aboutConversionTitle || "ℹ️ Sobre a Conversão PowerPoint para PDF"}</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Suporte a arquivos PPT e PPTX</li>
-            <li>• Preserva layout e formatação dos slides</li>
-            <li>• Opções flexíveis de layout (1, 2, 4 ou 6 slides por página)</li>
-            <li>• Configurações de qualidade e compressão</li>
-            <li>• Ideal para distribuição e impressão</li>
+            <li>• {t.pptToPdf?.aboutFeature1 || "Suporte a arquivos PPT e PPTX"}</li>
+            <li>• {t.pptToPdf?.aboutFeature2 || "Preserva layout e formatação dos slides"}</li>
+            <li>• {t.pptToPdf?.aboutFeature3 || "Opções flexíveis de layout (1, 2, 4 ou 6 slides por página)"}</li>
+            <li>• {t.pptToPdf?.aboutFeature4 || "Configurações de qualidade e compressão"}</li>
+            <li>• {t.pptToPdf?.aboutFeature5 || "Ideal para distribuição e impressão"}</li>
           </ul>
         </div>
 
         {/* Tips */}
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h4 className="font-semibold text-yellow-900 mb-2">💡 Dicas de Conversão</h4>
+          <h4 className="font-semibold text-yellow-900 mb-2">{t.pptToPdf?.conversionTipsTitle || "💡 Dicas de Conversão"}</h4>
           <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• Use 1 slide por página para melhor legibilidade</li>
-            <li>• 4 ou 6 slides por página economizam papel na impressão</li>
-            <li>• Qualidade alta preserva melhor gráficos e imagens</li>
-            <li>• Compressão média oferece bom equilíbrio tamanho/qualidade</li>
-            <li>• Inclua números dos slides para facilitar referências</li>
+            <li>• {t.pptToPdf?.tip1 || "Use 1 slide por página para melhor legibilidade"}</li>
+            <li>• {t.pptToPdf?.tip2 || "4 ou 6 slides por página economizam papel na impressão"}</li>
+            <li>• {t.pptToPdf?.tip3 || "Qualidade alta preserva melhor gráficos e imagens"}</li>
+            <li>• {t.pptToPdf?.tip4 || "Compressão média oferece bom equilíbrio tamanho/qualidade"}</li>
+            <li>• {t.pptToPdf?.tip5 || "Inclua números dos slides para facilitar referências"}</li>
           </ul>
         </div>
 
         {/* Information */}
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <h4 className="font-semibold text-green-900 mb-2">✅ Processamento Real</h4>
+          <h4 className="font-semibold text-green-900 mb-2">{t.pptToPdf?.realProcessingTitle || "✅ Processamento Real"}</h4>
           <p className="text-sm text-green-800">
-            Esta ferramenta processa arquivos PowerPoint reais usando JSZip e xml2js para extrair 
-            o conteúdo de texto dos slides. O texto extraído é então formatado e convertido 
-            para PDF mantendo a estrutura dos slides originais.
+            {t.pptToPdf?.realProcessingDescription || "Esta ferramenta processa arquivos PowerPoint reais usando JSZip e xml2js para extrair o conteúdo de texto dos slides. O texto extraído é então formatado e convertido para PDF mantendo a estrutura dos slides originais."}
           </p>
         </div>
       </div>

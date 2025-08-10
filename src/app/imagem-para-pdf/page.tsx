@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
+import { getTranslations } from '@/config/language';
 import { Upload, FileImage, Download, X, RotateCw, Move, Settings } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
@@ -26,6 +27,7 @@ const PAGE_SIZES: { [key: string]: PageSize } = {
 };
 
 export default function ImagemParaPdfPage() {
+  const t = getTranslations();
   const [selectedImages, setSelectedImages] = useState<ImageFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -220,8 +222,8 @@ export default function ImagemParaPdfPage() {
 
   return (
     <ToolLayout
-      title="Imagem para PDF"
-      description="Converta imagens (JPG, PNG, BMP, GIF, WebP) em documentos PDF com qualidade preservada."
+      title={t.imageToPdfTitle}
+      description={t.imageToPdfDescription}
     >
       <div className="space-y-6">
         {/* Upload Area */}

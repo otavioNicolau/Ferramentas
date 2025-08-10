@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { getTranslations } from '@/config/language';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const t = getTranslations();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -16,7 +18,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <h1 className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
-              UtilidadeWeb
+              {t.siteName}
             </h1>
           </Link>
 
@@ -26,19 +28,19 @@ export default function Header() {
               href="/" 
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >
-              Início
+              {t.home}
             </Link>
             <Link 
               href="#ferramentas" 
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >
-              Ferramentas
+              {t.tools}
             </Link>
             <Link 
               href="#sobre" 
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >
-              Sobre
+              {t.about}
             </Link>
           </nav>
 
@@ -62,21 +64,21 @@ export default function Header() {
                 className="block px-3 py-2 text-gray-700 hover:text-blue-600 rounded-md text-base font-medium transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Início
+                {t.home}
               </Link>
               <Link
                 href="#ferramentas"
                 className="block px-3 py-2 text-gray-700 hover:text-blue-600 rounded-md text-base font-medium transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Ferramentas
+                {t.tools}
               </Link>
               <Link
                 href="#sobre"
                 className="block px-3 py-2 text-gray-700 hover:text-blue-600 rounded-md text-base font-medium transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Sobre
+                {t.about}
               </Link>
             </div>
           </div>

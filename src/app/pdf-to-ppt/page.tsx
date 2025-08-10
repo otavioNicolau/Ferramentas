@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, CheckCircle, AlertTriangle, Presentation, RefreshCw, Settings, Image, FileImage } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import { getTranslations } from '@/config/language';
 
 interface ConversionSettings {
   slideLayout: 'single' | 'multiple';
@@ -38,6 +39,7 @@ interface PdfMetadata {
 }
 
 export default function PdfToPptPage() {
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -81,12 +83,12 @@ export default function PdfToPptPage() {
 
   const handleFileSelect = async (selectedFile: File) => {
     if (selectedFile.type !== 'application/pdf') {
-      alert('Por favor, selecione apenas arquivos PDF.');
+      alert(t.pdfToPpt?.onlyPdfAlert || 'Por favor, selecione apenas arquivos PDF.');
       return;
     }
     
     if (selectedFile.size > 100 * 1024 * 1024) {
-      alert('Arquivo muito grande. Limite de 100MB.');
+      alert(t.pdfToPpt?.fileSizeAlert || 'Arquivo muito grande. Limite de 100MB.');
       return;
     }
     
@@ -393,8 +395,8 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
 
   return (
     <ToolLayout
-      title="PDF para PPT"
-      description="Converta documentos PDF para apresentações PowerPoint"
+      title={t.pdfToPpt?.title || 'PDF para PPT'}
+      description={t.pdfToPpt?.description || 'Converta documentos PDF para apresentações PowerPoint'}
     >
       <div className="space-y-6">
         {/* Upload Area */}
@@ -411,10 +413,10 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
         >
           <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Selecione o documento PDF
+            {t.pdfToPpt?.selectDocument || 'Selecione o documento PDF'}
           </h3>
           <p className="text-gray-600 mb-4">
-            Arraste e solte seu arquivo PDF aqui ou clique para selecionar
+            {t.pdfToPpt?.dragDropText || 'Arraste e solte seu arquivo PDF aqui ou clique para selecionar'}
           </p>
           <input
             ref={fileInputRef}
@@ -428,7 +430,7 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Upload className="inline-block w-5 h-5 mr-2" />
-            Selecionar Arquivo PDF
+            {t.pdfToPpt?.selectFileButton || 'Selecionar Arquivo PDF'}
           </button>
           
           {file && (
@@ -447,22 +449,22 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
         {/* PDF Metadata */}
         {pdfMetadata && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Informações do PDF</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.pdfToPpt?.pdfInfo || 'Informações do PDF'}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium text-gray-700">Título:</span>
+                <span className="font-medium text-gray-700">{t.pdfToPpt?.title || 'Título'}:</span>
                 <span className="ml-2 text-gray-600">{pdfMetadata.title}</span>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Autor:</span>
+                <span className="font-medium text-gray-700">{t.pdfToPpt?.author || 'Autor'}:</span>
                 <span className="ml-2 text-gray-600">{pdfMetadata.author}</span>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Páginas:</span>
+                <span className="font-medium text-gray-700">{t.pdfToPpt?.pages || 'Páginas'}:</span>
                 <span className="ml-2 text-gray-600">{pdfMetadata.pageCount}</span>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Criado em:</span>
+                <span className="font-medium text-gray-700">{t.pdfToPpt?.createdOn || 'Criado em'}:</span>
                 <span className="ml-2 text-gray-600">{pdfMetadata.createdDate}</span>
               </div>
             </div>
@@ -473,33 +475,33 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
         {file && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Configurações de Conversão</h3>
+              <h3 className="text-lg font-semibold text-gray-900">{t.pdfToPpt?.conversionSettings || 'Configurações de Conversão'}</h3>
               <button
                 onClick={() => setShowAdvanced(!showAdvanced)}
                 className="text-blue-600 hover:text-blue-700 flex items-center text-sm"
               >
                 <Settings className="w-4 h-4 mr-1" />
-                {showAdvanced ? 'Ocultar' : 'Mostrar'} Avançadas
+                {showAdvanced ? (t.pdfToPpt?.hideAdvanced || 'Ocultar') : (t.pdfToPpt?.showAdvanced || 'Mostrar')} {t.pdfToPpt?.advanced || 'Avançadas'}
               </button>
             </div>
             
             {/* Basic Settings */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Layout dos Slides</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.pdfToPpt?.slideLayout || 'Layout dos Slides'}</label>
                 <select
                   value={settings.slideLayout}
                   onChange={(e) => setSettings(prev => ({ ...prev, slideLayout: e.target.value as 'single' | 'multiple' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="single">Uma página por slide</option>
-                  <option value="multiple">Múltiplas páginas por slide</option>
+                  <option value="single">{t.pdfToPpt?.onePagePerSlide || 'Uma página por slide'}</option>
+                  <option value="multiple">{t.pdfToPpt?.multiplePagesPerSlide || 'Múltiplas páginas por slide'}</option>
                 </select>
               </div>
               
               {settings.slideLayout === 'multiple' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Páginas por Slide</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t.pdfToPpt?.pagesPerSlide || 'Páginas por Slide'}</label>
                   <select
                     value={settings.slidesPerPage}
                     onChange={(e) => setSettings(prev => ({ ...prev, slidesPerPage: parseInt(e.target.value) as 1 | 2 | 4 }))}
@@ -513,14 +515,14 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
               )}
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Tamanho do Slide</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.pdfToPpt?.slideSize || 'Tamanho do Slide'}</label>
                 <select
                   value={settings.slideSize}
                   onChange={(e) => setSettings(prev => ({ ...prev, slideSize: e.target.value as 'standard' | 'widescreen' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="widescreen">Widescreen (16:9)</option>
-                  <option value="standard">Padrão (4:3)</option>
+                  <option value="widescreen">{t.pdfToPpt?.widescreen || 'Widescreen (16:9)'}</option>
+                  <option value="standard">{t.pdfToPpt?.standard || 'Padrão (4:3)'}</option>
                 </select>
               </div>
             </div>
@@ -530,15 +532,15 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Tema</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.pdfToPpt?.theme || 'Tema'}</label>
                     <select
                       value={settings.theme}
                       onChange={(e) => setSettings(prev => ({ ...prev, theme: e.target.value as 'default' | 'minimal' | 'modern' }))}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                      <option value="default">Padrão</option>
-                      <option value="minimal">Minimalista</option>
-                      <option value="modern">Moderno</option>
+                      <option value="default">{t.pdfToPpt?.defaultTheme || 'Padrão'}</option>
+                    <option value="minimal">{t.pdfToPpt?.minimalTheme || 'Minimalista'}</option>
+                    <option value="modern">{t.pdfToPpt?.modernTheme || 'Moderno'}</option>
                     </select>
                   </div>
                 </div>
@@ -551,7 +553,7 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
                       onChange={(e) => setSettings(prev => ({ ...prev, preserveImages: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Preservar imagens e gráficos</span>
+                    <span className="text-sm">{t.pdfToPpt?.preserveImages || 'Preservar imagens e gráficos'}</span>
                   </label>
                   
                   <label className="flex items-center">
@@ -561,7 +563,7 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
                       onChange={(e) => setSettings(prev => ({ ...prev, extractText: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Extrair e formatar texto</span>
+                    <span className="text-sm">{t.pdfToPpt?.extractText || 'Extrair e formatar texto'}</span>
                   </label>
                   
                   <label className="flex items-center">
@@ -571,7 +573,7 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
                       onChange={(e) => setSettings(prev => ({ ...prev, includePageNumbers: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Incluir números das páginas</span>
+                    <span className="text-sm">{t.pdfToPpt?.includePageNumbers || 'Incluir números das páginas'}</span>
                   </label>
                   
                   <label className="flex items-center">
@@ -581,7 +583,7 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
                       onChange={(e) => setSettings(prev => ({ ...prev, autoFitText: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Ajustar texto automaticamente</span>
+                    <span className="text-sm">{t.pdfToPpt?.autoAdjustText || 'Ajustar texto automaticamente'}</span>
                   </label>
                 </div>
               </div>
@@ -598,7 +600,7 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
               className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 transition-colors flex items-center mx-auto"
             >
               <RefreshCw className={`w-5 h-5 mr-2 ${isProcessing ? 'animate-spin' : ''}`} />
-              {isProcessing ? 'Convertendo...' : 'Converter para PowerPoint'}
+              {isProcessing ? (t.pdfToPpt?.converting || 'Convertendo...') : (t.pdfToPpt?.convertToPowerPoint || 'Converter para PowerPoint')}
             </button>
           </div>
         )}
@@ -608,7 +610,7 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-semibold text-blue-900">
-                Convertendo PDF para PowerPoint...
+                {t.pdfToPpt?.convertingProgress || 'Convertendo PDF para PowerPoint...'}
               </span>
               <span className="text-sm font-bold text-blue-900">
                 {Math.round(progress)}%
@@ -647,19 +649,19 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
               <>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Páginas PDF</div>
+                    <div className="font-semibold text-gray-900">{t.pdfToPpt?.pdfPages || 'Páginas PDF'}</div>
                     <div className="text-gray-600">{conversionResult.pageCount}</div>
                   </div>
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Slides Criados</div>
+                    <div className="font-semibold text-gray-900">{t.pdfToPpt?.slidesCreated || 'Slides Criados'}</div>
                     <div className="text-gray-600">{conversionResult.slideCount}</div>
                   </div>
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Imagens</div>
+                    <div className="font-semibold text-gray-900">{t.pdfToPpt?.images || 'Imagens'}</div>
                     <div className="text-gray-600">{conversionResult.extractedImages}</div>
                   </div>
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Tempo</div>
+                    <div className="font-semibold text-gray-900">{t.pdfToPpt?.time || 'Tempo'}</div>
                     <div className="text-gray-600">{conversionResult.processingTime.toFixed(1)}s</div>
                   </div>
                 </div>
@@ -671,14 +673,14 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
                     className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors inline-flex items-center"
                   >
                     <Download className="w-5 h-5 mr-2" />
-                    Baixar PowerPoint
+                    {t.pdfToPpt?.downloadPowerPoint || 'Baixar PowerPoint'}
                   </a>
                   
                   <button
                     onClick={clearAll}
                     className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    Converter Outro PDF
+                    {t.pdfToPpt?.convertAnother || 'Converter Outro PDF'}
                   </button>
                 </div>
               </>
@@ -688,35 +690,33 @@ ${Array.from({ length: slideCount }, (_, i) => `    <sldId id="${256 + i}" r:id=
 
         {/* Information */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">ℹ️ Sobre a Conversão PDF para PowerPoint</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">ℹ️ {t.pdfToPpt?.aboutConversion || 'Sobre a Conversão PDF para PowerPoint'}</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Converte páginas PDF em slides de apresentação</li>
-            <li>• Preserva texto, imagens e formatação</li>
-            <li>• Opções flexíveis de layout e tema</li>
-            <li>• Suporte a diferentes tamanhos de slide</li>
-            <li>• Ideal para criar apresentações a partir de documentos</li>
+            <li>• {t.pdfToPpt?.aboutInfo1 || 'Converte páginas PDF em slides de apresentação'}</li>
+            <li>• {t.pdfToPpt?.aboutInfo2 || 'Preserva texto, imagens e formatação'}</li>
+            <li>• {t.pdfToPpt?.aboutInfo3 || 'Opções flexíveis de layout e tema'}</li>
+            <li>• {t.pdfToPpt?.aboutInfo4 || 'Suporte a diferentes tamanhos de slide'}</li>
+            <li>• {t.pdfToPpt?.aboutInfo5 || 'Ideal para criar apresentações a partir de documentos'}</li>
           </ul>
         </div>
 
         {/* Tips */}
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h4 className="font-semibold text-yellow-900 mb-2">💡 Dicas de Conversão</h4>
+          <h4 className="font-semibold text-yellow-900 mb-2">💡 {t.pdfToPpt?.tipsTitle || 'Dicas de Conversão'}</h4>
           <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• Use uma página por slide para melhor legibilidade</li>
-            <li>• Formato widescreen é ideal para apresentações modernas</li>
-            <li>• Preserve imagens para manter o impacto visual</li>
-            <li>• Ajuste automático de texto evita sobreposições</li>
-            <li>• Tema moderno oferece aparência profissional</li>
+            <li>• {t.pdfToPpt?.tip1 || 'Use uma página por slide para melhor legibilidade'}</li>
+            <li>• {t.pdfToPpt?.tip2 || 'Formato widescreen é ideal para apresentações modernas'}</li>
+            <li>• {t.pdfToPpt?.tip3 || 'Preserve imagens para manter o impacto visual'}</li>
+            <li>• {t.pdfToPpt?.tip4 || 'Ajuste automático de texto evita sobreposições'}</li>
+            <li>• {t.pdfToPpt?.tip5 || 'Tema moderno oferece aparência profissional'}</li>
           </ul>
         </div>
 
         {/* Warning */}
         <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-          <h4 className="font-semibold text-orange-900 mb-2">⚠️ Nota Importante</h4>
+          <h4 className="font-semibold text-orange-900 mb-2">⚠️ {t.pdfToPpt?.importantNote || 'Nota Importante'}</h4>
           <p className="text-sm text-orange-800">
-            Esta é uma implementação de demonstração. Para conversão real de PDF para PowerPoint, 
-            seria necessário integrar uma biblioteca específica como Apache POI, python-pptx 
-            ou usar um serviço backend especializado para processar e converter os arquivos.
+            {t.pdfToPpt?.demoNote || 'Esta é uma implementação de demonstração. Para conversão real de PDF para PowerPoint, seria necessário integrar uma biblioteca específica como Apache POI, python-pptx ou usar um serviço backend especializado para processar e converter os arquivos.'}
           </p>
         </div>
       </div>

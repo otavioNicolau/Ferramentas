@@ -3,16 +3,18 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { getTranslations } from "@/config/language";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
 
+const t = getTranslations();
+
 export const metadata: Metadata = {
-  title: "UtilidadeWeb - Ferramentas Online Gratuitas",
-  description: "Conjunto de ferramentas online gratuitas para resolver tarefas do dia a dia. Conversores, editores PDF, geradores e muito mais.",
-  keywords: "ferramentas online, conversor PDF, gerador QR code, download YouTube, utilidades web",
+  title: t.siteTitle,
+  description: t.siteDescription,
 };
 
 export default function RootLayout({

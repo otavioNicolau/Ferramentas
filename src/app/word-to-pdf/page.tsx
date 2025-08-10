@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
+import { getTranslations } from '@/config/language';
 import { Upload, Download, FileText, CheckCircle, AlertTriangle, RefreshCw, Settings, FileImage, Type } from 'lucide-react';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { Document, Packer, Paragraph, TextRun } from 'docx';
@@ -50,6 +51,7 @@ interface DocumentMetadata {
 }
 
 export default function WordToPdfPage() {
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -432,8 +434,8 @@ export default function WordToPdfPage() {
 
   return (
     <ToolLayout
-      title="Word para PDF"
-      description="Converta documentos Word (.docx, .doc) para formato PDF"
+      title={t.wordToPdfTitle}
+      description={t.wordToPdfDescription}
     >
       <div className="space-y-6">
         {/* Upload Area */}

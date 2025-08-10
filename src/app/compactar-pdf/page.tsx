@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
+import { getTranslations } from '@/config/language';
 import { Upload, FileText, Minimize2 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
 export default function CompactarPDFPage() {
+  const t = getTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [originalSize, setOriginalSize] = useState<number>(0);
@@ -147,8 +149,8 @@ export default function CompactarPDFPage() {
 
   return (
     <ToolLayout
-      title="Compactar PDF"
-      description="Reduza o tamanho dos seus arquivos PDF mantendo a qualidade."
+      title={t.compressPdfTitle}
+      description={t.compressPdfDescription}
     >
       <div className="space-y-6">
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors">

@@ -1,9 +1,10 @@
-﻿'use client';
+'use client';
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Eye, Download, Copy, FileText, Image as ImageIcon, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { saveAs } from 'file-saver';
+import { getTranslations } from '@/config/language';
 
 interface OCRResult {
   text: string;
@@ -13,6 +14,7 @@ interface OCRResult {
 }
 
 export default function ExtrairTextoOcrPage() {
+  const t = getTranslations();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [results, setResults] = useState<{ file: File; result: OCRResult | null; error?: string }[]>([]);
@@ -40,7 +42,7 @@ export default function ExtrairTextoOcrPage() {
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
     
     if (imageFiles.length !== files.length) {
-      alert('Apenas arquivos de imagem são suportados (JPG, PNG, GIF, BMP, WEBP).');
+      alert(t.ocr.onlyImagesSupported);
     }
     
     setSelectedFiles(imageFiles);
@@ -53,7 +55,7 @@ export default function ExtrairTextoOcrPage() {
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
     
     if (imageFiles.length !== files.length) {
-      alert('Apenas arquivos de imagem são suportados.');
+      alert(t.ocr.onlyImagesSupported);
     }
     
     setSelectedFiles(imageFiles);
@@ -103,7 +105,7 @@ export default function ExtrairTextoOcrPage() {
           newResults.push({
             file,
             result: null,
-            error: 'Erro ao processar imagem. Tente com uma imagem de melhor qualidade.'
+            error: t.ocr.errorProcessingImage
           });
         }
 
@@ -113,7 +115,7 @@ export default function ExtrairTextoOcrPage() {
       setResults(newResults);
     } catch (error) {
       console.error('Erro no OCR:', error);
-      alert('Erro ao inicializar o OCR. Tente recarregar a página.');
+      alert(t.ocr.errorInitializingOcr);
     } finally {
       setIsProcessing(false);
       setProcessingProgress(0);
@@ -122,7 +124,7 @@ export default function ExtrairTextoOcrPage() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      alert('Texto copiado para a área de transferência!');
+      alert(t.ocr.textCopied);
     });
   };
 
@@ -157,8 +159,8 @@ export default function ExtrairTextoOcrPage() {
 
   return (
     <ToolLayout
-      title="OCR - Extrair Texto"
-      description="Extraia texto de imagens usando tecnologia OCR avançada com suporte a múltiplos idiomas."
+      title={t.ocrTitle}
+      description={t.ocrDescription}
     >
       <div className="space-y-6">
         {/* Área de Upload */}
@@ -170,14 +172,14 @@ export default function ExtrairTextoOcrPage() {
         >
           <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-lg font-bold text-gray-800 mb-2">
-            Selecione ou arraste imagens
+            {t.ocr.selectOrDrag}
           </h3>
           <p className="text-gray-600 mb-4">
-            Suporta JPG, PNG, GIF, BMP e WEBP - Múltiplos arquivos permitidos
+            {t.ocr.supportedFormats}
           </p>
           <div className="flex items-center justify-center gap-3">
             <ImageIcon size={20} className="text-blue-600" />
-            <span className="text-blue-600 font-medium">Escolher Imagens</span>
+            <span className="text-blue-600 font-medium">{t.ocr.chooseImages}</span>
           </div>
           <input
             ref={fileInputRef}
@@ -192,11 +194,11 @@ export default function ExtrairTextoOcrPage() {
         {/* Configurações */}
         {selectedFiles.length > 0 && (
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Configurações do OCR</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">{t.ocr.ocrSettings}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Idioma do Texto
+                  {t.ocr.textLanguage}
                 </label>
                 <select
                   value={selectedLanguage}
@@ -219,7 +221,7 @@ export default function ExtrairTextoOcrPage() {
                   className="mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
                 <label htmlFor="showPreview" className="text-sm font-medium text-gray-700">
-                  Mostrar preview das imagens
+                  {t.ocr.showPreview}
                 </label>
               </div>
             </div>
@@ -231,7 +233,7 @@ export default function ExtrairTextoOcrPage() {
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-800">
-                Imagens Selecionadas ({selectedFiles.length})
+                {t.ocr.selectedImages} ({selectedFiles.length})
               </h3>
               <button
                 onClick={processOCR}
@@ -241,12 +243,12 @@ export default function ExtrairTextoOcrPage() {
                 {isProcessing ? (
                   <>
                     <Loader2 size={16} className="animate-spin" />
-                    Processando...
+                    {t.ocr.processing}
                   </>
                 ) : (
                   <>
                     <FileText size={16} />
-                    Extrair Texto
+                    {t.ocr.extractText}
                   </>
                 )}
               </button>
@@ -256,7 +258,7 @@ export default function ExtrairTextoOcrPage() {
             {isProcessing && (
               <div className="mb-4">
                 <div className="flex justify-between text-sm text-gray-600 mb-1">
-                  <span>Processando OCR...</span>
+                  <span>{t.ocr.processingOcr}</span>
                   <span>{Math.round(processingProgress)}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -292,7 +294,7 @@ export default function ExtrairTextoOcrPage() {
                             <div className="flex items-center gap-2 mb-2">
                               <CheckCircle size={16} className="text-green-600" />
                               <span className="text-sm font-medium text-green-800">
-                                Texto extraído (Confiança: {results[index].result!.confidence}%)
+                                {t.ocr.textExtracted} ({t.ocr.confidence}: {results[index].result!.confidence}%)
                               </span>
                               <span className="text-xs text-green-600">
                                 {results[index].result!.processingTime}ms
@@ -300,7 +302,7 @@ export default function ExtrairTextoOcrPage() {
                             </div>
                             <div className="bg-white border border-green-200 rounded p-3 max-h-32 overflow-y-auto">
                               <pre className="text-sm text-gray-800 whitespace-pre-wrap font-mono">
-                                {results[index].result!.text || 'Nenhum texto encontrado na imagem'}
+                                {results[index].result!.text || t.ocr.noTextFound}
                               </pre>
                             </div>
                             <div className="flex gap-2 mt-2">
@@ -309,14 +311,14 @@ export default function ExtrairTextoOcrPage() {
                                 className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 flex items-center gap-1"
                               >
                                 <Copy size={12} />
-                                Copiar
+                                {t.ocr.copy}
                               </button>
                               <button
                                 onClick={() => downloadAsText(results[index].result!.text, file.name)}
                                 className="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 flex items-center gap-1"
                               >
                                 <Download size={12} />
-                                Download
+                                {t.ocr.download}
                               </button>
                             </div>
                           </div>
@@ -334,7 +336,7 @@ export default function ExtrairTextoOcrPage() {
                   <button
                     onClick={() => removeFile(index)}
                     className="text-red-500 hover:text-red-700 p-1"
-                    title="Remover arquivo"
+                    title={t.ocr.removeFile}
                   >
                     ✕
                   </button>
@@ -350,7 +352,7 @@ export default function ExtrairTextoOcrPage() {
                   className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-8 py-3 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200 flex items-center gap-3 mx-auto shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <Download size={20} />
-                  <span className="font-medium">Baixar Todos os Textos</span>
+                  <span className="font-medium">{t.ocr.downloadAll}</span>
                 </button>
               </div>
             )}
@@ -361,33 +363,33 @@ export default function ExtrairTextoOcrPage() {
         {selectedFiles.length === 0 && (
           <div className="text-center py-8 text-gray-600">
             <Eye className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-            <p className="font-medium text-gray-700">Nenhuma imagem selecionada</p>
-            <p className="text-sm mt-1 text-gray-500">Selecione imagens para extrair texto usando OCR</p>
+            <p className="font-medium text-gray-700">{t.ocr.noImagesSelected}</p>
+            <p className="text-sm mt-1 text-gray-500">{t.ocr.selectImagesHint}</p>
           </div>
         )}
 
         {/* Informações sobre OCR */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">🔍 Sobre o OCR:</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">🔍 {t.ocr.aboutOcr}</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• <strong>Qualidade da imagem:</strong> Para melhores resultados, use imagens nítidas e com boa resolução</li>
-            <li>• <strong>Contraste:</strong> Texto escuro em fundo claro funciona melhor</li>
-            <li>• <strong>Orientação:</strong> Certifique-se de que o texto esteja na orientação correta</li>
-            <li>• <strong>Idiomas:</strong> Selecione o idioma correto para maior precisão</li>
-            <li>• <strong>Formatos suportados:</strong> JPG, PNG, GIF, BMP, WEBP</li>
-            <li>• <strong>Processamento:</strong> O OCR é feito localmente no seu navegador</li>
+            <li>• <strong>Qualidade da imagem:</strong> {t.ocr.imageQuality}</li>
+            <li>• <strong>Contraste:</strong> {t.ocr.contrast}</li>
+            <li>• <strong>Orientação:</strong> {t.ocr.orientation}</li>
+            <li>• <strong>Idiomas:</strong> {t.ocr.languages}</li>
+            <li>• <strong>Formatos suportados:</strong> {t.ocr.supportedFormatsInfo}</li>
+            <li>• <strong>Processamento:</strong> {t.ocr.localProcessing}</li>
           </ul>
         </div>
 
         {/* Dicas de uso */}
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h4 className="font-semibold text-yellow-900 mb-2">💡 Dicas para Melhor Precisão:</h4>
+          <h4 className="font-semibold text-yellow-900 mb-2">💡 {t.ocr.tipsTitle}</h4>
           <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• Use imagens com resolução de pelo menos 300 DPI</li>
-            <li>• Evite imagens com ruído, borrão ou distorção</li>
-            <li>• Para documentos escaneados, use modo "texto" ou "documento"</li>
-            <li>• Fotografias de tela podem ter qualidade inferior</li>
-            <li>• Textos muito pequenos podem ser difíceis de reconhecer</li>
+            <li>• {t.ocr.tip1}</li>
+            <li>• {t.ocr.tip2}</li>
+            <li>• {t.ocr.tip3}</li>
+            <li>• {t.ocr.tip4}</li>
+            <li>• {t.ocr.tip5}</li>
           </ul>
         </div>
       </div>

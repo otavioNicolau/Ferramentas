@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, Shield, Lock, Eye, EyeOff, Trash2, AlertCircle } from 'lucide-react';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { getTranslations } from '@/config/language';
 
 interface ProtectedPdf {
   fileName: string;
@@ -30,6 +31,7 @@ interface SecuritySettings {
 }
 
 export default function ProtectPdfPage() {
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [protectedPdf, setProtectedPdf] = useState<ProtectedPdf | null>(null);
@@ -189,13 +191,13 @@ export default function ProtectPdfPage() {
 
   return (
     <ToolLayout
-      title="Protect PDF"
-      description="Adicione senha e permissões de segurança a documentos PDF"
+      title={t.protectPdf?.title || 'Protect PDF'}
+      description={t.protectPdf?.description || 'Adicione senha e permissões de segurança a documentos PDF'}
     >
       <div className="space-y-6">
         {/* Upload de Arquivo */}
         <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Selecionar Arquivo PDF</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">{t.protectPdf?.selectFile || 'Selecionar Arquivo PDF'}</h3>
           
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
@@ -210,9 +212,9 @@ export default function ProtectPdfPage() {
           >
             <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <p className="text-lg font-medium text-gray-900 mb-2">
-              Arraste e solte seu arquivo PDF aqui
+              {t.protectPdf?.dragDrop || 'Arraste e solte seu arquivo PDF aqui'}
             </p>
-            <p className="text-gray-600 mb-4">ou</p>
+            <p className="text-gray-600 mb-4">{t.protectPdf?.or || 'ou'}</p>
             <input
               ref={fileInputRef}
               type="file"
@@ -221,11 +223,11 @@ export default function ProtectPdfPage() {
               className="hidden"
             />
             <button
-              onClick={() => fileInputRef.current?.click()}
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Selecionar Arquivo
-            </button>
+                onClick={() => fileInputRef.current?.click()}
+                className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                {t.protectPdf?.selectFileButton || 'Selecionar Arquivo'}
+              </button>
           </div>
         </div>
 
@@ -234,21 +236,21 @@ export default function ProtectPdfPage() {
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
               <Shield className="text-blue-600" size={20} />
-              Configurações de Segurança
+              {t.protectPdf?.securitySettings || 'Configurações de Segurança'}
             </h3>
             
             {/* Senhas */}
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Senha do Usuário (para abrir o PDF)
+                  {t.protectPdf?.userPassword || 'Senha do Usuário (opcional)'}
                 </label>
                 <div className="relative">
                   <input
                     type={showUserPassword ? 'text' : 'password'}
                     value={settings.userPassword}
                     onChange={(e) => updateSetting('userPassword', e.target.value)}
-                    placeholder="Digite a senha (opcional)"
+                    placeholder={t.protectPdf?.userPasswordPlaceholder || 'Digite a senha (opcional)'}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
                   />
                   <button
@@ -263,14 +265,14 @@ export default function ProtectPdfPage() {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Senha do Proprietário (para editar permissões)
+                  {t.protectPdf?.ownerPassword || 'Senha do Proprietário (para editar permissões)'}
                 </label>
                 <div className="relative">
                   <input
                     type={showOwnerPassword ? 'text' : 'password'}
                     value={settings.ownerPassword}
                     onChange={(e) => updateSetting('ownerPassword', e.target.value)}
-                    placeholder="Digite a senha (opcional)"
+                    placeholder={t.protectPdf?.ownerPasswordPlaceholder || 'Digite a senha (opcional)'}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
                   />
                   <button
@@ -286,7 +288,7 @@ export default function ProtectPdfPage() {
             
             {/* Permissões */}
             <div>
-              <h4 className="text-md font-semibold text-gray-800 mb-3">Permissões do Documento</h4>
+              <h4 className="text-md font-semibold text-gray-800 mb-3">{t.protectPdf?.documentPermissions || 'Permissões do Documento'}</h4>
               <div className="grid md:grid-cols-2 gap-4">
                 <label className="flex items-center space-x-3">
                   <input
@@ -295,7 +297,7 @@ export default function ProtectPdfPage() {
                     onChange={(e) => updateSetting('allowPrinting', e.target.checked)}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">Permitir impressão</span>
+                  <span className="text-sm text-gray-700">{t.protectPdf?.allowPrinting || 'Permitir impressão'}</span>
                 </label>
                 
                 <label className="flex items-center space-x-3">
@@ -305,7 +307,7 @@ export default function ProtectPdfPage() {
                     onChange={(e) => updateSetting('allowModifying', e.target.checked)}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">Permitir modificação</span>
+                  <span className="text-sm text-gray-700">{t.protectPdf?.allowModification || 'Permitir modificação'}</span>
                 </label>
                 
                 <label className="flex items-center space-x-3">
@@ -315,7 +317,7 @@ export default function ProtectPdfPage() {
                     onChange={(e) => updateSetting('allowCopying', e.target.checked)}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">Permitir cópia de texto</span>
+                  <span className="text-sm text-gray-700">{t.protectPdf?.allowCopy || 'Permitir cópia de texto'}</span>
                 </label>
                 
                 <label className="flex items-center space-x-3">
@@ -325,7 +327,7 @@ export default function ProtectPdfPage() {
                     onChange={(e) => updateSetting('allowAnnotating', e.target.checked)}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">Permitir anotações</span>
+                  <span className="text-sm text-gray-700">{t.protectPdf?.allowAnnotations || 'Permitir anotações'}</span>
                 </label>
                 
                 <label className="flex items-center space-x-3">
@@ -335,7 +337,7 @@ export default function ProtectPdfPage() {
                     onChange={(e) => updateSetting('allowFillingForms', e.target.checked)}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">Permitir preenchimento de formulários</span>
+                  <span className="text-sm text-gray-700">{t.protectPdf?.allowFormFilling || 'Permitir preenchimento de formulários'}</span>
                 </label>
                 
                 <label className="flex items-center space-x-3">
@@ -345,7 +347,7 @@ export default function ProtectPdfPage() {
                     onChange={(e) => updateSetting('allowContentAccessibility', e.target.checked)}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">Permitir acessibilidade</span>
+                  <span className="text-sm text-gray-700">{t.protectPdf?.allowAccessibility || 'Permitir acessibilidade'}</span>
                 </label>
                 
                 <label className="flex items-center space-x-3">
@@ -355,7 +357,7 @@ export default function ProtectPdfPage() {
                     onChange={(e) => updateSetting('allowDocumentAssembly', e.target.checked)}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">Permitir montagem de documento</span>
+                  <span className="text-sm text-gray-700">{t.protectPdf?.allowDocumentAssembly || 'Permitir montagem de documento'}</span>
                 </label>
                 
                 <label className="flex items-center space-x-3">
@@ -365,7 +367,7 @@ export default function ProtectPdfPage() {
                     onChange={(e) => updateSetting('allowHighQualityPrinting', e.target.checked)}
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">Permitir impressão de alta qualidade</span>
+                  <span className="text-sm text-gray-700">{t.protectPdf?.allowHighQualityPrinting || 'Permitir impressão de alta qualidade'}</span>
                 </label>
               </div>
             </div>
@@ -377,7 +379,7 @@ export default function ProtectPdfPage() {
                 className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
               >
                 <Shield size={20} />
-                {isProcessing ? 'Protegendo...' : 'Proteger PDF'}
+                {isProcessing ? (t.protectPdf?.processing || 'Protegendo...') : (t.protectPdf?.protectButton || 'Proteger PDF')}
               </button>
               
               <button
@@ -385,7 +387,7 @@ export default function ProtectPdfPage() {
                 className="px-4 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors flex items-center gap-2"
               >
                 <Trash2 size={16} />
-                Limpar
+                {t.protectPdf?.clearButton || 'Limpar'}
               </button>
             </div>
           </div>
@@ -408,44 +410,44 @@ export default function ProtectPdfPage() {
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
               <div className="flex items-center gap-2 mb-3">
                 <Shield className="text-green-600" size={20} />
-                <span className="font-medium text-green-800">PDF protegido com sucesso!</span>
+                <span className="font-medium text-green-800">{t.protectPdf?.successMessage || 'PDF protegido com sucesso!'}</span>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-4">
                 <div>
-                  <span className="text-green-700 font-medium">Arquivo:</span>
+                  <span className="text-green-700 font-medium">{t.protectPdf?.fileName || 'Arquivo:'}:</span>
                   <p className="text-green-800">{protectedPdf.fileName}</p>
                 </div>
                 <div>
-                  <span className="text-green-700 font-medium">Tamanho:</span>
+                  <span className="text-green-700 font-medium">{t.protectPdf?.fileSize || 'Tamanho:'}:</span>
                   <p className="text-green-800">{formatFileSize(protectedPdf.fileSize)}</p>
                 </div>
                 <div>
-                  <span className="text-green-700 font-medium">Páginas:</span>
+                  <span className="text-green-700 font-medium">{t.protectPdf?.pages || 'Páginas:'}:</span>
                   <p className="text-green-800">{protectedPdf.pageCount}</p>
                 </div>
               </div>
               
               <div className="mb-4">
-                <span className="text-green-700 font-medium">Proteções aplicadas:</span>
+                <span className="text-green-700 font-medium">{t.protectPdf?.protectionsApplied || 'Proteções aplicadas:'}:</span>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {protectedPdf.hasUserPassword && (
                     <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs flex items-center gap-1">
                       <Lock size={12} />
-                      Senha de usuário
+                      {t.protectPdf?.userPasswordLabel || 'Senha de usuário'}
                     </span>
                   )}
                   {protectedPdf.hasOwnerPassword && (
                     <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs flex items-center gap-1">
                       <Lock size={12} />
-                      Senha de proprietário
+                      {t.protectPdf?.ownerPasswordLabel || 'Senha de proprietário'}
                     </span>
                   )}
                 </div>
               </div>
               
               <div>
-                <span className="text-green-700 font-medium">Permissões concedidas:</span>
+                <span className="text-green-700 font-medium">{t.protectPdf?.permissionsGranted || 'Permissões concedidas:'}:</span>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {protectedPdf.permissions.map((permission, index) => (
                     <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
@@ -461,33 +463,33 @@ export default function ProtectPdfPage() {
               className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
             >
               <Download size={20} />
-              Baixar PDF Protegido
+              {t.protectPdf?.downloadButton || 'Baixar PDF Protegido'}
             </button>
           </div>
         )}
 
         {/* Informações */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">🔒 Tipos de Proteção:</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">{t.protectPdf?.protectionTypesTitle || '🔒 Tipos de Proteção:'}</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• <strong>Senha de Usuário:</strong> Necessária para abrir e visualizar o PDF</li>
-            <li>• <strong>Senha de Proprietário:</strong> Necessária para modificar permissões e configurações</li>
-            <li>• <strong>Permissões:</strong> Controlam o que os usuários podem fazer com o documento</li>
-            <li>• <strong>Marca d'água:</strong> Adiciona identificação discreta de documento protegido</li>
+            <li>• <strong>{t.protectPdf?.userPasswordInfo || 'Senha de Usuário:'}:</strong> {t.protectPdf?.userPasswordDesc || 'Necessária para abrir e visualizar o PDF'}</li>
+            <li>• <strong>{t.protectPdf?.ownerPasswordInfo || 'Senha de Proprietário:'}:</strong> {t.protectPdf?.ownerPasswordDesc || 'Necessária para modificar permissões e configurações'}</li>
+            <li>• <strong>{t.protectPdf?.permissionsInfo || 'Permissões:'}:</strong> {t.protectPdf?.permissionsDesc || 'Controlam o que os usuários podem fazer com o documento'}</li>
+            <li>• <strong>{t.protectPdf?.watermarkInfo || 'Marca d\'água:'}:</strong> {t.protectPdf?.watermarkDesc || 'Adiciona identificação discreta de documento protegido'}</li>
           </ul>
         </div>
 
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <h4 className="font-semibold text-yellow-900 mb-2 flex items-center gap-2">
             <AlertCircle size={16} />
-            ⚠️ Limitações
+            {t.protectPdf?.limitationsTitle || '⚠️ Limitações'}
           </h4>
           <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• A proteção por senha tem limitações técnicas no navegador</li>
-            <li>• Para proteção máxima, use software especializado</li>
-            <li>• Permissões podem não ser respeitadas por todos os visualizadores</li>
-            <li>• Processamento realizado localmente no navegador</li>
-            <li>• Recomendado para proteção básica de documentos</li>
+            <li>• {t.protectPdf?.limitation1 || 'A proteção por senha tem limitações técnicas no navegador'}</li>
+            <li>• {t.protectPdf?.limitation2 || 'Para proteção máxima, use software especializado'}</li>
+            <li>• {t.protectPdf?.limitation3 || 'Permissões podem não ser respeitadas por todos os visualizadores'}</li>
+            <li>• {t.protectPdf?.limitation4 || 'Processamento realizado localmente no navegador'}</li>
+            <li>• {t.protectPdf?.limitation5 || 'Recomendado para proteção básica de documentos'}</li>
           </ul>
         </div>
       </div>

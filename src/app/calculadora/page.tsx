@@ -3,26 +3,28 @@
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Delete } from 'lucide-react';
+import { getTranslations } from '@/config/language';
 
 export default function CalculadoraPage() {
+  const t = getTranslations();
   const [display, setDisplay] = useState('0');
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
-  const [waitingForNewValue, setWaitingForNewValue] = useState(false);
+  const [waitingForOperand, setWaitingForOperand] = useState(false);
 
   const inputNumber = (num: string) => {
-    if (waitingForNewValue) {
+    if (waitingForOperand) {
       setDisplay(num);
-      setWaitingForNewValue(false);
+      setWaitingForOperand(false);
     } else {
       setDisplay(display === '0' ? num : display + num);
     }
   };
 
   const inputDecimal = () => {
-    if (waitingForNewValue) {
+    if (waitingForOperand) {
       setDisplay('0.');
-      setWaitingForNewValue(false);
+      setWaitingForOperand(false);
     } else if (display.indexOf('.') === -1) {
       setDisplay(display + '.');
     }
@@ -32,7 +34,7 @@ export default function CalculadoraPage() {
     setDisplay('0');
     setPreviousValue(null);
     setOperation(null);
-    setWaitingForNewValue(false);
+    setWaitingForOperand(false);
   };
 
   const performOperation = (nextOperation: string) => {
@@ -65,7 +67,7 @@ export default function CalculadoraPage() {
       setPreviousValue(result);
     }
 
-    setWaitingForNewValue(true);
+    setWaitingForOperand(true);
     setOperation(nextOperation);
   };
 
@@ -73,7 +75,7 @@ export default function CalculadoraPage() {
     performOperation('=');
     setOperation(null);
     setPreviousValue(null);
-    setWaitingForNewValue(true);
+    setWaitingForOperand(true);
   };
 
   const Button = ({ onClick, className, children }: {
@@ -91,8 +93,8 @@ export default function CalculadoraPage() {
 
   return (
     <ToolLayout
-      title="Calculadora"
-      description="Calculadora básica para operações matemáticas simples."
+      title={t.calculatorTitle}
+      description={t.calculatorDescription}
     >
       <div className="max-w-sm mx-auto bg-gray-100 rounded-2xl p-6 shadow-lg">
         {/* Display */}

@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, Eye, Trash2, AlertCircle, CheckCircle, GitCompare, ArrowRight } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import { getTranslations } from '@/config/language';
 
 interface ComparisonResult {
   fileName: string;
@@ -28,6 +29,7 @@ interface PageComparison {
 }
 
 export default function ComparePdfPage() {
+  const t = getTranslations();
   const [file1, setFile1] = useState<File | null>(null);
   const [file2, setFile2] = useState<File | null>(null);
   const [isComparing, setIsComparing] = useState(false);
@@ -64,12 +66,12 @@ export default function ComparePdfPage() {
 
   const handleFileSelect = (selectedFile: File, fileNumber: 1 | 2) => {
     if (selectedFile.type !== 'application/pdf') {
-      alert('Por favor, selecione apenas arquivos PDF.');
+      alert(t.comparePdf?.onlyPdfAlert || 'Por favor, selecione apenas arquivos PDF.');
       return;
     }
     
     if (selectedFile.size > 50 * 1024 * 1024) {
-      alert('Arquivo muito grande. Limite de 50MB.');
+      alert(t.comparePdf?.fileSizeAlert || 'Arquivo muito grande. Limite de 50MB.');
       return;
     }
     
@@ -281,8 +283,8 @@ export default function ComparePdfPage() {
 
   return (
     <ToolLayout
-      title="Compare PDF"
-      description="Compare dois documentos PDF e identifique diferenças"
+      title={t.comparePdf?.title || 'Compare PDF'}
+      description={t.comparePdf?.description || 'Compare dois documentos PDF e identifique diferenças'}
     >
       <div className="space-y-6">
         {/* Upload Areas */}
@@ -301,10 +303,10 @@ export default function ComparePdfPage() {
           >
             <FileText className="mx-auto h-10 w-10 text-gray-400 mb-3" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Primeiro PDF
+              {t.comparePdf?.firstPdf || 'Primeiro PDF'}
             </h3>
             <p className="text-gray-600 mb-3">
-              Arraste o primeiro arquivo aqui
+              {t.comparePdf?.dragFirstFile || 'Arraste o primeiro arquivo aqui'}
             </p>
             <input
               ref={fileInputRef1}
@@ -318,7 +320,7 @@ export default function ComparePdfPage() {
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Upload className="inline-block w-4 h-4 mr-2" />
-              Selecionar
+              {t.comparePdf?.selectButton || 'Selecionar'}
             </button>
             
             {file1 && (
@@ -343,10 +345,10 @@ export default function ComparePdfPage() {
           >
             <FileText className="mx-auto h-10 w-10 text-gray-400 mb-3" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Segundo PDF
+              {t.comparePdf?.secondPdf || 'Segundo PDF'}
             </h3>
             <p className="text-gray-600 mb-3">
-              Arraste o segundo arquivo aqui
+              {t.comparePdf?.dragSecondFile || 'Arraste o segundo arquivo aqui'}
             </p>
             <input
               ref={fileInputRef2}
@@ -360,7 +362,7 @@ export default function ComparePdfPage() {
               className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
             >
               <Upload className="inline-block w-4 h-4 mr-2" />
-              Selecionar
+              {t.comparePdf?.selectButton || 'Selecionar'}
             </button>
             
             {file2 && (
@@ -381,7 +383,7 @@ export default function ComparePdfPage() {
               className="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 disabled:bg-gray-400 transition-colors flex items-center mx-auto"
             >
               <GitCompare className="w-5 h-5 mr-2" />
-              {isComparing ? 'Comparando...' : 'Comparar PDFs'}
+              {isComparing ? (t.comparePdf?.comparing || 'Comparando...') : (t.comparePdf?.compareButton || 'Comparar PDFs')}
             </button>
             
             <button
@@ -389,7 +391,7 @@ export default function ComparePdfPage() {
               className="mt-3 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
             >
               <Trash2 className="inline-block w-4 h-4 mr-2" />
-              Limpar Tudo
+              {t.comparePdf?.clearButton || 'Limpar Tudo'}
             </button>
           </div>
         )}
@@ -399,7 +401,7 @@ export default function ComparePdfPage() {
           <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-semibold text-purple-900">
-                Comparando documentos...
+                {t.comparePdf?.comparingDocuments || 'Comparando documentos...'}
               </span>
               <span className="text-sm font-bold text-purple-900">
                 {Math.round(progress)}%
@@ -421,7 +423,7 @@ export default function ComparePdfPage() {
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <div className="flex items-center mb-4">
                 <CheckCircle className="h-6 w-6 text-green-500 mr-2" />
-                <h3 className="text-xl font-bold text-gray-900">Resultado da Comparação</h3>
+                <h3 className="text-xl font-bold text-gray-900">{t.comparePdf?.comparisonResult || 'Resultado da Comparação'}</h3>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -429,21 +431,21 @@ export default function ComparePdfPage() {
                   <div className="text-2xl font-bold text-blue-600">
                     {comparisonResult.similarity.toFixed(1)}%
                   </div>
-                  <div className="text-sm text-blue-800">Similaridade Geral</div>
+                  <div className="text-sm text-blue-800">{t.comparePdf?.overallSimilarity || 'Similaridade Geral'}</div>
                 </div>
                 
                 <div className="text-center p-4 bg-red-50 rounded-lg">
                   <div className="text-2xl font-bold text-red-600">
                     {comparisonResult.differences.length}
                   </div>
-                  <div className="text-sm text-red-800">Diferenças Encontradas</div>
+                  <div className="text-sm text-red-800">{t.comparePdf?.differencesFound || 'Diferenças Encontradas'}</div>
                 </div>
                 
                 <div className="text-center p-4 bg-green-50 rounded-lg">
                   <div className="text-2xl font-bold text-green-600">
                     {comparisonResult.pageComparisons.length}
                   </div>
-                  <div className="text-sm text-green-800">Páginas Analisadas</div>
+                  <div className="text-sm text-green-800">{t.comparePdf?.pagesAnalyzed || 'Páginas Analisadas'}</div>
                 </div>
               </div>
             </div>
@@ -451,7 +453,7 @@ export default function ComparePdfPage() {
             {/* Differences */}
             {comparisonResult.differences.length > 0 && (
               <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">Diferenças Identificadas</h4>
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">{t.comparePdf?.identifiedDifferences || 'Diferenças Identificadas'}</h4>
                 <div className="space-y-3">
                   {comparisonResult.differences.map((diff, index) => (
                     <div key={index} className={`p-3 rounded-lg border ${getSeverityColor(diff.severity)}`}>
@@ -462,7 +464,7 @@ export default function ComparePdfPage() {
                           </span>
                           <p className="mt-1">{diff.description}</p>
                           {diff.page && (
-                            <span className="text-xs opacity-75">Página {diff.page}</span>
+                            <span className="text-xs opacity-75">{t.comparePdf?.page || 'Página'} {diff.page}</span>
                           )}
                         </div>
                       </div>
@@ -474,12 +476,12 @@ export default function ComparePdfPage() {
 
             {/* Page by Page Comparison */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4">Comparação por Página</h4>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">{t.comparePdf?.pageByPageComparison || 'Comparação por Página'}</h4>
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {comparisonResult.pageComparisons.map((pageComp, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                     <div className="flex items-center space-x-3">
-                      <span className="font-medium">Página {pageComp.pageNumber}</span>
+                      <span className="font-medium">{t.comparePdf?.page || 'Página'} {pageComp.pageNumber}</span>
                       <div className="flex items-center space-x-2">
                         <span className={`w-3 h-3 rounded-full ${
                           pageComp.file1HasPage ? 'bg-blue-500' : 'bg-gray-300'
@@ -494,13 +496,13 @@ export default function ComparePdfPage() {
                     <div className="flex items-center space-x-4">
                       {pageComp.file1HasPage && pageComp.file2HasPage && (
                         <span className="text-sm font-medium">
-                          {pageComp.textSimilarity.toFixed(1)}% similar
+                          {pageComp.textSimilarity.toFixed(1)}% {t.comparePdf?.similar || 'similar'}
                         </span>
                       )}
                       
                       {pageComp.differences.length > 0 && (
                         <span className="text-xs text-red-600">
-                          {pageComp.differences.length} diferença(s)
+                          {pageComp.differences.length} {t.comparePdf?.differences || 'diferença(s)'}
                         </span>
                       )}
                     </div>
@@ -513,25 +515,25 @@ export default function ComparePdfPage() {
 
         {/* Information */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">ℹ️ Sobre a Comparação de PDFs</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">ℹ️ {t.comparePdf?.aboutComparison || 'Sobre a Comparação de PDFs'}</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Compara metadados, estrutura e conteúdo de texto</li>
-            <li>• Identifica diferenças em número de páginas e conteúdo</li>
-            <li>• Calcula similaridade baseada em análise de texto</li>
-            <li>• Funciona melhor com PDFs que contêm texto pesquisável</li>
-            <li>• PDFs escaneados podem ter resultados limitados</li>
+            <li>• {t.comparePdf?.aboutInfo1 || 'Compara metadados, estrutura e conteúdo de texto'}</li>
+            <li>• {t.comparePdf?.aboutInfo2 || 'Identifica diferenças em número de páginas e conteúdo'}</li>
+            <li>• {t.comparePdf?.aboutInfo3 || 'Calcula similaridade baseada em análise de texto'}</li>
+            <li>• {t.comparePdf?.aboutInfo4 || 'Funciona melhor com PDFs que contêm texto pesquisável'}</li>
+            <li>• {t.comparePdf?.aboutInfo5 || 'PDFs escaneados podem ter resultados limitados'}</li>
           </ul>
         </div>
 
         {/* Tips */}
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h4 className="font-semibold text-yellow-900 mb-2">💡 Dicas para Melhor Comparação</h4>
+          <h4 className="font-semibold text-yellow-900 mb-2">💡 {t.comparePdf?.tipsTitle || 'Dicas para Melhor Comparação'}</h4>
           <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• Use PDFs com texto pesquisável para melhores resultados</li>
-            <li>• Arquivos muito grandes podem demorar para processar</li>
-            <li>• A comparação é baseada em conteúdo de texto, não visual</li>
-            <li>• Diferenças de formatação podem não ser detectadas</li>
-            <li>• Recomendado para arquivos de até 50MB cada</li>
+            <li>• {t.comparePdf?.tip1 || 'Use PDFs com texto pesquisável para melhores resultados'}</li>
+            <li>• {t.comparePdf?.tip2 || 'Arquivos muito grandes podem demorar para processar'}</li>
+            <li>• {t.comparePdf?.tip3 || 'A comparação é baseada em conteúdo de texto, não visual'}</li>
+            <li>• {t.comparePdf?.tip4 || 'Diferenças de formatação podem não ser detectadas'}</li>
+            <li>• {t.comparePdf?.tip5 || 'Recomendado para arquivos de até 50MB cada'}</li>
           </ul>
         </div>
       </div>

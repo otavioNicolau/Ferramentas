@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, AlertTriangle, CheckCircle, Wrench, Trash2, Info, Shield } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import { getTranslations } from '@/config/language';
 
 interface RepairResult {
   fileName: string;
@@ -24,6 +25,7 @@ interface Issue {
 }
 
 export default function RepairPdfPage() {
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isRepairing, setIsRepairing] = useState(false);
   const [repairResult, setRepairResult] = useState<RepairResult | null>(null);
@@ -357,8 +359,8 @@ export default function RepairPdfPage() {
 
   return (
     <ToolLayout
-      title="Reparar PDF"
-      description="Repare PDFs corrompidos ou com problemas"
+      title={t.pdfRepair?.title || "Reparar PDF"}
+      description={t.pdfRepair?.description || "Repare PDFs corrompidos ou com problemas"}
     >
       <div className="space-y-6">
         {/* Upload Area */}
@@ -375,10 +377,10 @@ export default function RepairPdfPage() {
         >
           <Wrench className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Selecione o PDF para Reparar
+            {t.pdfRepair?.selectFile || "Selecione o PDF para Reparar"}
           </h3>
           <p className="text-gray-600 mb-4">
-            Arraste e solte seu arquivo PDF aqui ou clique para selecionar
+            {t.pdfRepair?.dragDropText || "Arraste e solte seu arquivo PDF aqui ou clique para selecionar"}
           </p>
           <input
             ref={fileInputRef}
@@ -392,7 +394,7 @@ export default function RepairPdfPage() {
             className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors"
           >
             <Upload className="inline-block w-5 h-5 mr-2" />
-            Selecionar PDF
+            {t.pdfRepair?.selectButton || "Selecionar PDF"}
           </button>
           
           {file && (
@@ -409,7 +411,7 @@ export default function RepairPdfPage() {
         {/* Repair Options */}
         {file && !repairResult && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Opções de Reparo</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.pdfRepair?.repairOptions || "Opções de Reparo"}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <label className="flex items-center space-x-3">
                 <input
@@ -418,7 +420,7 @@ export default function RepairPdfPage() {
                   onChange={(e) => setRepairOptions(prev => ({ ...prev, fixMetadata: e.target.checked }))}
                   className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                 />
-                <span className="text-sm text-gray-700">Corrigir metadados ausentes</span>
+                <span className="text-sm text-gray-700">{t.pdfRepair?.fixMetadata || "Corrigir metadados ausentes"}</span>
               </label>
               
               <label className="flex items-center space-x-3">
@@ -428,7 +430,7 @@ export default function RepairPdfPage() {
                   onChange={(e) => setRepairOptions(prev => ({ ...prev, removeCorruption: e.target.checked }))}
                   className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                 />
-                <span className="text-sm text-gray-700">Remover corrupção</span>
+                <span className="text-sm text-gray-700">{t.pdfRepair?.removeCorruption || "Remover corrupção"}</span>
               </label>
               
               <label className="flex items-center space-x-3">
@@ -438,7 +440,7 @@ export default function RepairPdfPage() {
                   onChange={(e) => setRepairOptions(prev => ({ ...prev, optimizeStructure: e.target.checked }))}
                   className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                 />
-                <span className="text-sm text-gray-700">Otimizar estrutura</span>
+                <span className="text-sm text-gray-700">{t.pdfRepair?.optimizeStructure || "Otimizar estrutura"}</span>
               </label>
               
               <label className="flex items-center space-x-3">
@@ -448,7 +450,7 @@ export default function RepairPdfPage() {
                   onChange={(e) => setRepairOptions(prev => ({ ...prev, validatePages: e.target.checked }))}
                   className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                 />
-                <span className="text-sm text-gray-700">Validar páginas</span>
+                <span className="text-sm text-gray-700">{t.pdfRepair?.validatePages || "Validar páginas"}</span>
               </label>
               
               <label className="flex items-center space-x-3">
@@ -458,7 +460,7 @@ export default function RepairPdfPage() {
                   onChange={(e) => setRepairOptions(prev => ({ ...prev, fixEncoding: e.target.checked }))}
                   className="rounded border-gray-300 text-red-600 focus:ring-red-500"
                 />
-                <span className="text-sm text-gray-700">Corrigir codificação</span>
+                <span className="text-sm text-gray-700">{t.pdfRepair?.fixEncoding || "Corrigir codificação"}</span>
               </label>
             </div>
           </div>
@@ -473,7 +475,7 @@ export default function RepairPdfPage() {
               className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 disabled:bg-gray-400 transition-colors flex items-center mx-auto"
             >
               <Wrench className="w-5 h-5 mr-2" />
-              {isRepairing ? 'Reparando...' : 'Reparar PDF'}
+              {isRepairing ? (t.pdfRepair?.repairing || 'Reparando...') : (t.pdfRepair?.repairButton || 'Reparar PDF')}
             </button>
             
             <button
@@ -481,7 +483,7 @@ export default function RepairPdfPage() {
               className="mt-3 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors"
             >
               <Trash2 className="inline-block w-4 h-4 mr-2" />
-              Limpar
+              {t.pdfRepair?.clear || "Limpar"}
             </button>
           </div>
         )}
@@ -491,7 +493,7 @@ export default function RepairPdfPage() {
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-semibold text-red-900">
-                Reparando PDF...
+                {t.pdfRepair?.repairingProgress || "Reparando PDF..."}
               </span>
               <span className="text-sm font-bold text-red-900">
                 {Math.round(progress)}%
@@ -518,7 +520,7 @@ export default function RepairPdfPage() {
                   <AlertTriangle className="h-6 w-6 text-red-500 mr-2" />
                 )}
                 <h3 className="text-xl font-bold text-gray-900">
-                  {repairResult.success ? 'PDF Reparado com Sucesso!' : 'Falha no Reparo'}
+                  {repairResult.success ? (t.pdfRepair?.successTitle || 'PDF Reparado com Sucesso!') : (t.pdfRepair?.failureTitle || 'Falha no Reparo')}
                 </h3>
               </div>
               
@@ -527,28 +529,28 @@ export default function RepairPdfPage() {
                   <div className="text-2xl font-bold text-blue-600">
                     {repairResult.issuesFound.length}
                   </div>
-                  <div className="text-sm text-blue-800">Problemas Encontrados</div>
+                  <div className="text-sm text-blue-800">{t.pdfRepair?.issuesFound || "Problemas Encontrados"}</div>
                 </div>
                 
                 <div className="text-center p-4 bg-green-50 rounded-lg">
                   <div className="text-2xl font-bold text-green-600">
                     {repairResult.issuesFixed.length}
                   </div>
-                  <div className="text-sm text-green-800">Problemas Corrigidos</div>
+                  <div className="text-sm text-green-800">{t.pdfRepair?.issuesFixed || "Problemas Corrigidos"}</div>
                 </div>
                 
                 <div className="text-center p-4 bg-purple-50 rounded-lg">
                   <div className="text-2xl font-bold text-purple-600">
                     {formatFileSize(repairResult.originalSize)}
                   </div>
-                  <div className="text-sm text-purple-800">Tamanho Original</div>
+                  <div className="text-sm text-purple-800">{t.pdfRepair?.originalSize || "Tamanho Original"}</div>
                 </div>
                 
                 <div className="text-center p-4 bg-orange-50 rounded-lg">
                   <div className="text-2xl font-bold text-orange-600">
                     {formatFileSize(repairResult.repairedSize)}
                   </div>
-                  <div className="text-sm text-orange-800">Tamanho Reparado</div>
+                  <div className="text-sm text-orange-800">{t.pdfRepair?.repairedSize || "Tamanho Reparado"}</div>
                 </div>
               </div>
               
@@ -560,7 +562,7 @@ export default function RepairPdfPage() {
                     className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors inline-flex items-center"
                   >
                     <Download className="w-5 h-5 mr-2" />
-                    Baixar PDF Reparado
+                    {t.pdfRepair?.downloadRepaired || "Baixar PDF Reparado"}
                   </a>
                 </div>
               )}
@@ -569,7 +571,7 @@ export default function RepairPdfPage() {
             {/* Issues Found */}
             {repairResult.issuesFound.length > 0 && (
               <div className="bg-white border border-gray-200 rounded-lg p-6">
-                <h4 className="text-lg font-semibold text-gray-900 mb-4">Problemas Identificados</h4>
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">{t.pdfRepair?.identifiedIssues || "Problemas Identificados"}</h4>
                 <div className="space-y-3">
                   {repairResult.issuesFound.map((issue, index) => (
                     <div key={index} className={`p-3 rounded-lg border ${getSeverityColor(issue.severity)}`}>
@@ -591,11 +593,11 @@ export default function RepairPdfPage() {
                         <div className="ml-4">
                           {issue.fixed ? (
                             <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                              Corrigido
+                              {t.pdfRepair?.fixed || "Corrigido"}
                             </span>
                           ) : (
                             <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
-                              Não corrigido
+                              {t.pdfRepair?.notFixed || "Não corrigido"}
                             </span>
                           )}
                         </div>
@@ -612,7 +614,7 @@ export default function RepairPdfPage() {
                 onClick={clearAll}
                 className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Reparar Outro PDF
+                {t.pdfRepair?.repairAnother || "Reparar Outro PDF"}
               </button>
             </div>
           </div>
@@ -622,14 +624,14 @@ export default function RepairPdfPage() {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
             <Info className="w-4 h-4 mr-2" />
-            Sobre o Reparo de PDFs
+            {t.pdfRepair?.aboutRepairTitle || "Sobre o Reparo de PDFs"}
           </h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Detecta e corrige problemas comuns em PDFs</li>
-            <li>• Repara metadados ausentes ou corrompidos</li>
-            <li>• Corrige problemas de estrutura e codificação</li>
-            <li>• Valida e repara páginas com dimensões inválidas</li>
-            <li>• Funciona com PDFs de até 100MB</li>
+            <li>• {t.pdfRepair?.aboutFeature1 || "Detecta e corrige problemas comuns em PDFs"}</li>
+            <li>• {t.pdfRepair?.aboutFeature2 || "Repara metadados ausentes ou corrompidos"}</li>
+            <li>• {t.pdfRepair?.aboutFeature3 || "Corrige problemas de estrutura e codificação"}</li>
+            <li>• {t.pdfRepair?.aboutFeature4 || "Valida e repara páginas com dimensões inválidas"}</li>
+            <li>• {t.pdfRepair?.aboutFeature5 || "Funciona com PDFs de até 100MB"}</li>
           </ul>
         </div>
 
@@ -637,14 +639,14 @@ export default function RepairPdfPage() {
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <h4 className="font-semibold text-yellow-900 mb-2 flex items-center">
             <Shield className="w-4 h-4 mr-2" />
-            Dicas de Reparo
+            {t.pdfRepair?.repairTipsTitle || "Dicas de Reparo"}
           </h4>
           <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• Faça backup do arquivo original antes do reparo</li>
-            <li>• PDFs muito corrompidos podem não ser reparáveis</li>
-            <li>• O reparo pode alterar a aparência visual do documento</li>
-            <li>• Teste o PDF reparado antes de usar em produção</li>
-            <li>• Alguns problemas podem requerer software especializado</li>
+            <li>• {t.pdfRepair?.tip1 || "Faça backup do arquivo original antes do reparo"}</li>
+            <li>• {t.pdfRepair?.tip2 || "PDFs muito corrompidos podem não ser reparáveis"}</li>
+            <li>• {t.pdfRepair?.tip3 || "O reparo pode alterar a aparência visual do documento"}</li>
+            <li>• {t.pdfRepair?.tip4 || "Teste o PDF reparado antes de usar em produção"}</li>
+            <li>• {t.pdfRepair?.tip5 || "Alguns problemas podem requerer software especializado"}</li>
           </ul>
         </div>
       </div>

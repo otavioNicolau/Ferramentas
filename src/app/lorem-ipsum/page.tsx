@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Type, Copy, RotateCcw } from 'lucide-react';
+import { getTranslations } from '@/config/language';
 
 export default function LoremIpsumPage() {
+  const t = getTranslations();
   const [paragraphs, setParagraphs] = useState(3);
   const [words, setWords] = useState(50);
   const [generationType, setGenerationType] = useState<'paragraphs' | 'words' | 'bytes'>('paragraphs');
@@ -126,8 +128,8 @@ export default function LoremIpsumPage() {
 
   return (
     <ToolLayout
-      title="Gerador Lorem Ipsum"
-      description="Gere texto de exemplo Lorem Ipsum personalizado para seus projetos."
+      title={t.loremIpsumTitle}
+      description={t.loremIpsumDescription}
     >
       <div className="space-y-6">
         {/* Configurações */}

@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, Maximize, Trash2, Eye, AlertCircle, CheckCircle, RotateCw } from 'lucide-react';
 import { PDFDocument, PageSizes, degrees } from 'pdf-lib';
+import { getTranslations } from '@/config/language';
 
 interface PageSize {
   name: string;
@@ -36,6 +37,7 @@ interface ResizedPdf {
 }
 
 export default function ResizePdfPage() {
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [resizedPdf, setResizedPdf] = useState<ResizedPdf | null>(null);
@@ -214,13 +216,13 @@ export default function ResizePdfPage() {
 
   return (
     <ToolLayout
-      title="Change PDF Page Size"
-      description="Altere o tamanho das páginas de documentos PDF"
+      title={t.resizePdf?.title || 'Change PDF Page Size'}
+      description={t.resizePdf?.description || 'Altere o tamanho das páginas de documentos PDF'}
     >
       <div className="space-y-6">
         {/* Upload de Arquivo */}
         <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Selecionar Arquivo PDF</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">{t.resizePdf?.selectFile || 'Selecionar Arquivo PDF'}</h3>
           
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
@@ -235,9 +237,9 @@ export default function ResizePdfPage() {
           >
             <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <p className="text-lg font-medium text-gray-900 mb-2">
-              Arraste e solte seu arquivo PDF aqui
+              {t.resizePdf?.dragDrop || 'Arraste e solte seu arquivo PDF aqui'}
             </p>
-            <p className="text-gray-600 mb-4">ou</p>
+            <p className="text-gray-600 mb-4">{t.resizePdf?.or || 'ou'}</p>
             <input
               ref={fileInputRef}
               type="file"
@@ -249,7 +251,7 @@ export default function ResizePdfPage() {
               onClick={() => fileInputRef.current?.click()}
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
             >
-              Selecionar Arquivo
+              {t.resizePdf?.selectFileButton || 'Selecionar Arquivo'}
             </button>
           </div>
         </div>
@@ -258,13 +260,13 @@ export default function ResizePdfPage() {
         {file && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">Configurações de Redimensionamento</h3>
+              <h3 className="text-lg font-semibold text-gray-800">{t.resizePdf?.resizeSettings || 'Configurações de Redimensionamento'}</h3>
               <button
                 onClick={clearAll}
                 className="text-gray-600 hover:text-gray-800 flex items-center gap-1"
               >
                 <Trash2 size={16} />
-                Limpar
+                {t.resizePdf?.clearButton || 'Limpar'}
               </button>
             </div>
             
@@ -280,7 +282,7 @@ export default function ResizePdfPage() {
               {/* Tamanho da Página */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tamanho da Página
+                  {t.resizePdf?.pageSize || 'Tamanho da Página'}
                 </label>
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
@@ -291,7 +293,7 @@ export default function ResizePdfPage() {
                       onChange={() => setUseCustomSize(false)}
                       className="text-blue-600"
                     />
-                    <label htmlFor="preset-size" className="text-sm text-gray-700">Tamanho padrão</label>
+                    <label htmlFor="preset-size" className="text-sm text-gray-700">{t.resizePdf?.standardSize || 'Tamanho padrão'}</label>
                   </div>
                   
                   {!useCustomSize && (
@@ -316,25 +318,31 @@ export default function ResizePdfPage() {
                       onChange={() => setUseCustomSize(true)}
                       className="text-blue-600"
                     />
-                    <label htmlFor="custom-size" className="text-sm text-gray-700">Tamanho personalizado (pontos)</label>
+                    <label htmlFor="custom-size" className="text-sm text-gray-700">{t.resizePdf?.customSize || 'Tamanho personalizado (pontos)'}</label>
                   </div>
                   
                   {useCustomSize && (
-                    <div className="grid grid-cols-2 gap-2">
-                      <input
-                        type="number"
-                        placeholder="Largura"
-                        value={customWidth}
-                        onChange={(e) => setCustomWidth(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                      <input
-                        type="number"
-                        placeholder="Altura"
-                        value={customHeight}
-                        onChange={(e) => setCustomHeight(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-1">{t.resizePdf?.width || 'Largura'}</label>
+                        <input
+                          type="number"
+                          placeholder={t.resizePdf?.width || 'Largura'}
+                          value={customWidth}
+                          onChange={(e) => setCustomWidth(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-1">{t.resizePdf?.height || 'Altura'}</label>
+                        <input
+                          type="number"
+                          placeholder={t.resizePdf?.height || 'Altura'}
+                          value={customHeight}
+                          onChange={(e) => setCustomHeight(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -343,7 +351,7 @@ export default function ResizePdfPage() {
               {/* Orientação */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Orientação
+                  {t.resizePdf?.orientation || 'Orientação'}
                 </label>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2">
@@ -354,7 +362,7 @@ export default function ResizePdfPage() {
                       onChange={(e) => setOrientation(e.target.value as 'portrait' | 'landscape')}
                       className="text-blue-600"
                     />
-                    <span className="text-sm text-gray-700">Retrato</span>
+                    <span className="text-sm text-gray-700">{t.resizePdf?.portrait || 'Retrato'}</span>
                   </label>
                   <label className="flex items-center gap-2">
                     <input
@@ -365,7 +373,7 @@ export default function ResizePdfPage() {
                       className="text-blue-600"
                     />
                     <RotateCw size={16} className="text-gray-500" />
-                    <span className="text-sm text-gray-700">Paisagem</span>
+                    <span className="text-sm text-gray-700">{t.resizePdf?.landscape || 'Paisagem'}</span>
                   </label>
                 </div>
               </div>
@@ -373,7 +381,7 @@ export default function ResizePdfPage() {
             
             {/* Opções de Escala */}
             <div className="mt-6 space-y-4">
-              <h4 className="font-medium text-gray-800">Opções de Conteúdo</h4>
+              <h4 className="font-medium text-gray-800">{t.resizePdf?.contentOptions || 'Opções de Conteúdo'}</h4>
               
               <div className="space-y-3">
                 <label className="flex items-center gap-2">
@@ -383,7 +391,7 @@ export default function ResizePdfPage() {
                     onChange={(e) => setScaleContent(e.target.checked)}
                     className="text-blue-600"
                   />
-                  <span className="text-sm text-gray-700">Redimensionar conteúdo para ajustar ao novo tamanho</span>
+                  <span className="text-sm text-gray-700">{t.resizePdf?.resizeContent || 'Redimensionar conteúdo para ajustar ao novo tamanho'}</span>
                 </label>
                 
                 {scaleContent && (
@@ -394,7 +402,7 @@ export default function ResizePdfPage() {
                       onChange={(e) => setMaintainAspectRatio(e.target.checked)}
                       className="text-blue-600"
                     />
-                    <span className="text-sm text-gray-700">Manter proporção (evitar distorção)</span>
+                    <span className="text-sm text-gray-700">{t.resizePdf?.maintainAspectRatio || 'Manter proporção (evitar distorção)'}</span>
                   </label>
                 )}
               </div>
@@ -406,7 +414,7 @@ export default function ResizePdfPage() {
               className="w-full mt-6 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               <Maximize size={20} />
-              {isProcessing ? 'Redimensionando...' : 'Redimensionar PDF'}
+              {isProcessing ? (t.resizePdf?.processing || 'Redimensionando...') : (t.resizePdf?.resizeButton || 'Redimensionar PDF')}
             </button>
           </div>
         )}
@@ -415,43 +423,43 @@ export default function ResizePdfPage() {
         {resizedPdf && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">PDF Redimensionado</h3>
+              <h3 className="text-lg font-semibold text-gray-800">{t.resizePdf?.resizedPdf || 'PDF Redimensionado'}</h3>
               <button
                 onClick={clearAll}
                 className="text-gray-600 hover:text-gray-800 flex items-center gap-1"
               >
                 <Trash2 size={16} />
-                Limpar
+                {t.resizePdf?.clearButton || 'Limpar'}
               </button>
             </div>
             
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
               <div className="flex items-center gap-2 mb-3">
                 <CheckCircle className="text-green-600" size={20} />
-                <span className="font-medium text-green-800">PDF redimensionado com sucesso!</span>
+                <span className="font-medium text-green-800">{t.resizePdf?.successMessage || 'PDF redimensionado com sucesso!'}</span>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
                 <div>
-                  <span className="text-green-700 font-medium">Arquivo:</span>
+                  <span className="text-green-700 font-medium">{t.resizePdf?.fileName || 'Arquivo'}:</span>
                   <p className="text-green-800">{resizedPdf.fileName}</p>
                 </div>
                 <div>
-                  <span className="text-green-700 font-medium">Tamanho:</span>
+                  <span className="text-green-700 font-medium">{t.resizePdf?.fileSize || 'Tamanho'}:</span>
                   <p className="text-green-800">{formatFileSize(resizedPdf.fileSize)}</p>
                 </div>
                 <div>
-                  <span className="text-green-700 font-medium">Páginas:</span>
+                  <span className="text-green-700 font-medium">{t.resizePdf?.pages || 'Páginas'}:</span>
                   <p className="text-green-800">{resizedPdf.pageCount}</p>
                 </div>
                 <div>
-                  <span className="text-green-700 font-medium">Novo tamanho:</span>
+                  <span className="text-green-700 font-medium">{t.resizePdf?.newSize || 'Novo tamanho'}:</span>
                   <p className="text-green-800">{resizedPdf.sizeName} ({Math.round(resizedPdf.newSize.width)} × {Math.round(resizedPdf.newSize.height)} pts)</p>
                 </div>
               </div>
               
               <div className="text-sm text-green-700">
-                <span className="font-medium">Tamanho original:</span> {Math.round(resizedPdf.originalSize.width)} × {Math.round(resizedPdf.originalSize.height)} pts
+                <span className="font-medium">{t.resizePdf?.originalSize || 'Tamanho original'}:</span> {Math.round(resizedPdf.originalSize.width)} × {Math.round(resizedPdf.originalSize.height)} pts
               </div>
             </div>
             
@@ -460,34 +468,34 @@ export default function ResizePdfPage() {
               className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
             >
               <Download size={20} />
-              Baixar PDF Redimensionado
+                {t.resizePdf?.downloadButton || 'Baixar PDF Redimensionado'}
             </button>
           </div>
         )}
 
         {/* Informações */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">📏 Como funciona:</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">📏 {t.resizePdf?.howItWorksTitle || 'Como funciona'}:</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Altera o tamanho das páginas do PDF para o formato desejado</li>
-            <li>• Opção de redimensionar o conteúdo para ajustar ao novo tamanho</li>
-            <li>• Mantém a proporção para evitar distorção do conteúdo</li>
-            <li>• Suporte para tamanhos padrão (A4, A3, Letter, etc.) e personalizados</li>
-            <li>• Processamento realizado localmente no navegador</li>
+            <li>• {t.resizePdf?.howItWorks1 || 'Altera o tamanho das páginas do PDF para o formato desejado'}</li>
+            <li>• {t.resizePdf?.howItWorks2 || 'Opção de redimensionar o conteúdo para ajustar ao novo tamanho'}</li>
+            <li>• {t.resizePdf?.howItWorks3 || 'Mantém a proporção para evitar distorção do conteúdo'}</li>
+            <li>• {t.resizePdf?.howItWorks4 || 'Suporte para tamanhos padrão (A4, A3, Letter, etc.) e personalizados'}</li>
+            <li>• {t.resizePdf?.howItWorks5 || 'Processamento realizado localmente no navegador'}</li>
           </ul>
         </div>
 
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <h4 className="font-semibold text-yellow-900 mb-2 flex items-center gap-2">
             <AlertCircle size={16} />
-            ⚠️ Importante
+            ⚠️ {t.resizePdf?.importantTitle || 'Importante'}
           </h4>
           <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• O redimensionamento pode afetar a qualidade visual do conteúdo</li>
-            <li>• Recomendado manter a proporção para evitar distorção</li>
-            <li>• Tamanhos personalizados devem ser especificados em pontos (1 ponto = 1/72 polegada)</li>
-            <li>• PDFs com elementos complexos podem ter resultados variados</li>
-            <li>• Sempre mantenha uma cópia do arquivo original</li>
+            <li>• {t.resizePdf?.important1 || 'O redimensionamento pode afetar a qualidade visual do conteúdo'}</li>
+            <li>• {t.resizePdf?.important2 || 'Recomendado manter a proporção para evitar distorção'}</li>
+            <li>• {t.resizePdf?.important3 || 'Tamanhos personalizados devem ser especificados em pontos (1 ponto = 1/72 polegada)'}</li>
+            <li>• {t.resizePdf?.important4 || 'PDFs com elementos complexos podem ter resultados variados'}</li>
+            <li>• {t.resizePdf?.important5 || 'Sempre mantenha uma cópia do arquivo original'}</li>
           </ul>
         </div>
       </div>

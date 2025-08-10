@@ -1,8 +1,9 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Link2, Copy, RotateCcw, ExternalLink, Clock } from 'lucide-react';
+import { getTranslations } from '@/config/language';
 
 interface ShortenedUrl {
   original: string;
@@ -12,6 +13,7 @@ interface ShortenedUrl {
 }
 
 export default function EncurtadorUrlPage() {
+  const t = getTranslations();
   const [originalUrl, setOriginalUrl] = useState('');
   const [shortenedUrls, setShortenedUrls] = useState<ShortenedUrl[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
@@ -101,8 +103,8 @@ export default function EncurtadorUrlPage() {
 
   return (
     <ToolLayout
-      title="Encurtador de URL"
-      description="Encurte URLs longas para facilitar o compartilhamento e acompanhe estatísticas básicas."
+      title={t.urlShortenerTitle}
+      description={t.urlShortenerDescription}
     >
       <div className="space-y-6">
         {/* Input de URL */}

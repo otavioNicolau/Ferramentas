@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { QrCode, Upload, Camera, Copy, ExternalLink, Scan, X, CheckCircle } from 'lucide-react';
 import { Html5QrcodeScanner, Html5Qrcode } from 'html5-qrcode';
+import { getTranslations } from '@/config/language';
 
 interface QRResult {
   text: string;
@@ -12,6 +13,7 @@ interface QRResult {
 }
 
 export default function LerQRCodePage() {
+  const t = getTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [result, setResult] = useState<QRResult | null>(null);
@@ -220,8 +222,8 @@ export default function LerQRCodePage() {
 
   return (
     <ToolLayout
-      title="Ler QR Code"
-      description="Leia códigos QR através de upload de imagem ou câmera em tempo real."
+      title={t.qrReaderTitle}
+      description={t.qrReaderDescription}
     >
       <div className="space-y-6">
         {/* Métodos de Input */}

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
+import { getTranslations } from '@/config/language';
 import { Upload, FileText, Download, Scissors, Trash2, Eye, AlertCircle } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 
@@ -22,6 +23,7 @@ interface PageRange {
 }
 
 export default function SplitPdfPage() {
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [splitResults, setSplitResults] = useState<SplitResult[]>([]);
@@ -228,8 +230,8 @@ export default function SplitPdfPage() {
 
   return (
     <ToolLayout
-      title="Dividir PDF"
-      description="Divida documentos PDF em páginas individuais ou seções específicas"
+      title={t.splitPdfTitle}
+      description={t.splitPdfDescription}
     >
       <div className="space-y-6">
         {/* Upload de Arquivo */}
