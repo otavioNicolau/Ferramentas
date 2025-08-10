@@ -134,6 +134,28 @@ export const getTranslations = () => {
         strengthMedium: 'Média',
         strengthStrong: 'Forte',
         strengthVeryStrong: 'Muito forte'
+      },
+
+      // Character Counter
+      characterCounterTitle: 'Contador de Caracteres',
+      characterCounterDescription: 'Conte caracteres, palavras, frases e mais em seu texto.',
+      characterCounter: {
+        textAreaTitle: 'Texto',
+        sampleText: 'Texto de exemplo',
+        clear: 'Limpar',
+        enterText: 'Digite ou cole seu texto aqui...',
+        characters: 'Caracteres',
+        charactersNoSpaces: 'Caracteres (sem espaços)',
+        words: 'Palavras',
+        sentences: 'Frases',
+        paragraphs: 'Parágrafos',
+        lines: 'Linhas',
+        additionalInfo: 'Informações adicionais',
+        estimatedReadingTime: 'Tempo estimado de leitura',
+        minutes: 'minutos',
+        estimatedSpeakingTime: 'Tempo estimado de fala',
+        averageWordsPerSentence: 'Média de palavras por frase',
+        averageCharsPerWord: 'Média de caracteres por palavra'
       }
     },
     'en': {
@@ -243,6 +265,28 @@ export const getTranslations = () => {
         strengthMedium: 'Medium',
         strengthStrong: 'Strong',
         strengthVeryStrong: 'Very strong'
+      },
+
+      // Character Counter
+      characterCounterTitle: 'Character Counter',
+      characterCounterDescription: 'Count characters, words, sentences and more in your text.',
+      characterCounter: {
+        textAreaTitle: 'Text',
+        sampleText: 'Sample text',
+        clear: 'Clear',
+        enterText: 'Type or paste your text here...',
+        characters: 'Characters',
+        charactersNoSpaces: 'Characters (no spaces)',
+        words: 'Words',
+        sentences: 'Sentences',
+        paragraphs: 'Paragraphs',
+        lines: 'Lines',
+        additionalInfo: 'Additional information',
+        estimatedReadingTime: 'Estimated reading time',
+        minutes: 'minutes',
+        estimatedSpeakingTime: 'Estimated speaking time',
+        averageWordsPerSentence: 'Average words per sentence',
+        averageCharsPerWord: 'Average characters per word'
       }
     }
   };
