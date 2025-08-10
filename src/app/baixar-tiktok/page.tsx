@@ -95,13 +95,26 @@ export default function BaixarTikTok() {
         body: JSON.stringify({ url: url.trim() }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || t.tiktokDownloader?.videoInfoError || 'Erro ao obter informações do vídeo');
+      const text = await response.text();
+      let data: unknown;
+
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(t.tiktokDownloader?.invalidResponse || 'Resposta inválida do servidor');
       }
 
-      const data = await response.json();
-      setVideoInfo(data);
+      if (!response.ok) {
+        const errorData = data as { error?: string; message?: string };
+        throw new Error(
+          errorData.error ||
+            errorData.message ||
+            t.tiktokDownloader?.videoInfoError ||
+            'Erro ao obter informações do vídeo'
+        );
+      }
+
+      setVideoInfo(data as VideoInfo);
     } catch (error) {
       console.error('Erro:', error);
       setError(error instanceof Error ? error.message : t.tiktokDownloader?.unknownError || 'Erro desconhecido');
@@ -165,9 +178,20 @@ export default function BaixarTikTok() {
       }
       
       if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage = errorData.message || `${t.tiktokDownloader?.downloadError || 'Erro ao baixar'} ${type === 'video' ? (t.tiktokDownloader?.video || 'vídeo') : (t.tiktokDownloader?.audio || 'áudio')}`;
-        
+        const errorText = await response.text();
+        let errorMessage = `${t.tiktokDownloader?.downloadError || 'Erro ao baixar'} ${
+          type === 'video'
+            ? (t.tiktokDownloader?.video || 'vídeo')
+            : (t.tiktokDownloader?.audio || 'áudio')
+        }`;
+
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.message || errorMessage;
+        } catch {
+          console.error('Erro na resposta:', errorText);
+        }
+
         throw new Error(errorMessage);
       }
 
