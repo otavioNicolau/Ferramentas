@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { Upload, FileText, Scissors, Download, Split, Grid3X3 } from 'lucide-react';
+import { Upload, FileText, Scissors, Split, Grid3X3 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 
@@ -15,7 +15,7 @@ interface SplitMode {
 }
 
 // Função auxiliar para debug e log detalhado
-const debugLog = (message: string, data?: any) => {
+const debugLog = (message: string, data?: unknown) => {
   console.log(`[DividirPDF] ${message}`, data || '');
 };
 
@@ -520,7 +520,7 @@ export default function DividirPDFPage() {
                   className="w-full px-3 py-2 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900 placeholder-gray-500"
                 />
                 <div className="text-xs text-purple-800 mt-1">
-                  Use vírgulas para separar intervalos. Ex: "1-3, 5, 7-10" criará 3 arquivos
+                  Use vírgulas para separar intervalos. Ex: &quot;1-3, 5, 7-10&quot; criará 3 arquivos
                 </div>
               </div>
             )}
