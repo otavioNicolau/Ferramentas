@@ -110,6 +110,30 @@ export const getTranslations = () => {
         errorProcessingImage: 'Erro ao processar imagem.',
         errorInitializingOcr: 'Erro ao iniciar OCR.',
         textCopied: 'Texto copiado para a área de transferência.'
+      },
+
+      // Password Generator
+      passwordGeneratorTitle: 'Gerador de Senhas',
+      passwordGeneratorDescription: 'Crie senhas seguras e personalizadas.',
+      passwordGenerator: {
+        generatedPassword: 'Senha gerada',
+        copy: 'Copiar',
+        copied: 'Copiado!',
+        generate: 'Gerar',
+        settings: 'Configurações',
+        length: 'Comprimento',
+        includeUppercase: 'Incluir letras maiúsculas',
+        includeLowercase: 'Incluir letras minúsculas',
+        includeNumbers: 'Incluir números',
+        includeSymbols: 'Incluir símbolos',
+        excludeAmbiguous: 'Excluir caracteres ambíguos',
+        selectAtLeastOne: 'Selecione pelo menos uma opção',
+        passwordSelected: 'Senha selecionada. Pressione Ctrl+C para copiar.',
+        passwordStrength: 'Força da senha',
+        strengthWeak: 'Fraca',
+        strengthMedium: 'Média',
+        strengthStrong: 'Forte',
+        strengthVeryStrong: 'Muito forte'
       }
     },
     'en': {
@@ -195,6 +219,30 @@ export const getTranslations = () => {
         errorProcessingImage: 'Error processing image.',
         errorInitializingOcr: 'Error initializing OCR.',
         textCopied: 'Text copied to clipboard.'
+      },
+
+      // Password Generator
+      passwordGeneratorTitle: 'Password Generator',
+      passwordGeneratorDescription: 'Create secure and custom passwords.',
+      passwordGenerator: {
+        generatedPassword: 'Generated password',
+        copy: 'Copy',
+        copied: 'Copied!',
+        generate: 'Generate',
+        settings: 'Settings',
+        length: 'Length',
+        includeUppercase: 'Include uppercase letters',
+        includeLowercase: 'Include lowercase letters',
+        includeNumbers: 'Include numbers',
+        includeSymbols: 'Include symbols',
+        excludeAmbiguous: 'Exclude ambiguous characters',
+        selectAtLeastOne: 'Select at least one option',
+        passwordSelected: 'Password selected. Press Ctrl+C to copy.',
+        passwordStrength: 'Password strength',
+        strengthWeak: 'Weak',
+        strengthMedium: 'Medium',
+        strengthStrong: 'Strong',
+        strengthVeryStrong: 'Very strong'
       }
     }
   };
