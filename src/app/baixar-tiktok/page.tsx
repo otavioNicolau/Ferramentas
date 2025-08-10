@@ -166,7 +166,7 @@ export default function BaixarTikTok() {
       
       if (!response.ok) {
         const errorData = await response.json();
-        let errorMessage = errorData.message || `${t.tiktokDownloader?.downloadError || 'Erro ao baixar'} ${type === 'video' ? (t.tiktokDownloader?.video || 'vídeo') : (t.tiktokDownloader?.audio || 'áudio')}`;
+        const errorMessage = errorData.message || `${t.tiktokDownloader?.downloadError || 'Erro ao baixar'} ${type === 'video' ? (t.tiktokDownloader?.video || 'vídeo') : (t.tiktokDownloader?.audio || 'áudio')}`;
         
         throw new Error(errorMessage);
       }

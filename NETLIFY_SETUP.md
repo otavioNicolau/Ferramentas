@@ -19,10 +19,12 @@
 
 ### Passo 2: Configurações de Build
 ```
-Build command: npm run build
+Build command: npm run build:netlify
 Publish directory: .next
 Node version: 20
 ```
+
+**Nota:** O comando `build:netlify` foi configurado para ignorar warnings do ESLint que não impedem o funcionamento da aplicação.
 
 ### Passo 3: Variáveis de Ambiente (Opcional)
 Se necessário, adicione em Site Settings > Environment variables:

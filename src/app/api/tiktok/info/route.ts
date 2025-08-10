@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
       thumbnailUrl: videoData.images?.[0] || '',
       videoUrl: videoData.videoHD || videoData.videoSD || '',
       audioUrl: videoData.music || '',
-      duration: (videoData as any).duration || 0,
+      duration: (videoData as { duration?: number }).duration || 0,
       views: stats.views,
       likes: stats.likes,
       comments: stats.comments,
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
     // Log para debug das estatísticas
     console.log('Estatísticas disponíveis:', {
       availableKeys: Object.keys(videoData),
-      hasRealStats: !!(videoData as any).stats?.likes,
+      hasRealStats: !!(videoData as { stats?: { likes?: number } }).stats?.likes,
       finalStats: stats
     });
     

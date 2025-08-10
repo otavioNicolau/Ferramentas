@@ -7,7 +7,7 @@ import { getTranslations } from '@/config/language';
 
 // Hook para evitar problemas de hidratação com traduções
 const useClientTranslations = () => {
-  const [translations, setTranslations] = useState<any>(null);
+  const [translations, setTranslations] = useState<Record<string, string> | null>(null);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {

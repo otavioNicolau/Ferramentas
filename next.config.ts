@@ -22,9 +22,9 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['@tobyg74/tiktok-api-dl'],
   
   // Configurações para evitar problemas no build
-  experimental: {
-    esmExternals: 'loose',
-  },
+  // experimental: {
+  //   esmExternals: 'loose',
+  // },
 };
 
 export default nextConfig;
