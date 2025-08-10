@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next export",
+    "netlify-build": "npm run build"
   },
   "dependencies": {
     "@distube/ytdl-core": "^4.16.12",
@@ -56,6 +58,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
+    "@netlify/plugin-nextjs": "^5.7.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
