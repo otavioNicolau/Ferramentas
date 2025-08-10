@@ -3,11 +3,11 @@
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { getTranslations } from '@/config/language';
-import { Upload, Download, FileText, CheckCircle, AlertTriangle, RefreshCw, Settings, FileImage, Type } from 'lucide-react';
+import { Upload, Download, FileText, CheckCircle, AlertTriangle, RefreshCw, Settings } from 'lucide-react';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import { Document, Packer, Paragraph, TextRun } from 'docx';
+
 import * as mammoth from 'mammoth/mammoth.browser';
-import JSZip from 'jszip';
+
 
 interface ConversionSettings {
   pageSize: 'A4' | 'Letter' | 'Legal';
@@ -231,8 +231,8 @@ export default function WordToPdfPage() {
       const pageDimensions = getPageDimensions(settings.pageSize, settings.orientation);
       
       // Processar o texto extraído
-      let imagesExtracted = 0;
-      let tablesConverted = 0;
+      const imagesExtracted = 0;
+      const tablesConverted = 0;
       
       // Dividir o texto extraído em linhas e páginas
       const words = extractedText.split(/\s+/).filter(word => word.length > 0);

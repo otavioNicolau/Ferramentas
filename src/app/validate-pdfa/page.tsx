@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { Upload, FileText, CheckCircle, XCircle, AlertTriangle, Download, Trash2 } from 'lucide-react';
+import { Upload, FileText, CheckCircle, XCircle, AlertTriangle, Trash2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 
 interface ValidationResult {
@@ -16,7 +16,7 @@ interface ValidationResult {
 }
 
 export default function ValidatePdfaPage() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [, setSelectedFile] = useState<File | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [result, setResult] = useState<ValidationResult | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -40,8 +40,8 @@ export default function ValidatePdfaPage() {
       
       let isValid = true;
       let pdfaLevel: string | null = null;
-      let issues: string[] = [];
-      let warnings: string[] = [];
+      const issues: string[] = [];
+      const warnings: string[] = [];
 
       // Check basic PDF metadata
       const title = pdfDoc.getTitle();

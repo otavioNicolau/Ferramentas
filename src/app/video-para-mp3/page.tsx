@@ -5,6 +5,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Upload, Music, Download, AlertCircle, CheckCircle, Loader2, X, Settings, FileVideo } from 'lucide-react';
 import { saveAs } from 'file-saver';
 import { getTranslations } from '@/config/language';
+import type { FFmpeg } from '@ffmpeg/ffmpeg';
 
 export default function VideoParaMp3Page() {
   const t = getTranslations();
@@ -17,10 +18,10 @@ export default function VideoParaMp3Page() {
   const [error, setError] = useState<string | null>(null);
   const [ffmpegLoaded, setFfmpegLoaded] = useState(false);
   const [ffmpegLoading, setFfmpegLoading] = useState(false);
-  const [logMessages, setLogMessages] = useState<string[]>([]);
+  const [, setLogMessages] = useState<string[]>([]);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const ffmpegRef = useRef<any>(null);
+  const ffmpegRef = useRef<FFmpeg | null>(null);
 
   // Carregar FFmpeg quando o componente montar
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function VideoParaMp3Page() {
         
         // Importar FFmpeg dinamicamente
         const { FFmpeg } = await import('@ffmpeg/ffmpeg');
-        const { fetchFile } = await import('@ffmpeg/util');
+        await import('@ffmpeg/util');
         
         // Criar instância do FFmpeg
         const ffmpeg = new FFmpeg();

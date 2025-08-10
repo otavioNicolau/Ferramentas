@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { spawn } from 'child_process';
-import { writeFileSync, unlinkSync, existsSync } from 'fs';
+import { writeFileSync, unlinkSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
+
+interface VideoData {
+  id?: string;
+  videoHD?: string;
+  videoSD?: string;
+  music?: string;
+  [key: string]: unknown;
+}
 
 // Função para converter vídeo para áudio usando FFmpeg
 async function convertVideoToAudio(videoBuffer: Buffer): Promise<Buffer> {
@@ -52,7 +60,7 @@ async function convertVideoToAudio(videoBuffer: Buffer): Promise<Buffer> {
       throw new Error('Arquivo de áudio não foi criado');
     }
     
-    const audioBuffer = require('fs').readFileSync(outputPath);
+    const audioBuffer = readFileSync(outputPath);
     return audioBuffer;
     
   } finally {
@@ -116,7 +124,7 @@ export async function POST(request: NextRequest) {
     
     if (type === 'video') {
       downloadUrl = videoData.videoHD || videoData.videoSD || '';
-      fileName = `tiktok-video-${(videoData as any).id || Date.now()}.mp4`;
+      fileName = `tiktok-video-${videoData.id || Date.now()}.mp4`;
       contentType = 'video/mp4';
     } else {
       // Para áudio, sempre baixar o vídeo e converter
@@ -134,7 +142,7 @@ export async function POST(request: NextRequest) {
       
       console.log('Áudio será convertido do vídeo usando FFmpeg');
       
-      fileName = `tiktok-audio-${(videoData as any).id || Date.now()}.mp3`;
+      fileName = `tiktok-audio-${videoData.id || Date.now()}.mp3`;
       contentType = 'audio/mpeg';
     }
     

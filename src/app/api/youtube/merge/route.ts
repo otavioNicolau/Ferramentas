@@ -142,7 +142,7 @@ export async function POST(req: NextRequest) {
 
       // Merge com ffmpeg
       await new Promise((res, rej) => {
-        const command = ffmpeg()
+        ffmpeg()
           .setFfmpegPath(availableFFmpegPath)
           .input(videoPath)
           .input(audioPath)

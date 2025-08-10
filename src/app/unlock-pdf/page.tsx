@@ -79,8 +79,8 @@ export default function UnlockPdfPage() {
       try {
         // Tentar carregar sem senha primeiro
         pdfDoc = await PDFDocument.load(arrayBuffer);
-      } catch (loadError: any) {
-        if (loadError.message?.includes('password') || loadError.message?.includes('encrypted')) {
+      } catch (loadError: unknown) {
+        if ((loadError instanceof Error && loadError.message?.includes('password')) || (loadError instanceof Error && loadError.message?.includes('encrypted'))) {
           if (!password) {
             setNeedsPassword(true);
             setError('Este PDF está protegido por senha. Digite a senha para continuar.');
@@ -93,7 +93,7 @@ export default function UnlockPdfPage() {
             pdfDoc = await PDFDocument.load(arrayBuffer, { 
               ignoreEncryption: true // Ignorar criptografia para tentar remover proteções
             });
-          } catch (passwordError) {
+          } catch {
             setError('Senha incorreta ou PDF não pode ser desbloqueado.');
             setIsProcessing(false);
             return;
@@ -141,9 +141,9 @@ export default function UnlockPdfPage() {
       });
       
       setNeedsPassword(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erro ao desbloquear PDF:', error);
-      if (error.message?.includes('password') || error.message?.includes('encrypted')) {
+      if ((error instanceof Error && error.message?.includes('password')) || (error instanceof Error && error.message?.includes('encrypted'))) {
         setNeedsPassword(true);
         setError('Este PDF está protegido por senha. Digite a senha para continuar.');
       } else {

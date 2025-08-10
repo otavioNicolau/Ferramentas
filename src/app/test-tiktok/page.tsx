@@ -2,9 +2,13 @@
 
 import { useState } from 'react';
 
+interface TikTokTestResult {
+  [key: string]: unknown;
+}
+
 export default function TikTokTestPage() {
   const [url, setUrl] = useState('');
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<TikTokTestResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 

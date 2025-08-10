@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import ytdl from '@distube/ytdl-core';
-import { Readable } from 'stream';
 
 export async function POST(request: NextRequest) {
   try {

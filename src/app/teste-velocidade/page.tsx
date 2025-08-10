@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { Wifi, Play, RotateCcw, Gauge, WifiOff } from 'lucide-react';
+import { Wifi, Play, RotateCcw, Gauge } from 'lucide-react';
 import { getTranslations } from '@/config/language';
 
 interface SpeedTestResult {
@@ -36,7 +36,7 @@ export default function TesteVelocidadePage() {
     const savedHistory = localStorage.getItem('utilidadeweb-speedtest-history');
     if (savedHistory) {
       try {
-        const parsed = JSON.parse(savedHistory).map((test: any) => ({
+        const parsed = JSON.parse(savedHistory).map((test: SpeedTestResult & { timestamp: string }) => ({
           ...test,
           timestamp: new Date(test.timestamp)
         }));
@@ -48,13 +48,15 @@ export default function TesteVelocidadePage() {
 
     // Detectar informações de conexão se disponível
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
-      setConnectionInfo({
-        type: connection.type || 'unknown',
-        effectiveType: connection.effectiveType || 'unknown',
-        downlink: connection.downlink || 0,
-        rtt: connection.rtt || 0
-      });
+      const connection = (navigator as unknown as { connection?: { type?: string; effectiveType?: string; downlink?: number; rtt?: number } }).connection;
+      if (connection) {
+        setConnectionInfo({
+          type: connection.type || 'unknown',
+          effectiveType: connection.effectiveType || 'unknown',
+          downlink: connection.downlink || 0,
+          rtt: connection.rtt || 0
+        });
+      }
     }
   }, []);
 

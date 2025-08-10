@@ -1,7 +1,7 @@
 'use client';
 
 import ToolLayout from '@/components/ToolLayout';
-import { Download, ExternalLink, AlertCircle, Check, Loader2, Play, Heart, MessageCircle, Share2, Eye, Clock, User, Music, Copy, Share } from 'lucide-react';
+import { Download, ExternalLink, AlertCircle, Check, Loader2, Play, Heart, MessageCircle, Share2, Eye, User, Music, Copy, Share } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { saveAs } from 'file-saver';
 import { getTranslations } from '@/config/language';

@@ -1,5 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+interface ApiResult {
+  type?: string;
+  author?: Record<string, unknown>;
+  stats?: Record<string, unknown>;
+  statistics?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+interface DownloaderResult {
+  status: string;
+  message: string;
+  result?: ApiResult;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { url } = await request.json();
@@ -13,7 +27,7 @@ export async function POST(request: NextRequest) {
     
     // Testar diferentes versões da API
     const versions = ['v1', 'v2', 'v3'] as const;
-    const results: any = {};
+    const results: Record<string, unknown> = {};
     
     for (const version of versions) {
       try {
@@ -27,8 +41,8 @@ export async function POST(request: NextRequest) {
           sampleData: result.result ? {
             type: result.result.type,
             hasAuthor: !!result.result.author,
-            hasStats: !!(result.result as any).stats,
-            hasStatistics: !!(result.result as any).statistics,
+            hasStats: !!result.result.stats,
+            hasStatistics: !!result.result.statistics,
             authorKeys: result.result.author ? Object.keys(result.result.author) : [],
             allKeys: Object.keys(result.result)
           } : null

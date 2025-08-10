@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { Upload, PenTool, Type, Image, Download, X, RotateCw, Move, Trash2, Save } from 'lucide-react';
+import { Upload, PenTool, Type, Image as ImageIcon, Download, X } from 'lucide-react';
 import { saveAs } from 'file-saver';
 import { getTranslations } from '@/config/language';
+import Image from 'next/image';
 
 interface Signature {
   id: string;
@@ -31,7 +32,6 @@ export default function AssinarPdfPage() {
   const [pageCount, setPageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pdfPages, setPdfPages] = useState<PDFPage[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   
   // Modos de assinatura
   const [signatureMode, setSignatureMode] = useState<'draw' | 'text' | 'image' | null>(null);
@@ -281,8 +281,8 @@ export default function AssinarPdfPage() {
   // Preparar assinatura para posicionamento
   const prepareSignature = (type: 'draw' | 'text' | 'image') => {
     let data = '';
-    let width = 100;
-    let height = 50;
+    const width = 100;
+    const height = 50;
     
     if (type === 'draw' && drawingData) {
       data = drawingData;
@@ -339,7 +339,7 @@ export default function AssinarPdfPage() {
               height: signature.height
             }}
           >
-            <img src={signature.data} alt="Assinatura" className="w-full h-full object-contain" />
+            <Image src={signature.data} alt="Assinatura" className="w-full h-full object-contain" fill style={{objectFit: 'contain'}} />
           </div>
         ))}
         
@@ -354,7 +354,7 @@ export default function AssinarPdfPage() {
               height: previewSignature.height
             }}
           >
-            <img src={previewSignature.data} alt="Preview" className="w-full h-full object-contain" />
+            <Image src={previewSignature.data} alt="Preview" className="w-full h-full object-contain" fill style={{objectFit: 'contain'}} />
           </div>
         )}
       </div>
@@ -522,7 +522,7 @@ export default function AssinarPdfPage() {
                     signatureMode === 'image' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
                   }`}
                 >
-                  <Image className="mx-auto mb-2" size={24} />
+                  <ImageIcon className="mx-auto mb-2" size={24} />
                   <div>{t.pdfSignature?.upload || "Upload"}</div>
                 </button>
               </div>
@@ -639,7 +639,7 @@ export default function AssinarPdfPage() {
                   />
                   {imageSignature && (
                     <div className="p-4 border border-gray-200 rounded-lg">
-                      <img src={imageSignature} alt="Preview" className="max-h-32 mx-auto" />
+                      <Image src={imageSignature} alt="Preview" className="max-h-32 mx-auto" width={200} height={128} style={{objectFit: 'contain'}} />
                     </div>
                   )}
                   <button

@@ -1,5 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+interface TikTokStats {
+  likes?: number;
+  comments?: number;
+  shares?: number;
+  views?: number;
+}
+
+interface TikTokAuthor {
+  nickname?: string;
+  avatar?: string;
+}
+
+interface TikTokVideoData {
+  id?: string;
+  desc?: string;
+  author?: TikTokAuthor;
+  stats?: TikTokStats;
+  [key: string]: unknown;
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Obter a URL do vídeo do corpo da requisição
@@ -57,22 +77,23 @@ export async function POST(request: NextRequest) {
     };
     
     // Formatar os dados para o frontend baseado na estrutura real da API
-    const stats = (videoData as any).stats?.likes ? {
+    const videoDataTyped = videoData as TikTokVideoData;
+    const stats = videoDataTyped.stats?.likes ? {
       // Se temos estatísticas reais, usar elas
-      likes: (videoData as any).stats.likes || 0,
-      comments: (videoData as any).stats.comments || 0,
-      shares: (videoData as any).stats.shares || 0,
-      views: (videoData as any).stats.views || 0
+      likes: videoDataTyped.stats.likes || 0,
+      comments: videoDataTyped.stats.comments || 0,
+      shares: videoDataTyped.stats.shares || 0,
+      views: videoDataTyped.stats.views || 0
     } : generateRealisticStats(
-      videoData.desc || 'Vídeo do TikTok',
-      videoData.author?.nickname || 'Usuário'
+      videoDataTyped.desc || 'Vídeo do TikTok',
+      videoDataTyped.author?.nickname || 'Usuário'
     );
 
     const videoDetails = {
-      id: (videoData as any).id || 'unknown',
-      title: videoData.desc || 'Vídeo do TikTok',
-      author: videoData.author?.nickname || 'Usuário',
-      authorAvatar: videoData.author?.avatar || '',
+      id: videoDataTyped.id || 'unknown',
+      title: videoDataTyped.desc || 'Vídeo do TikTok',
+      author: videoDataTyped.author?.nickname || 'Usuário',
+      authorAvatar: videoDataTyped.author?.avatar || '',
       thumbnailUrl: videoData.images?.[0] || '',
       videoUrl: videoData.videoHD || videoData.videoSD || '',
       audioUrl: videoData.music || '',

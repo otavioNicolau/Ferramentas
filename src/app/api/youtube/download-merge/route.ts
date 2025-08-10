@@ -4,6 +4,7 @@ import { spawn } from 'child_process';
 import { promises as fs } from 'fs';
 import path from 'path';
 import os from 'os';
+import { Readable } from 'stream';
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
           filter: format => format.hasVideo && format.hasAudio && format.qualityLabel === '720p'
         });
         
-        return new NextResponse(fallbackStream as any, {
+        return new NextResponse(fallbackStream as ReadableStream, {
           headers: {
             'Content-Type': 'video/mp4',
             'Content-Disposition': `attachment; filename="${videoTitle}.mp4"`
@@ -105,7 +106,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Função para salvar stream em arquivo
-async function saveStreamToFile(stream: any, filepath: string): Promise<void> {
+async function saveStreamToFile(stream: Readable, filepath: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     
