@@ -1,7 +1,17 @@
+type Language =
+  | 'pt-BR'
+  | 'en'
+  | 'es'
+  | 'zh'
+  | 'hi'
+  | 'ar'
+  | 'bn'
+  | 'ru'
+  | 'ja'
+  | 'de';
+
 const envLanguage =
-  (process.env.NEXT_PUBLIC_DEFAULT_LANGUAGE === 'en'
-    ? 'en'
-    : 'pt-BR') as 'pt-BR' | 'en';
+  (process.env.NEXT_PUBLIC_DEFAULT_LANGUAGE as Language) || 'pt-BR';
 
 export const LANGUAGE_CONFIG = {
   defaultLanguage: envLanguage,
@@ -14,23 +24,269 @@ export const LANGUAGE_CONFIG = {
       flag: '🇧🇷',
       code: 'pt-BR'
     },
-    'en': {
-      name: 'English', 
+    en: {
+      name: 'English',
       flag: '🇺🇸',
       code: 'en'
+    },
+    es: {
+      name: 'Español',
+      flag: '🇪🇸',
+      code: 'es'
+    },
+    zh: {
+      name: '中文',
+      flag: '🇨🇳',
+      code: 'zh'
+    },
+    hi: {
+      name: 'हिन्दी',
+      flag: '🇮🇳',
+      code: 'hi'
+    },
+    ar: {
+      name: 'العربية',
+      flag: '🇸🇦',
+      code: 'ar'
+    },
+    bn: {
+      name: 'বাংলা',
+      flag: '🇧🇩',
+      code: 'bn'
+    },
+    ru: {
+      name: 'Русский',
+      flag: '🇷🇺',
+      code: 'ru'
+    },
+    ja: {
+      name: '日本語',
+      flag: '🇯🇵',
+      code: 'ja'
+    },
+    de: {
+      name: 'Deutsch',
+      flag: '🇩🇪',
+      code: 'de'
     }
   }
 };
 
-export const setLanguage = (lang: 'pt-BR' | 'en') => {
+export const setLanguage = (lang: Language) => {
   LANGUAGE_CONFIG.currentLanguage = lang;
 };
 
 export const getCurrentLanguage = () => LANGUAGE_CONFIG.currentLanguage;
 
+const EN_TRANSLATIONS = {
+      // Site Meta
+      siteTitle: 'Free Online Tools',
+      siteName: 'Online Tools',
+      siteDescription:
+        'Access a complete collection of free online tools for PDF, video conversion, QR code generation and much more.',
+
+      // Navigation
+      home: 'Home',
+      tools: 'Tools',
+      about: 'About',
+      contact: 'Contact',
+
+      // Hero Section
+      heroTitle: 'Free Online Tools',
+      heroSubtitle: 'Everything you need in one place',
+      heroDescription:
+        'Access a complete collection of free online tools to facilitate your work and increase your productivity.',
+
+      // Search and Filter
+      searchPlaceholder: 'Search tools...',
+      allCategories: 'All',
+      totalTools: 'Total:',
+      toolsCounter: 'tools available',
+      // Notepad
+      notebookTitle: 'Notepad',
+      notebookDescription: 'Write and save your notes quickly.',
+      notebook: {
+        confirmClear: 'Are you sure you want to clear the notes?',
+        saved: 'Saved',
+        save: 'Save',
+        download: 'Download',
+        clear: 'Clear',
+        placeholder: 'Type your notes here...',
+        characterCount: 'characters',
+        yourNotes: 'Your Notes',
+        lastModified: 'Last modified',
+        autoSaveTitle: 'Auto save',
+        autoSaveDescription: 'Your notes are automatically saved every few seconds.',
+        privacyTitle: 'Privacy',
+        privacyDescription: 'All content is stored only in your browser.',
+        exportTitle: 'Export',
+        exportDescription: 'Download your notes as a text file.'
+      },
+
+      // OCR
+      ocrTitle: 'Extract Text (OCR)',
+      ocrDescription: 'Extract text from images using optical character recognition.',
+      ocr: {
+        selectOrDrag: 'Select or drag images',
+        supportedFormats: 'Supported formats: JPG, PNG, BMP or WEBP',
+        chooseImages: 'Choose images',
+        ocrSettings: 'OCR settings',
+        textLanguage: 'Text language',
+        showPreview: 'Show preview',
+        selectedImages: 'Selected images',
+        processing: 'Processing...',
+        extractText: 'Extract text',
+        processingOcr: 'Processing OCR...',
+        textExtracted: 'Text extracted',
+        confidence: 'Confidence',
+        noTextFound: 'No text found',
+        copy: 'Copy',
+        download: 'Download',
+        removeFile: 'Remove file',
+        downloadAll: 'Download all',
+        noImagesSelected: 'No images selected',
+        selectImagesHint: 'Select images to start',
+        aboutOcr: 'About OCR',
+        imageQuality: 'High quality images provide better results.',
+        contrast: 'Proper contrast improves accuracy.',
+        orientation: 'Ensure text is correctly oriented.',
+        languages: 'Choose the correct language of the text.',
+        supportedFormatsInfo: 'Supported formats: JPG, PNG, BMP or WEBP.',
+        localProcessing: 'Processing happens locally in your browser.',
+        tipsTitle: 'Tips',
+        tip1: 'Use sharp images.',
+        tip2: 'Avoid noisy backgrounds.',
+        tip3: 'Good lighting helps recognition.',
+        tip4: 'Crop the area that contains text.',
+        tip5: 'Use the correct language for better results.',
+        onlyImagesSupported: 'Only images are supported.',
+        errorProcessingImage: 'Error processing image.',
+        errorInitializingOcr: 'Error initializing OCR.',
+        textCopied: 'Text copied to clipboard.'
+      },
+
+      // Password Generator
+      passwordGeneratorTitle: 'Password Generator',
+      passwordGeneratorDescription: 'Create secure and custom passwords.',
+      passwordGenerator: {
+        generatedPassword: 'Generated password',
+        copy: 'Copy',
+        copied: 'Copied!',
+        generate: 'Generate',
+        settings: 'Settings',
+        length: 'Length',
+        includeUppercase: 'Include uppercase letters',
+        includeLowercase: 'Include lowercase letters',
+        includeNumbers: 'Include numbers',
+        includeSymbols: 'Include symbols',
+        excludeAmbiguous: 'Exclude ambiguous characters',
+        selectAtLeastOne: 'Select at least one option',
+        passwordSelected: 'Password selected. Press Ctrl+C to copy.',
+        passwordStrength: 'Password strength',
+        strengthWeak: 'Weak',
+        strengthMedium: 'Medium',
+        strengthStrong: 'Strong',
+        strengthVeryStrong: 'Very strong'
+      },
+
+      // Character Counter
+      characterCounterTitle: 'Character Counter',
+      characterCounterDescription:
+        'Count characters, words, sentences and more in your text.',
+      characterCounter: {
+        textAreaTitle: 'Text',
+        sampleText: 'Sample text',
+        clear: 'Clear',
+        enterText: 'Type or paste your text here...',
+        characters: 'Characters',
+        charactersNoSpaces: 'Characters (no spaces)',
+        words: 'Words',
+        sentences: 'Sentences',
+        paragraphs: 'Paragraphs',
+        lines: 'Lines',
+        additionalInfo: 'Additional information',
+        estimatedReadingTime: 'Estimated reading time',
+        minutes: 'minutes',
+        estimatedSpeakingTime: 'Estimated speaking time',
+        averageWordsPerSentence: 'Average words per sentence',
+        averageCharsPerWord: 'Average characters per word'
+      },
+
+      // QR Code Generator
+      qrGeneratorTitle: 'QR Code Generator',
+      qrGeneratorDescription: 'Create custom QR codes.',
+      qrGenerator: {
+        enterContent: 'Enter content to generate the QR Code',
+        errorGenerating: 'Error generating QR Code.',
+        settings: 'Settings',
+        contentType: 'Content type',
+        contentTypes: {
+          text: 'Text',
+          url: 'URL',
+          wifi: 'Wi-Fi',
+          vcard: 'vCard',
+          sms: 'SMS'
+        },
+        content: 'Content',
+        placeholders: {
+          text: 'Enter text here...',
+          url: 'Enter URL here...',
+          wifi: 'SSID;password;encryption',
+          vcard: 'Contact information',
+          sms: 'Number;Message'
+        },
+        size: 'Size',
+        color: 'Color',
+        generate: 'Generate QR Code',
+        preview: 'Preview',
+        generated: 'QR Code generated',
+        download: 'Download',
+        previewText: 'The QR Code will appear here after generation.'
+      },
+
+      // PDF/A Validator
+      pdfaValidatorTitle: 'PDF/A Validator',
+      pdfaValidatorDescription:
+        'Check if PDF documents comply with PDF/A standards for long-term archiving',
+      pdfaValidator: {
+        selectFileTitle: 'Select PDF File',
+        dragDropHint: 'Drag a PDF file here or click to select',
+        onlyPdfHint: 'Only PDF files are accepted',
+        selectButton: 'Select File',
+        validating: 'Validating PDF/A...',
+        checkingPdfa: 'Checking compliance with PDF/A standards',
+        resultTitle: 'Validation Result',
+        clear: 'Clear',
+        fileLabel: 'File:',
+        sizeLabel: 'Size:',
+        validatedAt: 'Validated on:',
+        valid: 'Valid PDF/A',
+        invalid: 'Invalid PDF/A',
+        detectedLevel: 'Detected level:',
+        issues: 'Issues Found',
+        warnings: 'Warnings',
+        aboutTitle: 'ℹ️ About PDF/A',
+        aboutItems: [
+          'PDF/A is an ISO standard for archiving electronic documents',
+          'Ensures documents can be viewed in the future',
+          'PDF/A-1: Based on PDF 1.4, more restrictive',
+          'PDF/A-2: Based on PDF 1.7, allows more features',
+          'PDF/A-3: Allows attachments of external files'
+        ],
+        tipsTitle: '💡 PDF/A Tips',
+        tipsItems: [
+          'Embed all fonts in the document',
+          'Avoid transparency and special effects',
+          'Use consistent RGB or CMYK colors',
+          'Include appropriate XMP metadata',
+          'Test files with names like "invalid.pdf" or "warning.pdf" to see different results'
+        ],
+        pdfOnlyAlert: 'Please select only PDF files.'
+      }
+};
+
 export const getTranslations = () => {
   const lang = getCurrentLanguage();
-  
   const translations = {
     'pt-BR': {
       // Site Meta
@@ -243,6 +499,7 @@ export const getTranslations = () => {
         pdfOnlyAlert: 'Por favor, selecione apenas arquivos PDF.'
       }
     },
+
     'en': {
       // Site Meta
       siteTitle: 'Free Online Tools',
@@ -271,187 +528,329 @@ export const getTranslations = () => {
       // Search and Filter
       searchPlaceholder: 'Search tools...',
       allCategories: 'All',
+
+    en: EN_TRANSLATIONS,
+    es: {
+      ...EN_TRANSLATIONS,
+      siteTitle: 'Herramientas Online Gratuitas',
+      siteName: 'Herramientas Online',
+      siteDescription:
+        'Accede a una colección completa de herramientas en línea gratuitas para PDF, conversión de video, generación de códigos QR y mucho más.',
+      home: 'Inicio',
+      tools: 'Herramientas',
+      about: 'Acerca de',
+      contact: 'Contacto',
+      heroTitle: 'Herramientas Online Gratuitas',
+      heroSubtitle: 'Todo lo que necesitas en un solo lugar',
+      heroDescription:
+        'Accede a una colección completa de herramientas en línea gratuitas para facilitar tu trabajo y aumentar tu productividad.',
+      searchPlaceholder: 'Buscar herramientas...',
+      allCategories: 'Todos',
+
       totalTools: 'Total:',
-      toolsCounter: 'tools available',
-      // Notepad
-      notebookTitle: 'Notepad',
-      notebookDescription: 'Write and save your notes quickly.',
+      toolsCounter: 'herramientas disponibles',
+      notebookTitle: 'Bloc de Notas',
+      notebookDescription: 'Escribe y guarda tus notas rápidamente.',
       notebook: {
-        confirmClear: 'Are you sure you want to clear the notes?',
-        saved: 'Saved',
-        save: 'Save',
-        download: 'Download',
-        clear: 'Clear',
-        placeholder: 'Type your notes here...',
-        characterCount: 'characters',
-        yourNotes: 'Your Notes',
-        lastModified: 'Last modified',
-        autoSaveTitle: 'Auto save',
-        autoSaveDescription: 'Your notes are automatically saved every few seconds.',
-        privacyTitle: 'Privacy',
-        privacyDescription: 'All content is stored only in your browser.',
-        exportTitle: 'Export',
-        exportDescription: 'Download your notes as a text file.'
-      },
-
-      // OCR
-      ocrTitle: 'Extract Text (OCR)',
-      ocrDescription: 'Extract text from images using optical character recognition.',
-      ocr: {
-        selectOrDrag: 'Select or drag images',
-        supportedFormats: 'Supported formats: JPG, PNG, BMP or WEBP',
-        chooseImages: 'Choose images',
-        ocrSettings: 'OCR settings',
-        textLanguage: 'Text language',
-        showPreview: 'Show preview',
-        selectedImages: 'Selected images',
-        processing: 'Processing...',
-        extractText: 'Extract text',
-        processingOcr: 'Processing OCR...',
-        textExtracted: 'Text extracted',
-        confidence: 'Confidence',
-        noTextFound: 'No text found',
-        copy: 'Copy',
-        download: 'Download',
-        removeFile: 'Remove file',
-        downloadAll: 'Download all',
-        noImagesSelected: 'No images selected',
-        selectImagesHint: 'Select images to start',
-        aboutOcr: 'About OCR',
-        imageQuality: 'High quality images provide better results.',
-        contrast: 'Proper contrast improves accuracy.',
-        orientation: 'Ensure text is correctly oriented.',
-        languages: 'Choose the correct language of the text.',
-        supportedFormatsInfo: 'Supported formats: JPG, PNG, BMP or WEBP.',
-        localProcessing: 'Processing happens locally in your browser.',
-        tipsTitle: 'Tips',
-        tip1: 'Use sharp images.',
-        tip2: 'Avoid noisy backgrounds.',
-        tip3: 'Good lighting helps recognition.',
-        tip4: 'Crop the area that contains text.',
-        tip5: 'Use the correct language for better results.',
-        onlyImagesSupported: 'Only images are supported.',
-        errorProcessingImage: 'Error processing image.',
-        errorInitializingOcr: 'Error initializing OCR.',
-        textCopied: 'Text copied to clipboard.'
-      },
-
-      // Password Generator
-      passwordGeneratorTitle: 'Password Generator',
-      passwordGeneratorDescription: 'Create secure and custom passwords.',
-      passwordGenerator: {
-        generatedPassword: 'Generated password',
-        copy: 'Copy',
-        copied: 'Copied!',
-        generate: 'Generate',
-        settings: 'Settings',
-        length: 'Length',
-        includeUppercase: 'Include uppercase letters',
-        includeLowercase: 'Include lowercase letters',
-        includeNumbers: 'Include numbers',
-        includeSymbols: 'Include symbols',
-        excludeAmbiguous: 'Exclude ambiguous characters',
-        selectAtLeastOne: 'Select at least one option',
-        passwordSelected: 'Password selected. Press Ctrl+C to copy.',
-        passwordStrength: 'Password strength',
-        strengthWeak: 'Weak',
-        strengthMedium: 'Medium',
-        strengthStrong: 'Strong',
-        strengthVeryStrong: 'Very strong'
-      },
-
-      // Character Counter
-      characterCounterTitle: 'Character Counter',
-      characterCounterDescription: 'Count characters, words, sentences and more in your text.',
-      characterCounter: {
-        textAreaTitle: 'Text',
-        sampleText: 'Sample text',
-        clear: 'Clear',
-        enterText: 'Type or paste your text here...',
-        characters: 'Characters',
-        charactersNoSpaces: 'Characters (no spaces)',
-        words: 'Words',
-        sentences: 'Sentences',
-        paragraphs: 'Paragraphs',
-        lines: 'Lines',
-        additionalInfo: 'Additional information',
-        estimatedReadingTime: 'Estimated reading time',
-        minutes: 'minutes',
-        estimatedSpeakingTime: 'Estimated speaking time',
-        averageWordsPerSentence: 'Average words per sentence',
-        averageCharsPerWord: 'Average characters per word'
-      },
-
-      // QR Code Generator
-      qrGeneratorTitle: 'QR Code Generator',
-      qrGeneratorDescription: 'Create custom QR codes.',
-      qrGenerator: {
-        enterContent: 'Enter content to generate the QR Code',
-        errorGenerating: 'Error generating QR Code.',
-        settings: 'Settings',
-        contentType: 'Content type',
-        contentTypes: {
-          text: 'Text',
-          url: 'URL',
-          wifi: 'Wi-Fi',
-          vcard: 'vCard',
-          sms: 'SMS'
-        },
-        content: 'Content',
-        placeholders: {
-          text: 'Enter text here...',
-          url: 'Enter URL here...',
-          wifi: 'SSID;password;encryption',
-          vcard: 'Contact information',
-          sms: 'Number;Message'
-        },
-        size: 'Size',
-        color: 'Color',
-        generate: 'Generate QR Code',
-        preview: 'Preview',
-        generated: 'QR Code generated',
-        download: 'Download',
-        previewText: 'The QR Code will appear here after generation.'
-      },
-
-      // PDF/A Validator
-      pdfaValidatorTitle: 'PDF/A Validator',
-      pdfaValidatorDescription:
-        'Check if PDF documents comply with PDF/A standards for long-term archiving',
-      pdfaValidator: {
-        selectFileTitle: 'Select PDF File',
-        dragDropHint: 'Drag a PDF file here or click to select',
-        onlyPdfHint: 'Only PDF files are accepted',
-        selectButton: 'Select File',
-        validating: 'Validating PDF/A...',
-        checkingPdfa: 'Checking compliance with PDF/A standards',
-        resultTitle: 'Validation Result',
-        clear: 'Clear',
-        fileLabel: 'File:',
-        sizeLabel: 'Size:',
-        validatedAt: 'Validated on:',
-        valid: 'Valid PDF/A',
-        invalid: 'Invalid PDF/A',
-        detectedLevel: 'Detected level:',
-        issues: 'Issues Found',
-        warnings: 'Warnings',
-        aboutTitle: 'ℹ️ About PDF/A',
-        aboutItems: [
-          'PDF/A is an ISO standard for archiving electronic documents',
-          'Ensures documents can be viewed in the future',
-          'PDF/A-1: Based on PDF 1.4, more restrictive',
-          'PDF/A-2: Based on PDF 1.7, allows more features',
-          'PDF/A-3: Allows attachments of external files'
-        ],
-        tipsTitle: '💡 PDF/A Tips',
-        tipsItems: [
-          'Embed all fonts in the document',
-          'Avoid transparency and special effects',
-          'Use consistent RGB or CMYK colors',
-          'Include appropriate XMP metadata',
-          'Test files with names like "invalid.pdf" or "warning.pdf" to see different results'
-        ],
-        pdfOnlyAlert: 'Please select only PDF files.'
+        ...EN_TRANSLATIONS.notebook,
+        confirmClear: '¿Seguro que deseas borrar las notas?',
+        saved: 'Guardado',
+        save: 'Guardar',
+        download: 'Descargar',
+        clear: 'Borrar',
+        placeholder: 'Escribe tus notas aquí...',
+        characterCount: 'caracteres',
+        yourNotes: 'Tus Notas',
+        lastModified: 'Última modificación',
+        autoSaveTitle: 'Guardado automático',
+        autoSaveDescription:
+          'Tus notas se guardan automáticamente cada pocos segundos.',
+        privacyTitle: 'Privacidad',
+        privacyDescription: 'Todo el contenido se almacena solo en tu navegador.',
+        exportTitle: 'Exportar',
+        exportDescription: 'Descarga tus notas como un archivo de texto.'
+      }
+    },
+    zh: {
+      ...EN_TRANSLATIONS,
+      siteTitle: '免费在线工具',
+      siteName: '在线工具',
+      siteDescription:
+        '访问完整的免费在线工具集合，用于PDF、视频转换、二维码生成等。',
+      home: '首页',
+      tools: '工具',
+      about: '关于',
+      contact: '联系',
+      heroTitle: '免费在线工具',
+      heroSubtitle: '所需的一切尽在一个地方',
+      heroDescription:
+        '访问完整的免费在线工具集合，方便工作并提升效率。',
+      searchPlaceholder: '搜索工具...',
+      allCategories: '全部',
+      totalTools: '总计:',
+      toolsCounter: '个可用工具',
+      notebookTitle: '记事本',
+      notebookDescription: '快速编写并保存你的笔记。',
+      notebook: {
+        ...EN_TRANSLATIONS.notebook,
+        confirmClear: '确定要清空笔记吗？',
+        saved: '已保存',
+        save: '保存',
+        download: '下载',
+        clear: '清空',
+        placeholder: '在此输入你的笔记...',
+        characterCount: '字符',
+        yourNotes: '你的笔记',
+        lastModified: '最后修改',
+        autoSaveTitle: '自动保存',
+        autoSaveDescription: '你的笔记会每隔几秒自动保存。',
+        privacyTitle: '隐私',
+        privacyDescription: '所有内容仅存储在你的浏览器中。',
+        exportTitle: '导出',
+        exportDescription: '将你的笔记下载为文本文件。'
+      }
+    },
+    hi: {
+      ...EN_TRANSLATIONS,
+      siteTitle: 'मुफ़्त ऑनलाइन उपकरण',
+      siteName: 'ऑनलाइन उपकरण',
+      siteDescription:
+        'PDF, वीडियो रूपांतरण, QR कोड जनरेशन और बहुत कुछ के लिए मुफ़्त ऑनलाइन उपकरणों का पूरा संग्रह एक्सेस करें।',
+      home: 'मुखपृष्ठ',
+      tools: 'उपकरण',
+      about: 'परिचय',
+      contact: 'संपर्क',
+      heroTitle: 'मुफ़्त ऑनलाइन उपकरण',
+      heroSubtitle: 'जो कुछ आपको चाहिए, सब एक जगह',
+      heroDescription:
+        'अपने कार्य को आसान बनाने और उत्पादकता बढ़ाने के लिए मुफ़्त ऑनलाइन उपकरणों का पूरा संग्रह एक्सेस करें।',
+      searchPlaceholder: 'उपकरण खोजें...',
+      allCategories: 'सभी',
+      totalTools: 'कुल:',
+      toolsCounter: 'उपलब्ध उपकरण',
+      notebookTitle: 'नोटपैड',
+      notebookDescription: 'जल्दी से अपनी नोट्स लिखें और सहेजें।',
+      notebook: {
+        ...EN_TRANSLATIONS.notebook,
+        confirmClear: 'क्या आप वास्तव में नोट्स साफ़ करना चाहते हैं?',
+        saved: 'सहेजा गया',
+        save: 'सहेजें',
+        download: 'डाउनलोड',
+        clear: 'साफ़ करें',
+        placeholder: 'यहाँ अपनी नोट्स टाइप करें...',
+        characterCount: 'अक्षर',
+        yourNotes: 'आपकी नोट्स',
+        lastModified: 'अंतिम संशोधन',
+        autoSaveTitle: 'स्वचालित सहेजना',
+        autoSaveDescription:
+          'आपकी नोट्स कुछ सेकंड में स्वतः सहेजी जाती हैं।',
+        privacyTitle: 'गोपनीयता',
+        privacyDescription: 'सारी सामग्री केवल आपके ब्राउज़र में संग्रहीत होती है।',
+        exportTitle: 'निर्यात',
+        exportDescription: 'अपनी नोट्स को टेक्स्ट फ़ाइल के रूप में डाउनलोड करें।'
+      }
+    },
+    ar: {
+      ...EN_TRANSLATIONS,
+      siteTitle: 'أدوات مجانية على الإنترنت',
+      siteName: 'أدوات الإنترنت',
+      siteDescription:
+        'الوصول إلى مجموعة كاملة من الأدوات المجانية على الإنترنت لملفات PDF وتحويل الفيديو وإنشاء رموز QR والمزيد.',
+      home: 'الرئيسية',
+      tools: 'الأدوات',
+      about: 'حول',
+      contact: 'اتصل',
+      heroTitle: 'أدوات مجانية على الإنترنت',
+      heroSubtitle: 'كل ما تحتاجه في مكان واحد',
+      heroDescription:
+        'الوصول إلى مجموعة كاملة من الأدوات المجانية على الإنترنت لتسهيل عملك وزيادة إنتاجيتك.',
+      searchPlaceholder: 'ابحث عن الأدوات...',
+      allCategories: 'الكل',
+      totalTools: 'المجموع:',
+      toolsCounter: 'أدوات متاحة',
+      notebookTitle: 'المفكرة',
+      notebookDescription: 'اكتب واحفظ ملاحظاتك بسرعة.',
+      notebook: {
+        ...EN_TRANSLATIONS.notebook,
+        confirmClear: 'هل أنت متأكد أنك تريد مسح الملاحظات؟',
+        saved: 'تم الحفظ',
+        save: 'حفظ',
+        download: 'تحميل',
+        clear: 'مسح',
+        placeholder: 'اكتب ملاحظاتك هنا...',
+        characterCount: 'أحرف',
+        yourNotes: 'ملاحظاتك',
+        lastModified: 'آخر تعديل',
+        autoSaveTitle: 'حفظ تلقائي',
+        autoSaveDescription:
+          'يتم حفظ ملاحظاتك تلقائيًا كل بضع ثوانٍ.',
+        privacyTitle: 'الخصوصية',
+        privacyDescription: 'يتم تخزين كل المحتوى في متصفحك فقط.',
+        exportTitle: 'تصدير',
+        exportDescription: 'قم بتنزيل ملاحظاتك كملف نصي.'
+      }
+    },
+    bn: {
+      ...EN_TRANSLATIONS,
+      siteTitle: 'বিনামূল্যের অনলাইন টুলস',
+      siteName: 'অনলাইন টুলস',
+      siteDescription:
+        'PDF, ভিডিও রূপান্তর, QR কোড জেনারেশন এবং আরও অনেক কিছুর জন্য বিনামূল্যের অনলাইন টুলসের পূর্ণ সংগ্রহ অ্যাক্সেস করুন।',
+      home: 'হোম',
+      tools: 'টুলস',
+      about: 'সম্পর্কে',
+      contact: 'যোগাযোগ',
+      heroTitle: 'বিনামূল্যের অনলাইন টুলস',
+      heroSubtitle: 'যা কিছু আপনার প্রয়োজন, সব এক জায়গায়',
+      heroDescription:
+        'আপনার কাজ সহজ করতে এবং উৎপাদনশীলতা বাড়াতে বিনামূল্যের অনলাইন টুলসের পূর্ণ সংগ্রহ অ্যাক্সেস করুন।',
+      searchPlaceholder: 'টুলস খুঁজুন...',
+      allCategories: 'সব',
+      totalTools: 'মোট:',
+      toolsCounter: 'উপলব্ধ টুলস',
+      notebookTitle: 'নোটপ্যাড',
+      notebookDescription: 'দ্রুত আপনার নোট লিখুন এবং সংরক্ষণ করুন।',
+      notebook: {
+        ...EN_TRANSLATIONS.notebook,
+        confirmClear: 'আপনি কি নিশ্চিত যে নোটগুলি মুছে ফেলবেন?',
+        saved: 'সংরক্ষিত',
+        save: 'সংরক্ষণ করুন',
+        download: 'ডাউনলোড',
+        clear: 'মুছুন',
+        placeholder: 'এখানে আপনার নোট লিখুন...',
+        characterCount: 'অক্ষর',
+        yourNotes: 'আপনার নোট',
+        lastModified: 'শেষ সংশোধন',
+        autoSaveTitle: 'স্বয়ংক্রিয় সংরক্ষণ',
+        autoSaveDescription:
+          'আপনার নোট কয়েক সেকেন্ড পরপর স্বয়ংক্রিয়ভাবে সংরক্ষণ করা হয়।',
+        privacyTitle: 'গোপনীয়তা',
+        privacyDescription:
+          'সমস্ত বিষয়বস্তু শুধুমাত্র আপনার ব্রাউজারে সংরক্ষিত হয়।',
+        exportTitle: 'রপ্তানি',
+        exportDescription: 'আপনার নোটগুলি টেক্সট ফাইল হিসাবে ডাউনলোড করুন।'
+      }
+    },
+    ru: {
+      ...EN_TRANSLATIONS,
+      siteTitle: 'Бесплатные онлайн-инструменты',
+      siteName: 'Онлайн-инструменты',
+      siteDescription:
+        'Получите доступ к полной коллекции бесплатных онлайн-инструментов для PDF, преобразования видео, генерации QR-кодов и многого другого.',
+      home: 'Главная',
+      tools: 'Инструменты',
+      about: 'О нас',
+      contact: 'Контакт',
+      heroTitle: 'Бесплатные онлайн-инструменты',
+      heroSubtitle: 'Всё, что вам нужно, в одном месте',
+      heroDescription:
+        'Получите доступ к полной коллекции бесплатных онлайн-инструментов, чтобы облегчить вашу работу и повысить продуктивность.',
+      searchPlaceholder: 'Поиск инструментов...',
+      allCategories: 'Все',
+      totalTools: 'Всего:',
+      toolsCounter: 'доступных инструментов',
+      notebookTitle: 'Блокнот',
+      notebookDescription: 'Быстро записывайте и сохраняйте свои заметки.',
+      notebook: {
+        ...EN_TRANSLATIONS.notebook,
+        confirmClear: 'Вы уверены, что хотите очистить заметки?',
+        saved: 'Сохранено',
+        save: 'Сохранить',
+        download: 'Скачать',
+        clear: 'Очистить',
+        placeholder: 'Введите свои заметки здесь...',
+        characterCount: 'символов',
+        yourNotes: 'Ваши заметки',
+        lastModified: 'Последнее изменение',
+        autoSaveTitle: 'Автосохранение',
+        autoSaveDescription:
+          'Ваши заметки автоматически сохраняются каждые несколько секунд.',
+        privacyTitle: 'Конфиденциальность',
+        privacyDescription:
+          'Всё содержимое хранится только в вашем браузере.',
+        exportTitle: 'Экспорт',
+        exportDescription: 'Скачайте ваши заметки в виде текстового файла.'
+      }
+    },
+    ja: {
+      ...EN_TRANSLATIONS,
+      siteTitle: '無料オンラインツール',
+      siteName: 'オンラインツール',
+      siteDescription:
+        'PDF、動画変換、QRコード生成などの無料オンラインツールの完全なコレクションにアクセス。',
+      home: 'ホーム',
+      tools: 'ツール',
+      about: '概要',
+      contact: '連絡先',
+      heroTitle: '無料オンラインツール',
+      heroSubtitle: '必要なものがすべてここに',
+      heroDescription:
+        '作業を簡単にし、生産性を高めるための無料オンラインツールの完全なコレクションにアクセス।',
+      searchPlaceholder: 'ツールを検索...',
+      allCategories: 'すべて',
+      totalTools: '合計:',
+      toolsCounter: '利用可能なツール',
+      notebookTitle: 'メモ帳',
+      notebookDescription: '素早くメモを作成して保存します。',
+      notebook: {
+        ...EN_TRANSLATIONS.notebook,
+        confirmClear: 'メモをクリアしてもよろしいですか？',
+        saved: '保存しました',
+        save: '保存',
+        download: 'ダウンロード',
+        clear: 'クリア',
+        placeholder: 'ここにメモを入力...',
+        characterCount: '文字',
+        yourNotes: 'あなたのメモ',
+        lastModified: '最終更新',
+        autoSaveTitle: '自動保存',
+        autoSaveDescription:
+          'メモは数秒ごとに自動保存されます。',
+        privacyTitle: 'プライバシー',
+        privacyDescription: 'すべての内容はブラウザ内にのみ保存されます。',
+        exportTitle: 'エクスポート',
+        exportDescription: 'メモをテキストファイルとしてダウンロード。'
+      }
+    },
+    de: {
+      ...EN_TRANSLATIONS,
+      siteTitle: 'Kostenlose Online-Tools',
+      siteName: 'Online-Tools',
+      siteDescription:
+        'Greife auf eine komplette Sammlung kostenloser Online-Tools für PDF, Videokonvertierung, QR-Code-Generierung und vieles mehr zu.',
+      home: 'Startseite',
+      tools: 'Werkzeuge',
+      about: 'Über',
+      contact: 'Kontakt',
+      heroTitle: 'Kostenlose Online-Tools',
+      heroSubtitle: 'Alles, was du brauchst, an einem Ort',
+      heroDescription:
+        'Greife auf eine komplette Sammlung kostenloser Online-Tools zu, um deine Arbeit zu erleichtern und deine Produktivität zu steigern.',
+      searchPlaceholder: 'Werkzeuge suchen...',
+      allCategories: 'Alle',
+      totalTools: 'Gesamt:',
+      toolsCounter: 'verfügbare Werkzeuge',
+      notebookTitle: 'Notizblock',
+      notebookDescription: 'Schreibe und speichere deine Notizen schnell.',
+      notebook: {
+        ...EN_TRANSLATIONS.notebook,
+        confirmClear: 'Möchtest du die Notizen wirklich löschen?',
+        saved: 'Gespeichert',
+        save: 'Speichern',
+        download: 'Herunterladen',
+        clear: 'Löschen',
+        placeholder: 'Gib deine Notizen hier ein...',
+        characterCount: 'Zeichen',
+        yourNotes: 'Deine Notizen',
+        lastModified: 'Zuletzt geändert',
+        autoSaveTitle: 'Automatisches Speichern',
+        autoSaveDescription:
+          'Deine Notizen werden alle paar Sekunden automatisch gespeichert.',
+        privacyTitle: 'Datenschutz',
+        privacyDescription:
+          'Der gesamte Inhalt wird nur in deinem Browser gespeichert.',
+        exportTitle: 'Exportieren',
+        exportDescription: 'Lade deine Notizen als Textdatei herunter.'
       }
     }
   };
