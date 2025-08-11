@@ -43,7 +43,15 @@ export const getTranslations = () => {
       tools: 'Ferramentas',
       about: 'Sobre',
       contact: 'Contato',
-      
+
+      // Páginas
+      toolsPageTitle: 'Ferramentas',
+      toolsPageDescription: 'Explore nossa lista de ferramentas online gratuitas.',
+      toolsPageKeywords: ['ferramentas online', 'utilidades', 'ferramentas gratuitas'],
+      aboutPageTitle: 'Sobre',
+      aboutPageDescription: 'Saiba mais sobre o Ferramentas Online.',
+      aboutPageKeywords: ['sobre', 'ferramentas online', 'informações'],
+
       // Hero Section
       heroTitle: 'Ferramentas Online Gratuitas',
       heroSubtitle: 'Tudo que você precisa em um só lugar',
@@ -246,7 +254,15 @@ export const getTranslations = () => {
       tools: 'Tools',
       about: 'About',
       contact: 'Contact',
-      
+
+      // Pages
+      toolsPageTitle: 'Tools',
+      toolsPageDescription: 'Explore our collection of free online tools.',
+      toolsPageKeywords: ['online tools', 'utilities', 'free tools'],
+      aboutPageTitle: 'About',
+      aboutPageDescription: 'Learn more about Online Tools.',
+      aboutPageKeywords: ['about', 'online tools', 'information'],
+
       // Hero Section
       heroTitle: 'Free Online Tools',
       heroSubtitle: 'Everything you need in one place',

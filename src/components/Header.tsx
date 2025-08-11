@@ -30,14 +30,14 @@ export default function Header() {
             >
               {t.home}
             </Link>
-            <Link 
-              href="#ferramentas" 
+            <Link
+              href="/tools"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >
               {t.tools}
             </Link>
-            <Link 
-              href="#sobre" 
+            <Link
+              href="/about"
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             >
               {t.about}
@@ -67,14 +67,14 @@ export default function Header() {
                 {t.home}
               </Link>
               <Link
-                href="#ferramentas"
+                href="/tools"
                 className="block px-3 py-2 text-gray-700 hover:text-blue-600 rounded-md text-base font-medium transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {t.tools}
               </Link>
               <Link
-                href="#sobre"
+                href="/about"
                 className="block px-3 py-2 text-gray-700 hover:text-blue-600 rounded-md text-base font-medium transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
