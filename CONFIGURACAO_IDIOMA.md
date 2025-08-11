@@ -14,8 +14,16 @@ Altere o valor para `en` para utilizar inglês.
 
 ## Idiomas Disponíveis
 
-- **Português (pt-BR)**: Idioma padrão
-- **Inglês (en)**: Idioma alternativo
+- **Português (pt-BR)**
+- **Inglês (en)**
+- **Espanhol (es)**
+- **Chinês (zh)**
+- **Hindi (hi)**
+- **Árabe (ar)**
+- **Bengali (bn)**
+- **Russo (ru)**
+- **Japonês (ja)**
+- **Alemão (de)**
 
 ## Estrutura do Sistema
 
