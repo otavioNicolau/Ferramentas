@@ -90,6 +90,9 @@ const EN_TRANSLATIONS = {
       tools: 'Tools',
       about: 'About',
       contact: 'Contact',
+      privacyPolicy: 'Privacy Policy',
+      termsOfUse: 'Terms of Use',
+      sitemap: 'Sitemap',
 
       // Hero Section
       heroTitle: 'Free Online Tools',
@@ -102,6 +105,11 @@ const EN_TRANSLATIONS = {
       allCategories: 'All',
       totalTools: 'Total:',
       toolsCounter: 'tools available',
+      // Footer
+      footerText: 'All rights reserved.',
+      privacyText: 'We use cookies to improve your experience.',
+      cookieMessage: 'This site uses cookies to ensure you get the best experience.',
+      acceptCookies: 'Accept',
       // Notepad
       notebookTitle: 'Notepad',
       notebookDescription: 'Write and save your notes quickly.',
@@ -299,6 +307,9 @@ export const getTranslations = () => {
       tools: 'Ferramentas',
       about: 'Sobre',
       contact: 'Contato',
+      privacyPolicy: 'Política de Privacidade',
+      termsOfUse: 'Termos de Uso',
+      sitemap: 'Mapa do Site',
       
       // Hero Section
       heroTitle: 'Ferramentas Online Gratuitas',
@@ -310,6 +321,11 @@ export const getTranslations = () => {
       allCategories: 'Todos',
       totalTools: 'Total:',
       toolsCounter: 'ferramentas disponíveis',
+      // Footer
+      footerText: 'Todos os direitos reservados.',
+      privacyText: 'Usamos cookies para melhorar sua experiência.',
+      cookieMessage: 'Este site utiliza cookies para garantir a melhor experiência.',
+      acceptCookies: 'Aceitar',
       // Bloco de Notas
       notebookTitle: 'Bloco de Notas',
       notebookDescription: 'Escreva e salve suas notas rapidamente.',
