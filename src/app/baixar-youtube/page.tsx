@@ -157,27 +157,50 @@ export default function BaixarYoutubePage() {
         },
         body: JSON.stringify({ url: url.trim() }),
       });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || data.message || t.youtubeDownloader?.videoInfoError || 'Erro ao obter informações do vídeo');
+
+      const contentType = response.headers.get('content-type');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let data: any = null;
+
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        // Quando a API retorna HTML ou outro formato inesperado
+        await response.text();
+        throw new Error(
+          t.youtubeDownloader?.invalidResponse ||
+            'Resposta inválida do servidor'
+        );
       }
-      
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+            data.message ||
+            t.youtubeDownloader?.videoInfoError ||
+            'Erro ao obter informações do vídeo'
+        );
+      }
+
       // A API já retorna os formatos processados com sizeInMB
       setVideoInfo(data);
-      
+
       // Verificar se é dados mock e definir modo demo
       if (data._isMockData) {
         setIsDemoMode(true);
-        setError(`${data._message} - As funcionalidades de download também estarão indisponíveis.`);
+        setError(
+          `${data._message} - As funcionalidades de download também estarão indisponíveis.`
+        );
       } else {
         setIsDemoMode(false);
       }
-      
+
     } catch (error) {
       console.error('Erro ao analisar vídeo:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido ao processar o vídeo';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Erro desconhecido ao processar o vídeo';
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -243,8 +266,16 @@ export default function BaixarYoutubePage() {
           downloadManager.updateProgress(buttonKey, 90);
           
           if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Erro ao baixar o arquivo');
+            const contentType = response.headers.get('content-type');
+            let errorMessage = 'Erro ao baixar o arquivo';
+            if (contentType && contentType.includes('application/json')) {
+              const errorData = await response.json();
+              errorMessage = errorData.message || errorData.error || errorMessage;
+            } else {
+              const text = await response.text();
+              errorMessage = text || errorMessage;
+            }
+            throw new Error(errorMessage);
           }
           
           downloadManager.updateProgress(buttonKey, 95);
