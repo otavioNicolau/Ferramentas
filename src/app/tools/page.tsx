@@ -4,12 +4,13 @@ import ToolCard from '@/components/ToolCard';
 import { tools } from '@/data/tools';
 
 const t = getTranslations();
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 
 export const metadata: Metadata = {
   title: t.toolsPageTitle,
   description: t.toolsPageDescription,
   keywords: t.toolsPageKeywords,
-  alternates: { canonical: '/tools' },
+  alternates: { canonical: `${baseUrl}/tools` },
 };
 
 export default function ToolsPage() {

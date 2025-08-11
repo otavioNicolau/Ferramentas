@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import { getTranslations } from '@/config/language';
 
 const t = getTranslations();
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 
 export const metadata: Metadata = {
   title: t.aboutPageTitle,
   description: t.aboutPageDescription,
   keywords: t.aboutPageKeywords,
-  alternates: { canonical: '/about' },
+  alternates: { canonical: `${baseUrl}/about` },
 };
 
 export default function AboutPage() {
