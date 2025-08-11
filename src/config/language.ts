@@ -1,6 +1,11 @@
+const envLanguage =
+  (process.env.NEXT_PUBLIC_DEFAULT_LANGUAGE === 'en'
+    ? 'en'
+    : 'pt-BR') as 'pt-BR' | 'en';
+
 export const LANGUAGE_CONFIG = {
-  defaultLanguage: 'pt-BR',
-  currentLanguage: 'pt-BR' as 'pt-BR' | 'en',
+  defaultLanguage: envLanguage,
+  currentLanguage: envLanguage,
   
   // Idiomas disponíveis
   availableLanguages: {

@@ -4,15 +4,13 @@ Este projeto implementa um sistema de tradução simples baseado em configuraç�
 
 ## Como Configurar o Idioma
 
-Para alterar o idioma da aplicação, edite o arquivo `src/config/language.ts`:
+Defina o idioma padrão criando um arquivo `.env` na raiz do projeto (ou utilizando `.env.example` como base) e configurando a variável:
 
-```typescript
-// Para usar português (padrão)
-export const CURRENT_LANGUAGE: Language = 'pt-BR';
-
-// Para usar inglês
-export const CURRENT_LANGUAGE: Language = 'en';
 ```
+NEXT_PUBLIC_DEFAULT_LANGUAGE=pt-BR
+```
+
+Altere o valor para `en` para utilizar inglês.
 
 ## Idiomas Disponíveis
 
@@ -32,7 +30,7 @@ export const CURRENT_LANGUAGE: Language = 'en';
 
 ### Como Funciona
 
-1. O idioma é definido na constante `CURRENT_LANGUAGE`
+1. O idioma é definido pela variável de ambiente `NEXT_PUBLIC_DEFAULT_LANGUAGE`
 2. A função `getTranslations()` retorna as traduções do idioma atual
 3. A função `getCurrentLanguage()` retorna o idioma configurado
 4. Os componentes usam essas funções para exibir o conteúdo traduzido
@@ -44,7 +42,7 @@ Para adicionar um novo idioma:
 1. Adicione o código do idioma ao tipo `Language`
 2. Adicione as traduções no objeto `translations`
 3. Adicione as ferramentas traduzidas no objeto `toolsData`
-4. Configure `CURRENT_LANGUAGE` para o novo idioma
+4. Configure `NEXT_PUBLIC_DEFAULT_LANGUAGE` para o novo idioma
 
 ## Vantagens deste Sistema
 
