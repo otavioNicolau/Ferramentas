@@ -299,7 +299,15 @@ export const getTranslations = () => {
       tools: 'Ferramentas',
       about: 'Sobre',
       contact: 'Contato',
-      
+
+      // Páginas
+      toolsPageTitle: 'Ferramentas',
+      toolsPageDescription: 'Explore nossa lista de ferramentas online gratuitas.',
+      toolsPageKeywords: ['ferramentas online', 'utilidades', 'ferramentas gratuitas'],
+      aboutPageTitle: 'Sobre',
+      aboutPageDescription: 'Saiba mais sobre o Ferramentas Online.',
+      aboutPageKeywords: ['sobre', 'ferramentas online', 'informações'],
+
       // Hero Section
       heroTitle: 'Ferramentas Online Gratuitas',
       heroSubtitle: 'Tudo que você precisa em um só lugar',
@@ -491,6 +499,36 @@ export const getTranslations = () => {
         pdfOnlyAlert: 'Por favor, selecione apenas arquivos PDF.'
       }
     },
+
+    'en': {
+      // Site Meta
+      siteTitle: 'Free Online Tools',
+      siteName: 'Online Tools',
+      siteDescription: 'Access a complete collection of free online tools for PDF, video conversion, QR code generation and much more.',
+      
+      // Navigation
+      home: 'Home',
+      tools: 'Tools',
+      about: 'About',
+      contact: 'Contact',
+
+      // Pages
+      toolsPageTitle: 'Tools',
+      toolsPageDescription: 'Explore our collection of free online tools.',
+      toolsPageKeywords: ['online tools', 'utilities', 'free tools'],
+      aboutPageTitle: 'About',
+      aboutPageDescription: 'Learn more about Online Tools.',
+      aboutPageKeywords: ['about', 'online tools', 'information'],
+
+      // Hero Section
+      heroTitle: 'Free Online Tools',
+      heroSubtitle: 'Everything you need in one place',
+      heroDescription: 'Access a complete collection of free online tools to facilitate your work and increase your productivity.',
+      
+      // Search and Filter
+      searchPlaceholder: 'Search tools...',
+      allCategories: 'All',
+
     en: EN_TRANSLATIONS,
     es: {
       ...EN_TRANSLATIONS,
@@ -508,6 +546,7 @@ export const getTranslations = () => {
         'Accede a una colección completa de herramientas en línea gratuitas para facilitar tu trabajo y aumentar tu productividad.',
       searchPlaceholder: 'Buscar herramientas...',
       allCategories: 'Todos',
+
       totalTools: 'Total:',
       toolsCounter: 'herramientas disponibles',
       notebookTitle: 'Bloc de Notas',
