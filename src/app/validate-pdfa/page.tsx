@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, FileText, CheckCircle, XCircle, AlertTriangle, Trash2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import { getTranslations, getCurrentLanguage } from '@/config/language';
 
 interface ValidationResult {
   fileName: string;
@@ -16,6 +17,8 @@ interface ValidationResult {
 }
 
 export default function ValidatePdfaPage() {
+  const t = getTranslations();
+  const currentLang = getCurrentLanguage();
   const [, setSelectedFile] = useState<File | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [result, setResult] = useState<ValidationResult | null>(null);
@@ -163,7 +166,7 @@ export default function ValidatePdfaPage() {
       setSelectedFile(file);
       validatePDF(file);
     } else {
-      alert('Por favor, selecione apenas arquivos PDF.');
+      alert(t.pdfaValidator.pdfOnlyAlert);
     }
   };
 
@@ -204,15 +207,17 @@ export default function ValidatePdfaPage() {
 
   return (
     <ToolLayout
-      title="Validador PDF/A"
-      description="Valide se documentos PDF estão em conformidade com os padrões PDF/A para arquivamento de longo prazo"
+      title={t.pdfaValidatorTitle}
+      description={t.pdfaValidatorDescription}
     >
       <div className="space-y-6">
         {/* Upload Area */}
         <div className="bg-white border border-gray-200 rounded-lg p-6">
           <div className="flex items-center gap-2 mb-4">
             <FileText size={20} className="text-gray-700" />
-            <h3 className="text-lg font-semibold text-gray-800">Selecionar Arquivo PDF</h3>
+            <h3 className="text-lg font-semibold text-gray-800">
+              {t.pdfaValidator.selectFileTitle}
+            </h3>
           </div>
           
           <div
@@ -227,16 +232,16 @@ export default function ValidatePdfaPage() {
           >
             <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <p className="text-lg font-medium text-gray-700 mb-2">
-              Arraste um arquivo PDF aqui ou clique para selecionar
+              {t.pdfaValidator.dragDropHint}
             </p>
             <p className="text-sm text-gray-500 mb-4">
-              Apenas arquivos PDF são aceitos
+              {t.pdfaValidator.onlyPdfHint}
             </p>
             <button
               onClick={() => fileInputRef.current?.click()}
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
             >
-              Selecionar Arquivo
+              {t.pdfaValidator.selectButton}
             </button>
             <input
               ref={fileInputRef}
@@ -253,10 +258,10 @@ export default function ValidatePdfaPage() {
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-center space-x-3">
               <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-600 border-t-transparent"></div>
-              <span className="text-gray-700">Validando PDF/A...</span>
+              <span className="text-gray-700">{t.pdfaValidator.validating}</span>
             </div>
             <div className="mt-4 text-center text-sm text-gray-500">
-              Verificando conformidade com padrões PDF/A
+              {t.pdfaValidator.checkingPdfa}
             </div>
           </div>
         )}
@@ -265,13 +270,15 @@ export default function ValidatePdfaPage() {
         {result && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">Resultado da Validação</h3>
+              <h3 className="text-lg font-semibold text-gray-800">
+                {t.pdfaValidator.resultTitle}
+              </h3>
               <button
                 onClick={reset}
                 className="text-gray-600 hover:text-gray-800 flex items-center gap-1"
               >
                 <Trash2 size={16} />
-                Limpar
+                {t.pdfaValidator.clear}
               </button>
             </div>
 
@@ -279,16 +286,22 @@ export default function ValidatePdfaPage() {
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div>
-                  <span className="font-medium text-gray-700">Arquivo:</span>
+                  <span className="font-medium text-gray-700">
+                    {t.pdfaValidator.fileLabel}
+                  </span>
                   <p className="text-gray-600 break-all">{result.fileName}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700">Tamanho:</span>
+                  <span className="font-medium text-gray-700">
+                    {t.pdfaValidator.sizeLabel}
+                  </span>
                   <p className="text-gray-600">{result.fileSize}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-700">Validado em:</span>
-                  <p className="text-gray-600">{result.timestamp.toLocaleString('pt-BR')}</p>
+                  <span className="font-medium text-gray-700">
+                    {t.pdfaValidator.validatedAt}
+                  </span>
+                  <p className="text-gray-600">{result.timestamp.toLocaleString(currentLang)}</p>
                 </div>
               </div>
             </div>
@@ -305,17 +318,21 @@ export default function ValidatePdfaPage() {
                 ) : (
                   <XCircle className="text-red-600" size={20} />
                 )}
-                <span className={`font-semibold ${
-                  result.isValid ? 'text-green-800' : 'text-red-800'
-                }`}>
-                  {result.isValid ? 'PDF/A Válido' : 'PDF/A Inválido'}
+                <span
+                  className={`font-semibold ${
+                    result.isValid ? 'text-green-800' : 'text-red-800'
+                  }`}
+                >
+                  {result.isValid ? t.pdfaValidator.valid : t.pdfaValidator.invalid}
                 </span>
               </div>
               {result.pdfaLevel && (
-                <p className={`text-sm ${
-                  result.isValid ? 'text-green-700' : 'text-red-700'
-                }`}>
-                  Nível detectado: {result.pdfaLevel}
+                <p
+                  className={`text-sm ${
+                    result.isValid ? 'text-green-700' : 'text-red-700'
+                  }`}
+                >
+                  {t.pdfaValidator.detectedLevel} {result.pdfaLevel}
                 </p>
               )}
             </div>
@@ -325,7 +342,9 @@ export default function ValidatePdfaPage() {
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <XCircle className="text-red-600" size={16} />
-                  <span className="font-medium text-red-800">Problemas Encontrados</span>
+                  <span className="font-medium text-red-800">
+                    {t.pdfaValidator.issues}
+                  </span>
                 </div>
                 <ul className="text-sm text-red-700 space-y-1">
                   {result.issues.map((issue, index) => (
@@ -343,7 +362,9 @@ export default function ValidatePdfaPage() {
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <AlertTriangle className="text-yellow-600" size={16} />
-                  <span className="font-medium text-yellow-800">Avisos</span>
+                  <span className="font-medium text-yellow-800">
+                    {t.pdfaValidator.warnings}
+                  </span>
                 </div>
                 <ul className="text-sm text-yellow-700 space-y-1">
                   {result.warnings.map((warning, index) => (
@@ -360,25 +381,25 @@ export default function ValidatePdfaPage() {
 
         {/* Information */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">ℹ️ Sobre PDF/A</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">
+            {t.pdfaValidator.aboutTitle}
+          </h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• PDF/A é um padrão ISO para arquivamento de documentos eletrônicos</li>
-            <li>• Garante que documentos possam ser visualizados no futuro</li>
-            <li>• PDF/A-1: Baseado em PDF 1.4, mais restritivo</li>
-            <li>• PDF/A-2: Baseado em PDF 1.7, permite mais recursos</li>
-            <li>• PDF/A-3: Permite anexos de arquivos externos</li>
+            {t.pdfaValidator.aboutItems.map((item, index) => (
+              <li key={index}>• {item}</li>
+            ))}
           </ul>
         </div>
 
         {/* Tips */}
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <h4 className="font-semibold text-green-900 mb-2">💡 Dicas para PDF/A</h4>
+          <h4 className="font-semibold text-green-900 mb-2">
+            {t.pdfaValidator.tipsTitle}
+          </h4>
           <ul className="text-sm text-green-800 space-y-1">
-            <li>• Incorpore todas as fontes no documento</li>
-            <li>• Evite transparências e efeitos especiais</li>
-            <li>• Use cores RGB ou CMYK consistentes</li>
-            <li>• Inclua metadados XMP apropriados</li>
-            <li>• Teste arquivos com nomes como "invalid.pdf" ou "warning.pdf" para ver diferentes resultados</li>
+            {t.pdfaValidator.tipsItems.map((item, index) => (
+              <li key={index}>• {item}</li>
+            ))}
           </ul>
         </div>
       </div>
