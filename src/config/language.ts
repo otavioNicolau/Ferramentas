@@ -193,6 +193,46 @@ export const getTranslations = () => {
         generated: 'QR Code gerado',
         download: 'Baixar',
         previewText: 'O QR Code aparecerá aqui após a geração.'
+      },
+
+      // PDF/A Validator
+      pdfaValidatorTitle: 'Validador PDF/A',
+      pdfaValidatorDescription:
+        'Valide se documentos PDF estão em conformidade com os padrões PDF/A para arquivamento de longo prazo',
+      pdfaValidator: {
+        selectFileTitle: 'Selecionar Arquivo PDF',
+        dragDropHint: 'Arraste um arquivo PDF aqui ou clique para selecionar',
+        onlyPdfHint: 'Apenas arquivos PDF são aceitos',
+        selectButton: 'Selecionar Arquivo',
+        validating: 'Validando PDF/A...',
+        checkingPdfa: 'Verificando conformidade com padrões PDF/A',
+        resultTitle: 'Resultado da Validação',
+        clear: 'Limpar',
+        fileLabel: 'Arquivo:',
+        sizeLabel: 'Tamanho:',
+        validatedAt: 'Validado em:',
+        valid: 'PDF/A Válido',
+        invalid: 'PDF/A Inválido',
+        detectedLevel: 'Nível detectado:',
+        issues: 'Problemas Encontrados',
+        warnings: 'Avisos',
+        aboutTitle: 'ℹ️ Sobre PDF/A',
+        aboutItems: [
+          'PDF/A é um padrão ISO para arquivamento de documentos eletrônicos',
+          'Garante que documentos possam ser visualizados no futuro',
+          'PDF/A-1: Baseado em PDF 1.4, mais restritivo',
+          'PDF/A-2: Baseado em PDF 1.7, permite mais recursos',
+          'PDF/A-3: Permite anexos de arquivos externos'
+        ],
+        tipsTitle: '💡 Dicas para PDF/A',
+        tipsItems: [
+          'Incorpore todas as fontes no documento',
+          'Evite transparências e efeitos especiais',
+          'Use cores RGB ou CMYK consistentes',
+          'Inclua metadados XMP apropriados',
+          'Teste arquivos com nomes como "invalid.pdf" ou "warning.pdf" para ver diferentes resultados'
+        ],
+        pdfOnlyAlert: 'Por favor, selecione apenas arquivos PDF.'
       }
     },
     'en': {
@@ -356,6 +396,46 @@ export const getTranslations = () => {
         generated: 'QR Code generated',
         download: 'Download',
         previewText: 'The QR Code will appear here after generation.'
+      },
+
+      // PDF/A Validator
+      pdfaValidatorTitle: 'PDF/A Validator',
+      pdfaValidatorDescription:
+        'Check if PDF documents comply with PDF/A standards for long-term archiving',
+      pdfaValidator: {
+        selectFileTitle: 'Select PDF File',
+        dragDropHint: 'Drag a PDF file here or click to select',
+        onlyPdfHint: 'Only PDF files are accepted',
+        selectButton: 'Select File',
+        validating: 'Validating PDF/A...',
+        checkingPdfa: 'Checking compliance with PDF/A standards',
+        resultTitle: 'Validation Result',
+        clear: 'Clear',
+        fileLabel: 'File:',
+        sizeLabel: 'Size:',
+        validatedAt: 'Validated on:',
+        valid: 'Valid PDF/A',
+        invalid: 'Invalid PDF/A',
+        detectedLevel: 'Detected level:',
+        issues: 'Issues Found',
+        warnings: 'Warnings',
+        aboutTitle: 'ℹ️ About PDF/A',
+        aboutItems: [
+          'PDF/A is an ISO standard for archiving electronic documents',
+          'Ensures documents can be viewed in the future',
+          'PDF/A-1: Based on PDF 1.4, more restrictive',
+          'PDF/A-2: Based on PDF 1.7, allows more features',
+          'PDF/A-3: Allows attachments of external files'
+        ],
+        tipsTitle: '💡 PDF/A Tips',
+        tipsItems: [
+          'Embed all fonts in the document',
+          'Avoid transparency and special effects',
+          'Use consistent RGB or CMYK colors',
+          'Include appropriate XMP metadata',
+          'Test files with names like "invalid.pdf" or "warning.pdf" to see different results'
+        ],
+        pdfOnlyAlert: 'Please select only PDF files.'
       }
     }
   };
