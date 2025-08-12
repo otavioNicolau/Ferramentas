@@ -54,7 +54,7 @@ const EN_TRANSLATIONS = {
   siteTitle: 'Free Online Tools',
   siteName: 'Online Tools',
   siteDescription:
-    'Access a complete collection of free online tools for PDF, video conversion, QR code generation and much more.',
+    'Access a comprehensive suite of free online tools for PDF editing, video conversion, image processing and QR code generation. Convert, compress and optimize files securely in your browser.',
 
   // Navigation
   home: 'Home',
@@ -285,7 +285,7 @@ const PT_BR = {
   siteTitle: 'NICOLLAUTOOLS - Ferramentas Online Gratuitas',
     siteName: 'NICOLLAUTOOLS',
   siteDescription:
-    'Acesse uma coleção completa de ferramentas online gratuitas para PDF, conversão de vídeo, geração de QR codes e muito mais.',
+    'Acesse uma ampla coleção de ferramentas online gratuitas para editar PDFs, converter vídeos, processar imagens e gerar QR Codes. Converta, compacte e otimize arquivos com segurança direto no navegador.',
 
   // Navegação
   home: 'Início',
@@ -512,7 +512,7 @@ const ES = {
   siteTitle: 'Herramientas Online Gratuitas',
   siteName: 'Herramientas Online',
   siteDescription:
-    'Accede a una colección completa de herramientas en línea gratuitas para PDF, conversión de video, generación de códigos QR y mucho más.',
+    'Accede a una colección completa de herramientas en línea gratuitas para editar PDF, convertir videos, procesar imágenes y generar códigos QR. Convierte, comprime y optimiza archivos de forma segura en tu navegador.',
   home: 'Inicio',
   tools: 'Herramientas',
   about: 'Acerca de',
@@ -553,7 +553,7 @@ const ZH = {
   siteTitle: '免费在线工具',
   siteName: '在线工具',
   siteDescription:
-    '访问完整的免费在线工具集合，用于PDF、视频转换、二维码生成等。',
+    '访问完整的免费在线工具集合，用于PDF编辑、视频转换、图像处理和二维码生成。在浏览器中安全地转换、压缩和优化文件。',
   home: '首页',
   tools: '工具',
   about: '关于',
@@ -593,7 +593,7 @@ const HI = {
   siteTitle: 'मुफ़्त ऑनलाइन उपकरण',
   siteName: 'ऑनलाइन उपकरण',
   siteDescription:
-    'PDF, वीडियो रूपांतरण, QR कोड जनरेशन और बहुत कुछ के लिए मुफ़्त ऑनलाइन उपकरणों का पूरा संग्रह एक्सेस करें।',
+    'PDF संपादन, वीडियो रूपांतरण, छवि प्रोसेसिंग और QR कोड जनरेशन के लिए मुफ़्त ऑनलाइन उपकरणों का पूरा संग्रह एक्सेस करें। अपने ब्राउज़र में सुरक्षित रूप से फ़ाइलों को कन्वर्ट, कंप्रेस और ऑप्टिमाइज़ करें।',
   home: 'मुखपृष्ठ',
   tools: 'उपकरण',
   about: 'परिचय',
@@ -633,7 +633,7 @@ const AR = {
   siteTitle: 'أدوات مجانية على الإنترنت',
   siteName: 'أدوات الإنترنت',
   siteDescription:
-    'الوصول إلى مجموعة كاملة من الأدوات المجانية على الإنترنت لملفات PDF وتحويل الفيديو وإنشاء رموز QR والمزيد.',
+    'الوصول إلى مجموعة كاملة من الأدوات المجانية على الإنترنت لتحرير ملفات PDF وتحويل الفيديو ومعالجة الصور وإنشاء رموز QR. حوّل واضغط وحسّن الملفات بأمان داخل متصفحك.',
   home: 'الرئيسية',
   tools: 'الأدوات',
   about: 'حول',
@@ -673,7 +673,7 @@ const BN = {
   siteTitle: 'বিনামূল্যের অনলাইন টুলস',
   siteName: 'অনলাইন টুলস',
   siteDescription:
-    'PDF, ভিডিও রূপান্তর, QR কোড জেনারেশন এবং আরও অনেক কিছুর জন্য বিনামূল্যের অনলাইন টুলসের পূর্ণ সংগ্রহ অ্যাক্সেস করুন।',
+    'PDF সম্পাদনা, ভিডিও রূপান্তর, ইমেজ প্রক্রিয়াকরণ এবং QR কোড তৈরির জন্য বিনামূল্যের অনলাইন টুলসের পূর্ণ সংগ্রহে প্রবেশ করুন। আপনার ব্রাউজারে নিরাপদে ফাইল রূপান্তর, সংকুচিত ও অপ্টিমাইজ করুন।',
   home: 'হোম',
   tools: 'টুলস',
   about: 'সম্পর্কে',
@@ -715,7 +715,7 @@ const RU = {
   siteTitle: 'Бесплатные онлайн-инструменты',
   siteName: 'Онлайн-инструменты',
   siteDescription:
-    'Получите доступ к полной коллекции бесплатных онлайн-инструментов для PDF, преобразования видео, генерации QR-кодов и многого другого.',
+    'Получите доступ к полной коллекции бесплатных онлайн‑инструментов для редактирования PDF, преобразования видео, обработки изображений и генерации QR‑кодов. Конвертируйте, сжимайте и оптимизируйте файлы безопасно прямо в браузере.',
   home: 'Главная',
   tools: 'Инструменты',
   about: 'О нас',
@@ -757,7 +757,7 @@ const JA = {
   siteTitle: '無料オンラインツール',
   siteName: 'オンラインツール',
   siteDescription:
-    'PDF、動画変換、QRコード生成などの無料オンラインツールの完全なコレクションにアクセスしましょう。',
+    'PDF編集、動画変換、画像処理、QRコード生成のための無料オンラインツールのフルセットを利用できます。ブラウザ内で安全にファイルを変換・圧縮・最適化しましょう。',
   home: 'ホーム',
   tools: 'ツール',
   about: '概要',
@@ -798,7 +798,7 @@ const DE = {
   siteTitle: 'Kostenlose Online-Tools',
   siteName: 'Online-Tools',
   siteDescription:
-    'Greifen Sie auf eine vollständige Sammlung kostenloser Online-Tools für PDFs, Videokonvertierung, QR-Code-Erstellung und vieles mehr zu.',
+    'Greifen Sie auf eine umfassende Sammlung kostenloser Online‑Tools zur PDF‑Bearbeitung, Videokonvertierung, Bildverarbeitung und QR‑Code‑Erstellung zu. Konvertieren, komprimieren und optimieren Sie Dateien sicher direkt in Ihrem Browser.',
   home: 'Startseite',
   tools: 'Werkzeuge',
   about: 'Über uns',
