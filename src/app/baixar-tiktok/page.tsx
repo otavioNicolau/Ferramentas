@@ -19,6 +19,7 @@ interface VideoInfo {
   likes?: number;
   comments?: number;
   shares?: number;
+  sourceUrl: string;
 }
 
 interface DownloadItem {
@@ -32,16 +33,17 @@ interface DownloadItem {
 
 export default function BaixarTikTok() {
   const t = getTranslations();
-  const [url, setUrl] = useState('');
-  const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
+  const [urls, setUrls] = useState('');
+  const [videoInfos, setVideoInfos] = useState<VideoInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [downloadType, setDownloadType] = useState<'video' | 'audio'>('video');
+  const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
   const [downloadHistory, setDownloadHistory] = useState<DownloadItem[]>([]);
   const [copiedUrl, setCopiedUrl] = useState('');
-  const urlInputRef = useRef<HTMLInputElement>(null);
+  const urlInputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const savedHistory = localStorage.getItem('tiktok-download-history');
@@ -72,49 +74,61 @@ export default function BaixarTikTok() {
   };
 
   const fetchVideoInfo = async () => {
-    if (!url.trim()) {
+    const urlList = urls
+      .split('\n')
+      .map(u => u.trim())
+      .filter(Boolean);
+
+    if (urlList.length === 0) {
       setError(t.tiktokDownloader?.enterUrl || 'Por favor, insira uma URL do TikTok');
       return;
     }
 
-    if (!validateTikTokUrl(url.trim())) {
+    const invalidUrl = urlList.find(u => !validateTikTokUrl(u));
+    if (invalidUrl) {
       setError(t.tiktokDownloader?.invalidUrl || 'Por favor, insira uma URL válida do TikTok');
       return;
     }
 
     setIsLoading(true);
     setError('');
-    setVideoInfo(null);
+    setVideoInfos([]);
 
     try {
-      const response = await fetch('/api/tiktok/info', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url: url.trim() }),
-      });
+      const results = await Promise.all(
+        urlList.map(async (u) => {
+          const response = await fetch('/api/tiktok/info', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: u }),
+          });
 
-      const text = await response.text();
-      let data: unknown;
+          const text = await response.text();
+          let data: unknown;
 
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error(t.tiktokDownloader?.invalidResponse || 'Resposta inválida do servidor');
-      }
+          try {
+            data = JSON.parse(text);
+          } catch {
+            throw new Error(t.tiktokDownloader?.invalidResponse || 'Resposta inválida do servidor');
+          }
 
-      if (!response.ok) {
-        const errorData = data as { error?: string; message?: string };
-        throw new Error(
-          errorData.error ||
-            errorData.message ||
-            t.tiktokDownloader?.videoInfoError ||
-            'Erro ao obter informações do vídeo'
-        );
-      }
+          if (!response.ok) {
+            const errorData = data as { error?: string; message?: string };
+            throw new Error(
+              errorData.error ||
+                errorData.message ||
+                t.tiktokDownloader?.videoInfoError ||
+                'Erro ao obter informações do vídeo'
+            );
+          }
 
-      setVideoInfo(data as VideoInfo);
+          return { ...(data as VideoInfo), sourceUrl: u };
+        })
+      );
+
+      setVideoInfos(results);
     } catch (error) {
       console.error('Erro:', error);
       setError(error instanceof Error ? error.message : t.tiktokDownloader?.unknownError || 'Erro desconhecido');
@@ -144,10 +158,9 @@ export default function BaixarTikTok() {
     return num.toString();
   };
 
-  const downloadMedia = async (type: 'video' | 'audio') => {
-    if (!videoInfo) return;
-
+  const downloadMedia = async (video: VideoInfo, type: 'video' | 'audio') => {
     setIsDownloading(true);
+    setCurrentVideoId(video.id);
     setDownloadProgress(0);
     setDownloadType(type);
 
@@ -163,20 +176,20 @@ export default function BaixarTikTok() {
           return prev + (type === 'audio' ? 8 : 10);
         });
       }, type === 'audio' ? 300 : 200); // Mais devagar para áudio
-      
+
       const response = await fetch('/api/tiktok/download', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url, type }),
+        body: JSON.stringify({ url: video.sourceUrl, type }),
       });
 
       // Simular progresso final
       for (let i = 0; i < 5; i++) {
         await new Promise(resolve => setTimeout(resolve, 300));
       }
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         let errorMessage = `${t.tiktokDownloader?.downloadError || 'Erro ao baixar'} ${
@@ -196,7 +209,7 @@ export default function BaixarTikTok() {
       }
 
       const blob = await response.blob();
-      
+
       // Finalizar progresso durante o processamento do blob
       for (let i = 0; i < 3; i++) {
         setDownloadProgress(prev => Math.min(prev + 3, 97));
@@ -205,7 +218,7 @@ export default function BaixarTikTok() {
 
       const contentDisposition = response.headers.get('content-disposition');
       let fileName = `tiktok_${type}_${Date.now()}.${type === 'video' ? 'mp4' : 'mp3'}`;
-      
+
       if (contentDisposition) {
         const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
         if (fileNameMatch) {
@@ -214,20 +227,20 @@ export default function BaixarTikTok() {
       }
 
       setDownloadProgress(100);
-      
+
       // Pequena pausa para mostrar 100%
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       saveAs(blob, fileName);
 
       // Adicionar ao histórico
       const downloadItem: DownloadItem = {
-        id: videoInfo.id,
-        title: videoInfo.title,
-        author: videoInfo.author,
+        id: video.id,
+        title: video.title,
+        author: video.author,
         type,
         timestamp: Date.now(),
-        thumbnailUrl: videoInfo.thumbnailUrl
+        thumbnailUrl: video.thumbnailUrl
       };
 
       const newHistory = [downloadItem, ...downloadHistory.slice(0, 9)];
@@ -239,6 +252,7 @@ export default function BaixarTikTok() {
       setError(error instanceof Error ? error.message : t.tiktokDownloader?.downloadFailed || 'Erro no download');
     } finally {
       setIsDownloading(false);
+      setCurrentVideoId(null);
       setDownloadProgress(0);
     }
   };
@@ -248,8 +262,9 @@ export default function BaixarTikTok() {
     localStorage.removeItem('tiktok-download-history');
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !isLoading) {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && !isLoading) {
+      e.preventDefault();
       fetchVideoInfo();
     }
   };
@@ -265,23 +280,23 @@ export default function BaixarTikTok() {
           <div className="space-y-4">
             <div>
               <label htmlFor="tiktok-url" className="block text-sm font-semibold text-gray-900 mb-3">
-                🎵 {t.tiktokDownloader?.urlLabel || "URL do TikTok"}
+                🎵 {t.tiktokDownloader?.urlLabel || "URLs do TikTok"}
               </label>
               <div className="flex gap-3">
-                <input
+                <textarea
                   ref={urlInputRef}
                   id="tiktok-url"
-                  type="url"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder={t.tiktokDownloader?.urlPlaceholder || "Cole aqui a URL do vídeo do TikTok..."}
+                  value={urls}
+                  onChange={(e) => setUrls(e.target.value)}
+                  onKeyDown={handleKeyPress}
+                  placeholder={t.tiktokDownloader?.urlPlaceholder || "Cole aqui uma ou mais URLs do TikTok (uma por linha)..."}
                   className="flex-1 px-4 py-3 border-2 border-gray-400 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 transition-all duration-200 placeholder-gray-500"
+                  rows={3}
                   disabled={isLoading}
                 />
                 <button
                   onClick={fetchVideoInfo}
-                  disabled={isLoading || !url.trim()}
+                    disabled={isLoading || !urls.trim()}
                   className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-white rounded-xl font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
                 >
                   {isLoading ? (
@@ -309,8 +324,8 @@ export default function BaixarTikTok() {
         </div>
 
         {/* Informações do Vídeo */}
-        {videoInfo && (
-          <div className="bg-gray-100 border border-gray-300 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl">
+        {videoInfos.map((videoInfo) => (
+          <div key={videoInfo.id} className="bg-gray-100 border border-gray-300 rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl">
             <div className="md:flex">
               {/* Thumbnail */}
               <div className="md:w-1/3">
@@ -375,11 +390,11 @@ export default function BaixarTikTok() {
                   {/* Botões de Download */}
                   <div className="flex flex-col sm:flex-row gap-4 pt-2">
                     <button
-                      onClick={() => downloadMedia('video')}
+                      onClick={() => downloadMedia(videoInfo, 'video')}
                       disabled={isDownloading}
                       className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-white rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
                     >
-                      {isDownloading && downloadType === 'video' ? (
+                      {isDownloading && currentVideoId === videoInfo.id && downloadType === 'video' ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
                           <div className="text-left">
@@ -398,11 +413,11 @@ export default function BaixarTikTok() {
                       )}
                     </button>
                     <button
-                      onClick={() => downloadMedia('audio')}
+                      onClick={() => downloadMedia(videoInfo, 'audio')}
                       disabled={isDownloading}
-                      className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-white rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
+                        className="flex-1 flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-white rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
                     >
-                      {isDownloading && downloadType === 'audio' ? (
+                      {isDownloading && currentVideoId === videoInfo.id && downloadType === 'audio' ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
                           <div className="text-left">
@@ -423,7 +438,7 @@ export default function BaixarTikTok() {
                   </div>
 
                   {/* Barra de Progresso */}
-                  {isDownloading && (
+                    {isDownloading && currentVideoId === videoInfo.id && (
                     <div className="w-full bg-gray-300 rounded-full h-3 shadow-inner">
                       <div
                         className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500 shadow-sm"
@@ -435,7 +450,7 @@ export default function BaixarTikTok() {
               </div>
             </div>
           </div>
-        )}
+        ))}
 
         {/* Histórico de Downloads */}
         {downloadHistory.length > 0 && (
@@ -495,11 +510,11 @@ export default function BaixarTikTok() {
           <ol className="list-decimal list-inside space-y-3 text-gray-800">
             <li className="flex items-start gap-2">
               <span className="font-semibold">1.</span>
-              <span>🔗 {t.tiktokDownloader?.step1 || "Copie a URL do vídeo do TikTok que deseja baixar"}</span>
+              <span>🔗 {t.tiktokDownloader?.step1 || "Copie as URLs dos vídeos do TikTok que deseja baixar"}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="font-semibold">2.</span>
-              <span>📋 {t.tiktokDownloader?.step2 || 'Cole a URL no campo acima e clique em "Analisar"'}</span>
+              <span>📋 {t.tiktokDownloader?.step2 || 'Cole as URLs no campo acima (uma por linha) e clique em "Analisar"'}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="font-semibold">3.</span>

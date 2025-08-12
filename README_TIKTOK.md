@@ -8,6 +8,7 @@ O NICOLLAUTOOLS permite baixar vídeos do TikTok sem marca d'água em alta quali
 
 - **Download de Vídeo**: Baixe vídeos em formato MP4 sem marca d'água
 - **Download de Áudio**: Extraia apenas o áudio em formato MP3
+- **Múltiplas URLs**: Analise e baixe vários vídeos de uma só vez
 - **Preview do Vídeo**: Visualize o vídeo antes de baixar
 - **Informações Detalhadas**: Veja estatísticas, autor, duração e mais
 - **Histórico de Downloads**: Acompanhe seus downloads recentes
@@ -16,17 +17,18 @@ O NICOLLAUTOOLS permite baixar vídeos do TikTok sem marca d'água em alta quali
 
 ## 🚀 Como Usar
 
-### 1. Cole a URL do TikTok
-- Copie o link do vídeo do TikTok que deseja baixar
-- Cole no campo de entrada da ferramenta
+### 1. Cole as URLs do TikTok
+- Copie os links dos vídeos do TikTok que deseja baixar
+- Cole no campo de entrada da ferramenta (uma URL por linha)
 
 ### 2. Busque Informações
 - Clique em "Buscar" ou pressione `Ctrl/Cmd + Enter`
-- Aguarde o carregamento das informações do vídeo
+- Aguarde o carregamento das informações dos vídeos
 
 ### 3. Escolha o Tipo de Download
-- **Vídeo (MP4)**: Download completo do vídeo sem marca d'água
-- **Áudio (MP3)**: Apenas o áudio do vídeo
+- Para cada vídeo, escolha entre:
+  - **Vídeo (MP4)**: Download completo do vídeo sem marca d'água
+  - **Áudio (MP3)**: Apenas o áudio do vídeo
 
 ### 4. Baixe o Arquivo
 - Clique em "Baixar Vídeo" ou "Baixar Áudio"
