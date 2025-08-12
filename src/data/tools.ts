@@ -59,7 +59,7 @@ const toolsData = {
       {
         id: 'baixar-tiktok',
         title: 'Download TikTok',
-        description: 'Baixe vídeos do TikTok sem marca d\'água',
+        description: 'Baixe um ou mais vídeos do TikTok sem marca d\'água',
         href: '/baixar-tiktok',
         icon: Download,
         category: 'Áudio/Vídeo'
@@ -557,7 +557,7 @@ const toolsData = {
       {
         id: 'baixar-tiktok',
         title: 'TikTok Downloader',
-        description: 'Download TikTok videos without watermark',
+        description: 'Download one or more TikTok videos without watermark',
         href: '/baixar-tiktok',
         icon: Download,
         category: 'Audio/Video'
