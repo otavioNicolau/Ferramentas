@@ -13,10 +13,14 @@ const inter = Inter({
 
 const t = getTranslations();
 const lang = getCurrentLanguage();
+const adsenseAccount = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT;
 
 export const metadata: Metadata = {
   title: t.siteTitle,
   description: t.siteDescription,
+  other: adsenseAccount
+    ? { "google-adsense-account": adsenseAccount }
+    : undefined,
 };
 
 export default function RootLayout({
