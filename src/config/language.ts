@@ -25,7 +25,7 @@ export const LANGUAGE_CONFIG = {
   defaultLanguage: envLanguage,
   currentLanguage: envLanguage,
 
-  // Idiomas disponíveis
+  // Idiomas dis poníveis
   availableLanguages: {
     'pt-BR': { name: 'Português', flag: '🇧🇷', code: 'pt-BR' },
     en: { name: 'English', flag: '🇺🇸', code: 'en' },
