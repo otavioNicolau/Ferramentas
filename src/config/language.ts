@@ -282,8 +282,8 @@ const EN_TRANSLATIONS = {
 // pt-BR (com páginas e navegação + chaves adicionais)
 const PT_BR = {
   // Site Meta
-  siteTitle: 'NICOLLAUTOOLS - Ferramentas Online Gratuitas',
-    siteName: 'NICOLLAUTOOLS',
+  siteTitle: 'Ferramentas Online Gratuitas',
+  siteName: 'NICOLLAUTOOLS',
   siteDescription:
     'Acesse uma ampla coleção de ferramentas online gratuitas para editar PDFs, converter vídeos, processar imagens e gerar QR Codes. Converta, compacte e otimize arquivos com segurança direto no navegador.',
 
@@ -305,7 +305,7 @@ const PT_BR = {
   aboutPageKeywords: ['sobre', 'ferramentas online', 'informações'],
 
   // Hero Section
-  heroTitle: 'NICOLLAUTOOLS - Ferramentas Online Gratuitas',
+  heroTitle: 'Ferramentas Online Gratuitas',
   heroSubtitle: 'Tudo que você precisa em um só lugar',
   heroDescription:
     'Acesse uma coleção completa de ferramentas online gratuitas para facilitar seu trabalho e aumentar sua produtividade.',
