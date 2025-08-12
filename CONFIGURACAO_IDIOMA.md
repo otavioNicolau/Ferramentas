@@ -1,6 +1,6 @@
-# Sistema de Tradução Configurável
+# Sistema de Tradução Configurável - NICOLLAUTOOLS
 
-Este projeto implementa um sistema de tradução simples baseado em configuração, permitindo alterar facilmente o idioma da aplicação.
+Este projeto implementa um sistema de tradução simples baseado em configuração, permitindo alterar facilmente o idioma do NICOLLAUTOOLS.
 
 ## Como Configurar o Idioma
 

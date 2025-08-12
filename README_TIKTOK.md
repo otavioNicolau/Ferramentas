@@ -1,8 +1,8 @@
-# Download de Vídeos do TikTok
+# NICOLLAUTOOLS - Download do TikTok
 
 ## 📱 Funcionalidades
 
-Esta ferramenta permite baixar vídeos do TikTok sem marca d'água em alta qualidade. 
+O NICOLLAUTOOLS permite baixar vídeos do TikTok sem marca d'água em alta qualidade. 
 
 ### ✨ Recursos Principais
 
@@ -148,4 +148,4 @@ Se você encontrar problemas ou tiver sugestões:
 
 ---
 
-**Lembre-se**: Esta ferramenta é para uso pessoal e educacional. Respeite sempre os direitos autorais e as políticas de uso do TikTok. 
+**Lembre-se**: Esta ferramenta é para uso pessoal e educacional. Respeite sempre os direitos autorais e as políticas de uso do TikTok.

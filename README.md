@@ -1,6 +1,6 @@
-# UtilidadeWeb 🛠️
+# NICOLLAUTOOLS 🛠️
 
-UtilidadeWeb é uma coleção de ferramentas online gratuitas projetadas para tornar sua vida digital mais fácil. Todas as ferramentas funcionam diretamente no seu navegador, garantindo privacidade e segurança.
+NICOLLAUTOOLS é uma coleção de ferramentas online gratuitas projetadas para tornar sua vida digital mais fácil. Todas as ferramentas funcionam diretamente no seu navegador, garantindo privacidade e segurança.
 
 ## 🌟 Características
 

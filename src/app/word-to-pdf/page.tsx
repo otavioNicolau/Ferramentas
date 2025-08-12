@@ -364,7 +364,7 @@ export default function WordToPdfPage() {
       pdfDoc.setTitle(documentMetadata.title);
       pdfDoc.setAuthor(documentMetadata.author);
       pdfDoc.setSubject('Documento convertido de Word para PDF');
-      pdfDoc.setCreator('Ferramenta de Conversão Word para PDF');
+      pdfDoc.setCreator('NICOLLAUTOOLS - Conversão Word para PDF');
       pdfDoc.setProducer('PDF Tools');
       pdfDoc.setCreationDate(new Date());
       pdfDoc.setModificationDate(new Date());

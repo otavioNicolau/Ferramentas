@@ -1,7 +1,7 @@
-# Robots.txt otimizado para SEO
+# Robots.txt para NICOLLAUTOOLS - Ferramentas Online
 # Gerado automaticamente para máxima indexação
 # Site: http://localhost:3000
-# Gerado em: 2025-08-12T00:41:44.781Z
+# Gerado em: 2025-08-12T01:45:51.503Z
 
 User-agent: *
 Allow: /

@@ -9,7 +9,7 @@ export function generateMetadata(): Metadata {
     title: t.aboutPageTitle ?? t.about ?? 'Sobre',
     description:
       t.aboutPageDescription ??
-      'Este site oferece diversas ferramentas online gratuitas para facilitar o seu dia a dia.',
+      'O NICOLLAUTOOLS oferece diversas ferramentas online gratuitas para facilitar o seu dia a dia.',
     keywords: t.aboutPageKeywords,
     alternates: { canonical: `${baseUrl}/about` },
   };
@@ -32,7 +32,7 @@ export default function AboutPage() {
             {t.aboutPageTitle ?? t.about}
           </h1>
           <p className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-light">
-            Transformando a maneira como você trabalha com ferramentas digitais
+            NICOLLAUTOOLS - Transformando a maneira como você trabalha com ferramentas digitais
           </p>
           <div className="mt-8 w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
         </div>
