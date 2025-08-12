@@ -32,7 +32,7 @@ import {
   Archive,
   Plus
 } from 'lucide-react';
-import { getCurrentLanguage } from '@/config/language';
+import { getCurrentLanguage, Language } from '@/config/language';
 
 // Dados das ferramentas movidos para toolsData abaixo
 
@@ -520,19 +520,6 @@ const toolsData = {
         icon: DollarSign,
         category: 'Financeiro'
       }
-    ],
-    categories: [
-      'Todos',
-      'Áudio/Vídeo',
-      'PDF',
-      'Imagem',
-      'QR Code',
-      'Segurança',
-      'Web',
-      'Utilidades',
-      'Texto',
-      'Financeiro',
-      'Internet'
     ]
   },
   'en': {
@@ -1018,21 +1005,141 @@ const toolsData = {
         icon: DollarSign,
         category: 'Financial'
       }
-    ],
-    categories: [
-      'All',
-      'Audio/Video',
-      'PDF',
-      'Image',
-      'QR Code',
-      'Security',
-      'Web',
-      'Utilities',
-      'Text',
-      'Financial',
-      'Internet'
     ]
   }
+};
+
+const categoriesData: Record<Language, string[]> = {
+  'pt-BR': [
+    'Todos',
+    'Áudio/Vídeo',
+    'PDF',
+    'Imagem',
+    'QR Code',
+    'Segurança',
+    'Web',
+    'Utilidades',
+    'Texto',
+    'Financeiro',
+    'Internet'
+  ],
+  en: [
+    'All',
+    'Audio/Video',
+    'PDF',
+    'Image',
+    'QR Code',
+    'Security',
+    'Web',
+    'Utilities',
+    'Text',
+    'Financial',
+    'Internet'
+  ],
+  es: [
+    'Todos',
+    'Audio/Video',
+    'PDF',
+    'Imagen',
+    'Código QR',
+    'Seguridad',
+    'Web',
+    'Utilidades',
+    'Texto',
+    'Financiero',
+    'Internet'
+  ],
+  zh: [
+    '全部',
+    '音频/视频',
+    'PDF',
+    '图像',
+    '二维码',
+    '安全',
+    '网络',
+    '实用工具',
+    '文本',
+    '金融',
+    '互联网'
+  ],
+  hi: [
+    'सभी',
+    'ऑडियो/वीडियो',
+    'PDF',
+    'छवि',
+    'QR कोड',
+    'सुरक्षा',
+    'वेब',
+    'उपयोगिताएँ',
+    'पाठ',
+    'वित्तीय',
+    'इंटरनेट'
+  ],
+  ar: [
+    'الكل',
+    'صوت/فيديو',
+    'PDF',
+    'صورة',
+    'رمز QR',
+    'أمان',
+    'ويب',
+    'أدوات',
+    'نص',
+    'مالي',
+    'إنترنت'
+  ],
+  bn: [
+    'সব',
+    'অডিও/ভিডিও',
+    'PDF',
+    'চিত্র',
+    'QR কোড',
+    'নিরাপত্তা',
+    'ওয়েব',
+    'ইউটিলিটি',
+    'টেক্সট',
+    'আর্থিক',
+    'ইন্টারনেট'
+  ],
+  ru: [
+    'Все',
+    'Аудио/Видео',
+    'PDF',
+    'Изображение',
+    'QR код',
+    'Безопасность',
+    'Веб',
+    'Утилиты',
+    'Текст',
+    'Финансы',
+    'Интернет'
+  ],
+  ja: [
+    'すべて',
+    'オーディオ/ビデオ',
+    'PDF',
+    '画像',
+    'QRコード',
+    'セキュリティ',
+    'ウェブ',
+    'ユーティリティ',
+    'テキスト',
+    '金融',
+    'インターネット'
+  ],
+  de: [
+    'Alle',
+    'Audio/Video',
+    'PDF',
+    'Bild',
+    'QR-Code',
+    'Sicherheit',
+    'Web',
+    'Dienstprogramme',
+    'Text',
+    'Finanzen',
+    'Internet'
+  ]
 };
 
 export function getTools() {
@@ -1043,8 +1150,7 @@ export function getTools() {
 
 export function getCategories() {
   const language = getCurrentLanguage();
-  const langData = toolsData[language];
-  return langData ? langData.categories : toolsData['pt-BR'].categories;
+  return categoriesData[language] || categoriesData['pt-BR'];
 }
 
 // Manter compatibilidade com código existente

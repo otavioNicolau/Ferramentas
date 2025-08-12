@@ -11,7 +11,7 @@ const t = getTranslations();
 
 export default function ToolsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(t.allCategories);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -20,7 +20,8 @@ export default function ToolsPage() {
     return tools.filter(tool => {
       const matchesSearch = tool.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            tool.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || tool.category === selectedCategory;
+      const matchesCategory =
+        selectedCategory === t.allCategories || tool.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
   }, [searchTerm, selectedCategory]);
@@ -120,16 +121,16 @@ export default function ToolsPage() {
               <h3 className="text-sm font-semibold text-gray-700 mb-3">Categorias</h3>
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => setSelectedCategory('All')}
+                  onClick={() => setSelectedCategory(t.allCategories)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedCategory === 'All'
+                    selectedCategory === t.allCategories
                       ? 'bg-blue-600 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  Todas ({tools.length})
+                  {t.allCategories} ({tools.length})
                 </button>
-                {categories.filter(cat => cat !== 'All').map((category) => (
+                {categories.slice(1).map((category) => (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
@@ -148,7 +149,7 @@ export default function ToolsPage() {
         </div>
 
         {/* Categorias Populares */}
-        {searchTerm === '' && selectedCategory === 'All' && (
+        {searchTerm === '' && selectedCategory === t.allCategories && (
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">📈 Categorias Populares</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -176,7 +177,9 @@ export default function ToolsPage() {
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-800">
-              {selectedCategory === 'All' ? 'Todas as Ferramentas' : selectedCategory}
+              {selectedCategory === t.allCategories
+                ? `${t.allCategories} ${t.tools}`
+                : selectedCategory}
               <span className="text-gray-500 ml-2">({filteredTools.length})</span>
             </h2>
             {searchTerm && (
@@ -218,7 +221,7 @@ export default function ToolsPage() {
             <button
               onClick={() => {
                 setSearchTerm('');
-                setSelectedCategory('All');
+                setSelectedCategory(t.allCategories);
               }}
               className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
             >
