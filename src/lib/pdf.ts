@@ -1,6 +1,13 @@
 import { PDFDocument } from 'pdf-lib';
 
 /**
+ * Check if a provided file is a valid PDF
+ */
+export const isPdfFile = (file?: File | null): boolean => {
+  return !!file && file.type === 'application/pdf';
+};
+
+/**
  * Get the number of pages in a PDF file
  */
 export const getPdfPageCount = async (file: File): Promise<number> => {

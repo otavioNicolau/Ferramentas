@@ -5,6 +5,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, CheckCircle, AlertTriangle, Presentation, RefreshCw, Settings, Image, FileImage } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import { getTranslations } from '@/config/language';
+import { isPdfFile } from '@/lib/pdf';
 
 interface ConversionSettings {
   slideLayout: 'single' | 'multiple';
@@ -82,7 +83,7 @@ export default function PdfToPptPage() {
   };
 
   const handleFileSelect = async (selectedFile: File) => {
-    if (selectedFile.type !== 'application/pdf') {
+    if (!isPdfFile(selectedFile)) {
       alert(t.pdfToPpt?.onlyPdfAlert || 'Por favor, selecione apenas arquivos PDF.');
       return;
     }

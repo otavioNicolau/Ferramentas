@@ -5,6 +5,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, AlertTriangle, CheckCircle, Wrench, Trash2, Info, Shield } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import { getTranslations } from '@/config/language';
+import { isPdfFile } from '@/lib/pdf';
 
 interface RepairResult {
   fileName: string;
@@ -62,7 +63,7 @@ export default function RepairPdfPage() {
   };
 
   const handleFileSelect = (selectedFile: File) => {
-    if (selectedFile.type !== 'application/pdf') {
+    if (!isPdfFile(selectedFile)) {
       alert('Por favor, selecione apenas arquivos PDF.');
       return;
     }

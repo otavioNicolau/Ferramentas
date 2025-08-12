@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, Crop, CheckCircle, AlertTriangle, Scissors, Eye, RotateCcw } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import { isPdfFile } from '@/lib/pdf';
 
 interface CropSettings {
   top: number;
@@ -93,7 +94,7 @@ export default function CropPdfPage() {
   };
 
   const handleFileSelect = async (selectedFile: File) => {
-    if (selectedFile.type !== 'application/pdf') {
+    if (!isPdfFile(selectedFile)) {
       alert('Por favor, selecione apenas arquivos PDF.');
       return;
     }
