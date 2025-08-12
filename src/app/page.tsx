@@ -1,15 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ToolCard from '@/components/ToolCard';
 import { tools, categories } from '@/data/tools';
 import { Search } from 'lucide-react';
 import { getTranslations } from '@/config/language';
 
 export default function HomePage() {
-  const [selectedCategory, setSelectedCategory] = useState('Todos');
-  const [searchTerm, setSearchTerm] = useState('');
   const t = getTranslations();
+  const [selectedCategory, setSelectedCategory] = useState(t.allCategories);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    setSelectedCategory(t.allCategories);
+  }, [t.allCategories]);
 
   const filteredTools = tools.filter(tool => {
     const matchesCategory = selectedCategory === t.allCategories || tool.category === selectedCategory;
