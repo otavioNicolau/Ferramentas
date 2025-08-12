@@ -3,31 +3,31 @@
  * Works in both secure and non-secure contexts
  */
 export const copyToClipboard = async (text: string): Promise<boolean> => {
+  if (typeof navigator === 'undefined' || typeof document === 'undefined') {
+    console.error('Clipboard API not available');
+    return false;
+  }
+
   try {
     // Modern clipboard API (requires HTTPS)
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
       return true;
-    } else {
-      // Fallback for older browsers or non-secure contexts
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
-      textArea.style.top = '-999999px';
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      
-      try {
-        const success = document.execCommand('copy');
-        document.body.removeChild(textArea);
-        return success;
-      } catch (err) {
-        document.body.removeChild(textArea);
-        throw err;
-      }
     }
+
+    // Fallback for older browsers or non-secure contexts
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    textArea.setAttribute('readonly', '');
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    const success = document.execCommand('copy');
+    document.body.removeChild(textArea);
+    return success;
   } catch (err) {
     console.error('Failed to copy text:', err);
     return false;

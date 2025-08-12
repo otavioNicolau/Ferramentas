@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Type, Copy, RotateCcw } from 'lucide-react';
 import { getTranslations } from '@/config/language';
+import { copyToClipboard as copyTextToClipboard } from '@/lib/utils';
 
 export default function LoremIpsumPage() {
   const t = getTranslations();
@@ -112,13 +113,11 @@ export default function LoremIpsumPage() {
     setGeneratedText(result);
   };
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(generatedText);
+  const handleCopyToClipboard = async () => {
+    const success = await copyTextToClipboard(generatedText);
+    if (success) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Erro ao copiar:', err);
     }
   };
 
@@ -204,7 +203,7 @@ export default function LoremIpsumPage() {
             {generatedText && (
               <>
                 <button
-                  onClick={copyToClipboard}
+                  onClick={handleCopyToClipboard}
                   className={`px-6 py-2 rounded-lg transition-colors flex items-center gap-2 ${
                     copied ? 'bg-green-600 text-white' : 'bg-gray-600 text-white hover:bg-gray-700'
                   }`}
