@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, Trash2 } from 'lucide-react';
-import { PDFDocument } from 'pdf-lib';
 import { saveAs } from 'file-saver';
+import { getPdfPageCount, mergePdfFiles } from '@/lib/pdf';
+import { generateId } from '@/lib/utils';
 
 interface PDFFile {
   id: string;
@@ -26,12 +27,9 @@ export default function JuntarPDFPage() {
       const file = files[i];
       if (file.type === 'application/pdf') {
         try {
-          const arrayBuffer = await file.arrayBuffer();
-          const pdfDoc = await PDFDocument.load(arrayBuffer);
-          const pageCount = pdfDoc.getPageCount();
-          
+          const pageCount = await getPdfPageCount(file);
           newFiles.push({
-            id: Math.random().toString(36).substr(2, 9),
+            id: generateId(),
             name: file.name,
             file: file,
             pages: pageCount
@@ -86,16 +84,7 @@ export default function JuntarPDFPage() {
 
     setIsProcessing(true);
     try {
-      const mergedPdf = await PDFDocument.create();
-
-      for (const pdfFile of pdfFiles) {
-        const arrayBuffer = await pdfFile.file.arrayBuffer();
-        const pdf = await PDFDocument.load(arrayBuffer);
-        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        copiedPages.forEach((page) => mergedPdf.addPage(page));
-      }
-
-      const pdfBytes = await mergedPdf.save();
+      const pdfBytes = await mergePdfFiles(pdfFiles.map(p => p.file));
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       saveAs(blob, 'documentos-unidos.pdf');
     } catch (error) {

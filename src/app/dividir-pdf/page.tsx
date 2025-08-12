@@ -5,6 +5,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Upload, FileText, Scissors, Split, Grid3X3 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
+import { getPdfPageCount } from '@/lib/pdf';
 
 interface SplitMode {
   value: string;
@@ -62,24 +63,10 @@ export default function DividirPDFPage() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const getPageCount = async (file: File): Promise<number> => {
-    try {
-      const pdfjsLib = await import('pdfjs-dist');
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
-      
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      return pdf.numPages;
-    } catch (error) {
-      console.error('Erro ao contar páginas:', error);
-      return 0;
-    }
-  };
-
   const handleFileSelect = async (file: File) => {
     if (file.type === 'application/pdf') {
       setSelectedFile(file);
-      const pages = await getPageCount(file);
+      const pages = await getPdfPageCount(file);
       setPageCount(pages);
       setProgress(0);
       setCurrentPage(0);
