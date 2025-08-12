@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Play, Pause, Square, Volume2, FileText, Upload, Download, Settings } from 'lucide-react';
+import { isPdfFile } from '@/lib/pdf';
 
 interface Voice {
   name: string;
@@ -59,7 +60,7 @@ export default function PdfToSpeechPage() {
   // Extrair texto de PDF
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file || file.type !== 'application/pdf') {
+    if (!isPdfFile(file)) {
       alert('Por favor, selecione um arquivo PDF válido.');
       return;
     }

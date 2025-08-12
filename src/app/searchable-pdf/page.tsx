@@ -5,6 +5,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, Eye, Trash2, AlertCircle, CheckCircle, Search } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import Tesseract from 'tesseract.js';
+import { isPdfFile } from '@/lib/pdf';
 
 interface SearchablePdf {
   fileName: string;
@@ -49,7 +50,7 @@ export default function SearchablePdfPage() {
   };
 
   const handleFileSelect = (selectedFile: File) => {
-    if (selectedFile.type !== 'application/pdf') {
+    if (!isPdfFile(selectedFile)) {
       alert('Por favor, selecione apenas arquivos PDF.');
       return;
     }

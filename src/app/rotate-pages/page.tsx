@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, RotateCw, RotateCcw, CheckCircle, AlertTriangle, RefreshCw, Eye } from 'lucide-react';
 import { PDFDocument, degrees } from 'pdf-lib';
+import { isPdfFile } from '@/lib/pdf';
 
 interface PageRotation {
   pageNumber: number;
@@ -83,7 +84,7 @@ export default function RotatePagesPage() {
   };
 
   const handleFileSelect = async (selectedFile: File) => {
-    if (selectedFile.type !== 'application/pdf') {
+    if (!isPdfFile(selectedFile)) {
       alert('Por favor, selecione apenas arquivos PDF.');
       return;
     }

@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, ArrowUp, ArrowDown, Trash2, RotateCcw, Move, CheckCircle } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import { isPdfFile } from '@/lib/pdf';
 
 interface PageInfo {
   pageNumber: number;
@@ -43,7 +44,7 @@ export default function SortPagesPage() {
   };
 
   const handleFileSelect = async (selectedFile: File) => {
-    if (selectedFile.type !== 'application/pdf') {
+    if (!isPdfFile(selectedFile)) {
       alert('Por favor, selecione apenas arquivos PDF.');
       return;
     }

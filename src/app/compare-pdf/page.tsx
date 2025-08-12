@@ -5,6 +5,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, Eye, Trash2, AlertCircle, CheckCircle, GitCompare, ArrowRight } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import { getTranslations } from '@/config/language';
+import { isPdfFile } from '@/lib/pdf';
 
 interface ComparisonResult {
   fileName: string;
@@ -65,7 +66,7 @@ export default function ComparePdfPage() {
   };
 
   const handleFileSelect = (selectedFile: File, fileNumber: 1 | 2) => {
-    if (selectedFile.type !== 'application/pdf') {
+    if (!isPdfFile(selectedFile)) {
       alert(t.comparePdf?.onlyPdfAlert || 'Por favor, selecione apenas arquivos PDF.');
       return;
     }

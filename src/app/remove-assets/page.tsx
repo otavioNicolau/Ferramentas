@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, Image, Trash2, CheckCircle, AlertTriangle, Settings } from 'lucide-react';
 import { PDFDocument, PDFPage } from 'pdf-lib';
+import { isPdfFile } from '@/lib/pdf';
 
 interface AssetInfo {
   type: 'image' | 'form' | 'annotation' | 'font' | 'other';
@@ -131,7 +132,7 @@ export default function RemoveAssetsPage() {
   };
 
   const handleFileSelect = async (selectedFile: File) => {
-    if (selectedFile.type !== 'application/pdf') {
+    if (!isPdfFile(selectedFile)) {
       alert('Por favor, selecione apenas arquivos PDF.');
       return;
     }
