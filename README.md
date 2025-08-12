@@ -1,6 +1,6 @@
 # NICOLLAUTOOLS 🛠️
 
-NICOLLAUTOOLS é uma coleção de ferramentas online gratuitas projetadas para tornar sua vida digital mais fácil. Todas as ferramentas funcionam diretamente no seu navegador, garantindo privacidade e segurança.
+NICOLLAUTOOLS é uma ampla coleção de ferramentas online gratuitas para PDF, vídeo, imagem, QR Code e outras utilidades. Todas as ferramentas funcionam diretamente no navegador, permitindo converter, editar, compactar e otimizar arquivos com privacidade e segurança.
 
 ## 🌟 Características
 
