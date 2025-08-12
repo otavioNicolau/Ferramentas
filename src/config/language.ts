@@ -716,3 +716,136 @@ const RU = {
   siteName: 'Онлайн-инструменты',
   siteDescription:
     'Получите доступ к полной коллекции бесплатных онлайн-инструментов для PDF, преобразования видео, генерации QR-кодов и многого другого.',
+  home: 'Главная',
+  tools: 'Инструменты',
+  about: 'О нас',
+  contact: 'Контакты',
+  heroTitle: 'Бесплатные онлайн-инструменты',
+  heroSubtitle: 'Все, что вам нужно, в одном месте',
+  heroDescription:
+    'Получите доступ к полной коллекции бесплатных онлайн-инструментов, чтобы облегчить вашу работу и повысить продуктивность.',
+  searchPlaceholder: 'Поиск инструментов...',
+  allCategories: 'Все',
+  totalTools: 'Всего:',
+  toolsCounter: 'доступных инструментов',
+  notebookTitle: 'Блокнот',
+  notebookDescription: 'Быстро записывайте и сохраняйте свои заметки.',
+  notebook: {
+    ...EN_TRANSLATIONS.notebook,
+    confirmClear: 'Вы уверены, что хотите очистить заметки?',
+    saved: 'Сохранено',
+    save: 'Сохранить',
+    download: 'Скачать',
+    clear: 'Очистить',
+    placeholder: 'Введите свои заметки здесь...',
+    characterCount: 'символов',
+    yourNotes: 'Ваши заметки',
+    lastModified: 'Последнее изменение',
+    autoSaveTitle: 'Автосохранение',
+    autoSaveDescription:
+      'Ваши заметки автоматически сохраняются каждые несколько секунд.',
+    privacyTitle: 'Конфиденциальность',
+    privacyDescription:
+      'Все содержимое хранится только в вашем браузере.',
+    exportTitle: 'Экспорт',
+    exportDescription: 'Скачайте свои заметки как текстовый файл.',
+  },
+};
+
+const JA = {
+  ...EN_TRANSLATIONS,
+  siteTitle: '無料オンラインツール',
+  siteName: 'オンラインツール',
+  siteDescription:
+    'PDF、動画変換、QRコード生成などの無料オンラインツールの完全なコレクションにアクセスしましょう。',
+  home: 'ホーム',
+  tools: 'ツール',
+  about: '概要',
+  contact: '連絡先',
+  heroTitle: '無料オンラインツール',
+  heroSubtitle: '必要なものがすべてここに',
+  heroDescription:
+    '作業を簡単にし、生産性を高めるための無料オンラインツールの完全なコレクションにアクセスしましょう。',
+  searchPlaceholder: 'ツールを検索...',
+  allCategories: 'すべて',
+  totalTools: '合計:',
+  toolsCounter: '利用可能なツール',
+  notebookTitle: 'ノートパッド',
+  notebookDescription: '素早くメモを書いて保存します。',
+  notebook: {
+    ...EN_TRANSLATIONS.notebook,
+    confirmClear: '本当にメモを消去しますか？',
+    saved: '保存済み',
+    save: '保存',
+    download: 'ダウンロード',
+    clear: 'クリア',
+    placeholder: 'ここにメモを入力...',
+    characterCount: '文字',
+    yourNotes: 'あなたのメモ',
+    lastModified: '最終更新',
+    autoSaveTitle: '自動保存',
+    autoSaveDescription:
+      'メモは数秒ごとに自動的に保存されます。',
+    privacyTitle: 'プライバシー',
+    privacyDescription: 'すべての内容はブラウザにのみ保存されます。',
+    exportTitle: 'エクスポート',
+    exportDescription: 'メモをテキストファイルとしてダウンロードします。',
+  },
+};
+
+const DE = {
+  ...EN_TRANSLATIONS,
+  siteTitle: 'Kostenlose Online-Tools',
+  siteName: 'Online-Tools',
+  siteDescription:
+    'Greifen Sie auf eine vollständige Sammlung kostenloser Online-Tools für PDFs, Videokonvertierung, QR-Code-Erstellung und vieles mehr zu.',
+  home: 'Startseite',
+  tools: 'Werkzeuge',
+  about: 'Über uns',
+  contact: 'Kontakt',
+  heroTitle: 'Kostenlose Online-Tools',
+  heroSubtitle: 'Alles, was Sie brauchen, an einem Ort',
+  heroDescription:
+    'Greifen Sie auf eine vollständige Sammlung kostenloser Online-Tools zu, um Ihre Arbeit zu erleichtern und Ihre Produktivität zu steigern.',
+  searchPlaceholder: 'Werkzeuge suchen...',
+  allCategories: 'Alle',
+  totalTools: 'Gesamt:',
+  toolsCounter: 'verfügbare Werkzeuge',
+  notebookTitle: 'Notizblock',
+  notebookDescription: 'Schreiben und speichern Sie Ihre Notizen schnell.',
+  notebook: {
+    ...EN_TRANSLATIONS.notebook,
+    confirmClear: 'Möchten Sie die Notizen wirklich löschen?',
+    saved: 'Gespeichert',
+    save: 'Speichern',
+    download: 'Herunterladen',
+    clear: 'Löschen',
+    placeholder: 'Geben Sie hier Ihre Notizen ein...',
+    characterCount: 'Zeichen',
+    yourNotes: 'Ihre Notizen',
+    lastModified: 'Zuletzt geändert',
+    autoSaveTitle: 'Automatisches Speichern',
+    autoSaveDescription:
+      'Ihre Notizen werden alle paar Sekunden automatisch gespeichert.',
+    privacyTitle: 'Datenschutz',
+    privacyDescription:
+      'Alle Inhalte werden nur in Ihrem Browser gespeichert.',
+    exportTitle: 'Exportieren',
+    exportDescription: 'Laden Sie Ihre Notizen als Textdatei herunter.',
+  },
+};
+
+const TRANSLATIONS: Record<Language, typeof EN_TRANSLATIONS> = {
+  'pt-BR': PT_BR,
+  en: EN_TRANSLATIONS,
+  es: ES,
+  zh: ZH,
+  hi: HI,
+  ar: AR,
+  bn: BN,
+  ru: RU,
+  ja: JA,
+  de: DE,
+};
+
+export const getTranslations = () => TRANSLATIONS[LANGUAGE_CONFIG.currentLanguage];
