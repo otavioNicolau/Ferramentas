@@ -1037,12 +1037,14 @@ const toolsData = {
 
 export function getTools() {
   const language = getCurrentLanguage();
-  return toolsData[language].tools;
+  const langData = toolsData[language];
+  return langData ? langData.tools : toolsData['pt-BR'].tools;
 }
 
 export function getCategories() {
   const language = getCurrentLanguage();
-  return toolsData[language].categories;
+  const langData = toolsData[language];
+  return langData ? langData.categories : toolsData['pt-BR'].categories;
 }
 
 // Manter compatibilidade com código existente
