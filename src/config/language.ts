@@ -47,12 +47,68 @@ const LANGUAGE_LIST: Language[] = [
 const isLanguage = (v: unknown): v is Language =>
   typeof v === 'string' && (LANGUAGE_LIST as string[]).includes(v);
 
-const envLang = process.env.NEXT_PUBLIC_DEFAULT_LANGUAGE;
-const envLanguage: Language = isLanguage(envLang) ? envLang : 'pt-BR';
+// Função para detectar idioma baseado no subdomínio da URL
+const detectLanguageFromURL = (): Language => {
+  if (typeof window === 'undefined') {
+    // No servidor, tenta usar o header do middleware ou retorna pt-BR como padrão
+    try {
+      // Tenta acessar headers do Next.js (se disponível)
+      const { headers } = require('next/headers');
+      const detectedLang = headers().get('x-detected-language');
+      if (detectedLang && isLanguage(detectedLang)) {
+        return detectedLang;
+      }
+    } catch {
+      // Se não conseguir acessar headers, continua com o padrão
+    }
+    return 'pt-BR';
+  }
+  
+  const hostname = window.location.hostname;
+  
+  // Extrai o subdomínio (primeira parte antes do domínio principal)
+  const parts = hostname.split('.');
+  
+  // Se não há subdomínio (apenas muiltools.com), usa pt-BR
+  if (parts.length <= 2) {
+    return 'pt-BR';
+  }
+  
+  // Pega o primeiro subdomínio
+  const subdomain = parts[0];
+  
+  // Mapeia códigos de subdomínio para códigos de idioma
+  const subdomainToLanguage: Record<string, Language> = {
+    'ko': 'ko',
+    'en': 'en',
+    'es': 'es',
+    'zh': 'zh',
+    'hi': 'hi',
+    'ar': 'ar',
+    'bn': 'bn',
+    'ru': 'ru',
+    'ja': 'ja',
+    'de': 'de',
+    'fr': 'fr',
+    'it': 'it',
+    'tr': 'tr',
+    'pl': 'pl',
+    'nl': 'nl',
+    'sv': 'sv',
+    'uk': 'uk',
+    'vi': 'vi',
+    'th': 'th'
+  };
+  
+  // Retorna o idioma correspondente ou pt-BR como padrão
+  return subdomainToLanguage[subdomain] || 'pt-BR';
+};
+
+const detectedLanguage = detectLanguageFromURL();
 
 export const LANGUAGE_CONFIG = {
-  defaultLanguage: envLanguage,
-  currentLanguage: envLanguage,
+  defaultLanguage: detectedLanguage,
+  currentLanguage: detectedLanguage,
 
   // Idiomas dis poníveis
   availableLanguages: {
@@ -83,7 +139,12 @@ export const setLanguage = (lang: Language) => {
   LANGUAGE_CONFIG.currentLanguage = lang;
 };
 
-export const getCurrentLanguage = () => LANGUAGE_CONFIG.currentLanguage;
+export const getCurrentLanguage = () => {
+  // Sempre detecta o idioma atual baseado na URL
+  const currentLang = detectLanguageFromURL();
+  LANGUAGE_CONFIG.currentLanguage = currentLang;
+  return currentLang;
+};
 
 /* =======================
  * BASE: EN (fallback)
@@ -1299,4 +1360,9 @@ const TRANSLATIONS: Record<Language, typeof EN_TRANSLATIONS> = {
   th: TH,
 };
 
-export const getTranslations = () => TRANSLATIONS[LANGUAGE_CONFIG.currentLanguage];
+export const getTranslations = () => {
+  // Sempre detecta o idioma atual baseado na URL
+  const currentLang = detectLanguageFromURL();
+  LANGUAGE_CONFIG.currentLanguage = currentLang;
+  return TRANSLATIONS[currentLang];
+};

@@ -1,16 +1,19 @@
-# Sistema de Tradução Configurável - NICOLLAUTOOLS
+# Sistema de Tradução por Subdomínio - NICOLLAUTOOLS
 
-Este projeto implementa um sistema de tradução simples baseado em configuração, permitindo alterar facilmente o idioma do NICOLLAUTOOLS.
+Este projeto implementa um sistema de tradução baseado em subdomínios da URL, permitindo que diferentes idiomas sejam acessados através de subdomínios específicos.
 
-## Como Configurar o Idioma
+## Como Funciona o Sistema de Idiomas
 
-Defina o idioma padrão criando um arquivo `.env` na raiz do projeto (ou utilizando `.env.example` como base) e configurando a variável:
+O idioma é automaticamente detectado baseado no subdomínio da URL:
 
-```
-NEXT_PUBLIC_DEFAULT_LANGUAGE=pt-BR
-```
+- **muiltools.com** → Português (pt-BR) - idioma padrão
+- **ko.muiltools.com** → Coreano (ko)
+- **en.muiltools.com** → Inglês (en)
+- **es.muiltools.com** → Espanhol (es)
+- **zh.muiltools.com** → Chinês (zh)
+- E assim por diante para todos os 20 idiomas suportados
 
-Altere o valor para `en` para utilizar inglês.
+**Não é mais necessário configurar variáveis de ambiente** - o sistema detecta automaticamente o idioma pela URL.
 
 ## Idiomas Disponíveis
 
@@ -48,27 +51,34 @@ Altere o valor para `en` para utilizar inglês.
 
 ### Como Funciona
 
-1. O idioma é definido pela variável de ambiente `NEXT_PUBLIC_DEFAULT_LANGUAGE`
-2. A função `getTranslations()` retorna as traduções do idioma atual
-3. A função `getCurrentLanguage()` retorna o idioma configurado
-4. Os componentes usam essas funções para exibir o conteúdo traduzido
+1. O middleware intercepta todas as requisições e detecta o subdomínio
+2. O subdomínio é mapeado para o código de idioma correspondente
+3. A função `detectLanguageFromURL()` identifica o idioma baseado na URL
+4. A função `getTranslations()` retorna as traduções do idioma detectado
+5. A função `getCurrentLanguage()` retorna o idioma atual da URL
+6. Os componentes usam essas funções para exibir o conteúdo traduzido automaticamente
 
 ## Adicionando Novos Idiomas
 
 Para adicionar um novo idioma:
 
-1. Adicione o código do idioma ao tipo `Language`
-2. Adicione as traduções no objeto `translations`
-3. Adicione as ferramentas traduzidas no objeto `toolsData`
-4. Configure `NEXT_PUBLIC_DEFAULT_LANGUAGE` para o novo idioma
+1. Adicione o código do idioma ao tipo `Language` em `src/config/language.ts`
+2. Adicione o código à lista `LANGUAGE_LIST`
+3. Adicione o mapeamento no objeto `subdomainToLanguage` (tanto no arquivo de configuração quanto no middleware)
+4. Adicione as traduções no objeto `TRANSLATIONS`
+5. Adicione as informações do idioma em `availableLanguages`
+6. Configure o subdomínio correspondente no DNS (ex: `novo.muiltools.com`)
 
 ## Vantagens deste Sistema
 
-- ✅ **Simples**: Apenas uma configuração para alterar todo o idioma
+- ✅ **Automático**: Detecção automática de idioma baseada na URL
+- ✅ **SEO Friendly**: Cada idioma tem sua própria URL (subdomínio)
 - ✅ **Rápido**: Sem dependências externas pesadas
 - ✅ **Flexível**: Fácil de adicionar novos idiomas
 - ✅ **Centralizado**: Todas as traduções em um local
+- ✅ **Escalável**: Suporte a 20 idiomas diferentes
 - ✅ **Compatível**: Funciona com Next.js 15 e Turbopack
+- ✅ **Sem Configuração**: Não requer variáveis de ambiente
 
 ## Exemplo de Uso
 
