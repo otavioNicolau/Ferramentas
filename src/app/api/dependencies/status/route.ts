@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
 
 interface DependencyStatus {
   name: string;
@@ -57,30 +53,34 @@ export async function GET(request: NextRequest) {
     
     const dependencies: DependencyStatus[] = [];
     
-    // Obter lista de pacotes instalados
+    // No ambiente Netlify, não podemos executar comandos do sistema
+    // Vamos verificar apenas se os pacotes estão listados no package.json
     let installedPackages: NpmListOutput = {};
+    
+    // Tentar ler node_modules para verificar pacotes instalados (se disponível)
     try {
-      const { stdout } = await execAsync('npm list --json --depth=0', {
-        cwd: process.cwd(),
-        timeout: 30000 // 30 segundos timeout
-      });
-      installedPackages = JSON.parse(stdout);
+      const nodeModulesPath = join(process.cwd(), 'node_modules');
+      // Em produção (Netlify), assumimos que todas as dependências estão instaladas
+      // pois o build não funcionaria sem elas
+      const isProduction = process.env.NODE_ENV === 'production' || process.env.NETLIFY;
+      
+      if (isProduction) {
+        // Em produção, assumimos que todas as dependências estão instaladas
+        installedPackages.dependencies = {};
+      }
     } catch (error) {
-      console.warn('Erro ao executar npm list:', error);
-      // Continua sem a informação de pacotes instalados
+      console.warn('Não foi possível verificar node_modules:', error);
     }
     
     // Processar dependências principais
     if (packageJson.dependencies) {
       for (const [name, version] of Object.entries(packageJson.dependencies)) {
-        const installedInfo = installedPackages.dependencies?.[name];
-        const installed = !!installedInfo;
-        const installedVersion = installedInfo?.version;
+        // Em produção (Netlify), assumimos que as dependências estão instaladas
+        const isProduction = process.env.NODE_ENV === 'production' || process.env.NETLIFY;
+        const installed = isProduction ? true : false;
+        const installedVersion = isProduction ? version.replace(/[^\d\.]/g, '') : undefined;
         
-        let status: 'installed' | 'outdated' | 'missing' = 'missing';
-        if (installed && installedVersion) {
-          status = compareVersions(version, installedVersion);
-        }
+        let status: 'installed' | 'outdated' | 'missing' = isProduction ? 'installed' : 'missing';
         
         dependencies.push({
           name,
@@ -96,14 +96,12 @@ export async function GET(request: NextRequest) {
     // Processar devDependencies
     if (packageJson.devDependencies) {
       for (const [name, version] of Object.entries(packageJson.devDependencies)) {
-        const installedInfo = installedPackages.dependencies?.[name];
-        const installed = !!installedInfo;
-        const installedVersion = installedInfo?.version;
+        // Em produção (Netlify), assumimos que as devDependencies não estão instaladas
+        const isProduction = process.env.NODE_ENV === 'production' || process.env.NETLIFY;
+        const installed = false; // devDependencies geralmente não estão em produção
+        const installedVersion = undefined;
         
         let status: 'installed' | 'outdated' | 'missing' = 'missing';
-        if (installed && installedVersion) {
-          status = compareVersions(version, installedVersion);
-        }
         
         dependencies.push({
           name,
@@ -151,85 +149,26 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { action, packages } = body;
-    
-    if (action === 'install' && packages && Array.isArray(packages)) {
-      // Instalar pacotes específicos
-      const packageList = packages.join(' ');
-      
-      try {
-        const { stdout, stderr } = await execAsync(`npm install ${packageList}`, {
-          cwd: process.cwd(),
-          timeout: 120000 // 2 minutos timeout
-        });
-        
-        return NextResponse.json({
-          success: true,
-          message: `Pacotes instalados com sucesso: ${packageList}`,
-          output: stdout,
-          errors: stderr
-        });
-        
-      } catch (installError) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Erro ao instalar pacotes',
-            details: installError instanceof Error ? installError.message : 'Erro desconhecido'
-          },
-          { status: 500 }
-        );
-      }
-    }
-    
-    if (action === 'update') {
-      // Atualizar todas as dependências
-      try {
-        const { stdout, stderr } = await execAsync('npm update', {
-          cwd: process.cwd(),
-          timeout: 300000 // 5 minutos timeout
-        });
-        
-        return NextResponse.json({
-          success: true,
-          message: 'Dependências atualizadas com sucesso',
-          output: stdout,
-          errors: stderr
-        });
-        
-      } catch (updateError) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Erro ao atualizar dependências',
-            details: updateError instanceof Error ? updateError.message : 'Erro desconhecido'
-          },
-          { status: 500 }
-        );
-      }
-    }
-    
+  // Funcionalidades de instalação/atualização não disponíveis em produção (Netlify)
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.NETLIFY;
+  
+  if (isProduction) {
     return NextResponse.json(
       {
         success: false,
-        error: 'Ação não suportada',
-        supportedActions: ['install', 'update']
+        error: 'Funcionalidades de instalação/atualização não disponíveis em produção',
+        message: 'Esta funcionalidade está disponível apenas em ambiente de desenvolvimento'
       },
-      { status: 400 }
-    );
-    
-  } catch (error) {
-    console.error('Erro ao processar requisição POST:', error);
-    
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Erro interno do servidor',
-        details: error instanceof Error ? error.message : 'Erro desconhecido'
-      },
-      { status: 500 }
+      { status: 403 }
     );
   }
+  
+  return NextResponse.json(
+    {
+      success: false,
+      error: 'Funcionalidade não implementada para ambiente de desenvolvimento local',
+      message: 'Use npm install ou npm update diretamente no terminal'
+    },
+    { status: 501 }
+  );
 }

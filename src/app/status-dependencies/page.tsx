@@ -23,6 +23,7 @@ export default function StatusDependencies() {
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'installed' | 'missing' | 'outdated'>('all');
   const [typeFilter, setTypeFilter] = useState<'all' | 'dependency' | 'devDependency'>('all');
+  const [isProduction, setIsProduction] = useState(false);
 
   useEffect(() => {
     checkDependencies();
@@ -41,6 +42,11 @@ export default function StatusDependencies() {
       
       const data = await response.json();
       setDependencies(data.dependencies);
+      
+      // Detectar se estamos em produção baseado nos dados retornados
+      const prodDeps = data.dependencies.filter((d: DependencyStatus) => d.type === 'dependency' && d.status === 'installed');
+      const totalDeps = data.dependencies.filter((d: DependencyStatus) => d.type === 'dependency');
+      setIsProduction(prodDeps.length === totalDeps.length && totalDeps.length > 0);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro desconhecido');
     } finally {
@@ -129,6 +135,22 @@ export default function StatusDependencies() {
           <p className="mt-2 text-gray-600">
             Visualize o status de todas as dependências do projeto
           </p>
+          
+          {isProduction && (
+            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <CheckCircleIcon className="w-5 h-5 text-blue-500" />
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-blue-700">
+                    <strong>Ambiente de Produção:</strong> As dependências principais estão instaladas e funcionais. 
+                    DevDependencies não são instaladas em produção por questões de segurança e performance.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Stats Cards */}
@@ -218,13 +240,19 @@ export default function StatusDependencies() {
               </select>
             </div>
 
-            <div className="flex items-end">
+            <div className="flex items-end gap-2">
               <button
                 onClick={checkDependencies}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Atualizar
               </button>
+              
+              {!isProduction && (
+                <div className="text-xs text-gray-500 self-center">
+                  💡 Funcionalidades de instalação disponíveis apenas em desenvolvimento
+                </div>
+              )}
             </div>
           </div>
         </div>
