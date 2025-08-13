@@ -7,6 +7,7 @@ const supportedLanguages = [
 
 // Mapeamento de subdomínios para códigos de idioma
 const subdomainToLanguage: Record<string, string> = {
+  'br': 'pt-BR',
   'ko': 'ko',
   'en': 'en',
   'es': 'es',
