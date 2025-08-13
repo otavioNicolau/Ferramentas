@@ -3,10 +3,17 @@ import ytdl from '@distube/ytdl-core';
 import { generateMockDataForUrl } from './mock';
 
 export async function POST(request: NextRequest) {
+  console.log('=== YouTube API Route Called ===');
+  console.log('Request method:', request.method);
+  console.log('Request headers:', Object.fromEntries(request.headers.entries()));
+  
   try {
     // Verificar se há conteúdo no corpo da requisição
     const contentLength = request.headers.get('content-length');
+    console.log('Content-Length:', contentLength);
+    
     if (!contentLength || contentLength === '0') {
+      console.log('Erro: Corpo da requisição vazio');
       return NextResponse.json(
         { error: 'Corpo da requisição vazio' },
         { status: 400 }
@@ -17,7 +24,9 @@ export async function POST(request: NextRequest) {
     let requestBody;
     try {
       requestBody = await request.json();
-    } catch {
+      console.log('Request body parsed:', requestBody);
+    } catch (parseError) {
+      console.log('Erro ao fazer parse do JSON:', parseError);
       return NextResponse.json(
         { error: 'Formato JSON inválido' },
         { status: 400 }
@@ -25,8 +34,10 @@ export async function POST(request: NextRequest) {
     }
 
     const { url } = requestBody;
+    console.log('URL recebida:', url);
     
     if (!url) {
+      console.log('Erro: URL não fornecida');
       return NextResponse.json(
         { error: 'URL do vídeo é obrigatória' },
         { status: 400 }
@@ -63,8 +74,12 @@ export async function POST(request: NextRequest) {
     };
 
     try {
+      console.log('Tentando obter informações do vídeo para:', cleanUrl);
+      console.log('Opções ytdl:', options);
+      
       // Tentar obter informações do vídeo
       const info = await ytdl.getInfo(cleanUrl, options);
+      console.log('Informações do vídeo obtidas com sucesso');
       
       // Verificar se o vídeo está disponível
       if (!info.videoDetails) {
@@ -118,7 +133,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(videoDetails);
       
     } catch (ytdlError) {
-      console.log('YTDL Error, using mock data:', ytdlError);
+      console.log('=== YTDL Error ===');
+      console.log('Error type:', typeof ytdlError);
+      console.log('Error message:', ytdlError instanceof Error ? ytdlError.message : ytdlError);
+      console.log('Error stack:', ytdlError instanceof Error ? ytdlError.stack : 'N/A');
+      console.log('Using mock data instead');
       
       // Se falhar, usar dados mock para demonstração
       const mockData = generateMockDataForUrl(cleanUrl);
@@ -130,7 +149,10 @@ export async function POST(request: NextRequest) {
       });
     }
   } catch (error) {
+    console.log('=== Main Catch Block ===');
     console.error('Erro ao obter informações do vídeo:', error);
+    console.error('Error type:', typeof error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'N/A');
     
     // Fornecer mensagens de erro mais específicas
     if (error instanceof Error) {

@@ -484,6 +484,14 @@ const toolsData = {
         icon: Settings,
         category: 'Utilidades'
       },
+      {
+        id: 'status-dependencies',
+        title: 'Status das Dependências',
+        description: 'Visualize o status de todas as dependências do projeto',
+        href: '/status-dependencies',
+        icon: CheckCircle,
+        category: 'Utilidades'
+      },
       
       // Texto
       {
@@ -967,6 +975,14 @@ const toolsData = {
         description: 'Generate color palettes for your projects',
         href: '/gerador-cores',
         icon: Settings,
+        category: 'Utilities'
+      },
+      {
+        id: 'status-dependencies',
+        title: 'Dependencies Status',
+        description: 'View the status of all project dependencies',
+        href: '/status-dependencies',
+        icon: CheckCircle,
         category: 'Utilities'
       },
       

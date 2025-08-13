@@ -330,11 +330,13 @@ export default function BaixarTikTok() {
               {/* Thumbnail */}
               <div className="md:w-1/3">
                 <div className="relative aspect-[9/16] bg-gradient-to-br from-gray-200 to-gray-300">
-                  <img
-                    src={videoInfo.thumbnailUrl}
-                    alt={videoInfo.title}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                  />
+                  {videoInfo.thumbnailUrl && (
+                    <img
+                      src={videoInfo.thumbnailUrl}
+                      alt={videoInfo.title}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center transition-opacity duration-300 hover:bg-opacity-30">
                     <div className="bg-white bg-opacity-90 rounded-full p-3 shadow-lg">
                       <Play className="w-8 h-8 text-gray-800" fill="currentColor" />
@@ -354,11 +356,13 @@ export default function BaixarTikTok() {
                       {videoInfo.title}
                     </h3>
                     <div className="flex items-center gap-3 mt-3">
-                      <img
-                        src={videoInfo.authorAvatar}
-                        alt={videoInfo.author}
-                        className="w-8 h-8 rounded-full border-2 border-gray-400"
-                      />
+                      {videoInfo.authorAvatar && (
+                        <img
+                          src={videoInfo.authorAvatar}
+                          alt={videoInfo.author}
+                          className="w-8 h-8 rounded-full border-2 border-gray-400"
+                        />
+                      )}
                       <span className="text-gray-700 font-medium">{videoInfo.author}</span>
                     </div>
                   </div>
@@ -469,11 +473,13 @@ export default function BaixarTikTok() {
             <div className="space-y-3">
               {downloadHistory.slice(0, 3).map((item, index) => (
                 <div key={`${item.id}-${item.timestamp}-${index}`} className="flex items-center gap-4 p-4 bg-gray-200 border border-gray-400 rounded-xl hover:shadow-md transition-all duration-200">
-                  <img
-                    src={item.thumbnailUrl}
-                    alt={item.title}
-                    className="w-16 h-16 object-cover rounded-lg border-2 border-gray-400"
-                  />
+                  {item.thumbnailUrl && (
+                    <img
+                      src={item.thumbnailUrl}
+                      alt={item.title}
+                      className="w-16 h-16 object-cover rounded-lg border-2 border-gray-400"
+                    />
+                  )}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-gray-900 truncate">
                       {item.title}
@@ -525,6 +531,16 @@ export default function BaixarTikTok() {
               <span>⬇️ {t.tiktokDownloader?.step4 || "O download será iniciado automaticamente"}</span>
             </li>
           </ol>
+          
+          {/* Aviso sobre limite de tamanho */}
+          <div className="mt-4 p-3 bg-blue-100 border border-blue-300 rounded-lg">
+            <p className="text-sm text-blue-800 flex items-start gap-2">
+              <span className="text-base">📏</span>
+              <span>
+                <strong>Limite de Tamanho:</strong> Arquivos até 100MB podem ser baixados. Vídeos maiores não são suportados devido a limitações técnicas.
+              </span>
+            </p>
+          </div>
           <div className="mt-6 p-4 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 rounded-xl">
             <p className="text-sm text-gray-900 flex items-start gap-2">
               <span className="text-lg">⚠️</span>

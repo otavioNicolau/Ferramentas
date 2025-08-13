@@ -66,6 +66,24 @@ export default function BaixarYoutubePage() {
     }
   };
 
+  // Função para fazer requisição com timeout
+  const fetchWithTimeout = async (url: string, options: RequestInit, timeout = 10000) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      throw error;
+    }
+  };
+
   // Função para analisar a URL do vídeo
   const analyzeVideo = async () => {
     if (!url) {
@@ -86,26 +104,59 @@ export default function BaixarYoutubePage() {
     
     try {
       // Fazer requisição para a API do servidor para obter informações do vídeo
-      const response = await fetch('/api/youtube/info', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url: url.trim() }),
-      });
+      let response;
+      let lastError;
+      
+      // Tentar até 2 vezes em caso de erro
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          console.log(`Tentativa ${attempt} de requisição para API`);
+          response = await fetchWithTimeout('/api/youtube/info', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: url.trim() }),
+          }, 15000); // 15 segundos de timeout
+          break; // Se chegou aqui, a requisição foi bem-sucedida
+        } catch (fetchError) {
+          console.error(`Erro na tentativa ${attempt}:`, fetchError);
+          lastError = fetchError;
+          if (attempt === 2) {
+            throw fetchError; // Se foi a última tentativa, propagar o erro
+          }
+          // Aguardar 1 segundo antes da próxima tentativa
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
+      
+      if (!response) {
+        throw lastError || new Error('Falha ao fazer requisição');
+      }
 
       const contentType = response.headers.get('content-type');
+      console.log('Response status:', response.status);
+      console.log('Response content-type:', contentType);
+      
+      // Primeiro, vamos sempre tentar ler como texto para debug
+      const responseText = await response.text();
+      console.log('Response text (first 200 chars):', responseText.substring(0, 200));
+      
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let data: any = null;
 
-      if (contentType && contentType.includes('application/json')) {
-        data = await response.json();
-      } else {
-        // Quando a API retorna HTML ou outro formato inesperado
-        await response.text();
+      // Tentar fazer parse do JSON
+      try {
+        data = JSON.parse(responseText);
+        console.log('JSON parsed successfully');
+      } catch (parseError) {
+        console.error('Failed to parse JSON:', parseError);
+        console.error('Response was:', responseText.substring(0, 500));
+        
+        // Se não conseguir fazer parse do JSON, é um erro do servidor
         throw new Error(
           t.youtubeDownloader?.invalidResponse ||
-            'Resposta inválida do servidor'
+            'Resposta inválida do servidor. O servidor pode estar sobrecarregado.'
         );
       }
 
@@ -133,6 +184,9 @@ export default function BaixarYoutubePage() {
 
     } catch (error) {
       console.error('Erro ao analisar vídeo:', error);
+      console.error('Tipo do erro:', typeof error);
+      console.error('Stack trace:', error instanceof Error ? error.stack : 'N/A');
+      
       const errorMessage =
         error instanceof Error
           ? error.message

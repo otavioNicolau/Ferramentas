@@ -178,10 +178,18 @@ export async function POST(request: NextRequest) {
         throw new Error(`Erro ao baixar arquivo: ${response.status} ${response.statusText}`);
       }
       
-      // Para arquivos grandes, usar streaming
+      // Verificar tamanho do arquivo
       const contentLength = response.headers.get('content-length');
-      if (contentLength && parseInt(contentLength) > 50 * 1024 * 1024) { // 50MB
-        throw new Error('Arquivo muito grande para download');
+      const fileSizeMB = contentLength ? parseInt(contentLength) / (1024 * 1024) : 0;
+      
+      // Limite aumentado para 100MB, com mensagem mais informativa
+      if (contentLength && parseInt(contentLength) > 100 * 1024 * 1024) { // 100MB
+        throw new Error(`Arquivo muito grande para download (${fileSizeMB.toFixed(1)}MB). Limite máximo: 100MB. Tente um vídeo menor.`);
+      }
+      
+      // Log do tamanho do arquivo para debug
+      if (fileSizeMB > 0) {
+        console.log(`Tamanho do arquivo: ${fileSizeMB.toFixed(1)}MB`);
       }
       
       const arrayBuffer = await response.arrayBuffer();
@@ -259,6 +267,6 @@ export const config = {
     bodyParser: {
       sizeLimit: '4mb',
     },
-    responseLimit: '50mb',
+    responseLimit: '100mb',
   },
 };
