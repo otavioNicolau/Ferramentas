@@ -24,6 +24,16 @@ Altere o valor para `en` para utilizar inglês.
 - **Russo (ru)**
 - **Japonês (ja)**
 - **Alemão (de)**
+- **Francês (fr)**
+- **Italiano (it)**
+- **Coreano (ko)**
+- **Turco (tr)**
+- **Polonês (pl)**
+- **Holandês (nl)**
+- **Sueco (sv)**
+- **Ucraniano (uk)**
+- **Vietnamita (vi)**
+- **Tailandês (th)**
 
 ## Estrutura do Sistema
 
