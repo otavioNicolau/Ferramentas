@@ -1,17 +1,23 @@
 #!/bin/bash
 set -e
 
-echo "📥 Atualizando código do repositório..."
-git pull
+BRANCH=main
+echo "📥 Resetando para a origem ($BRANCH)..."
+git fetch origin
+git reset --hard origin/$BRANCH
+git clean -fd
 
 echo "📦 Instalando dependências (incluindo dev)..."
 npm ci --include=dev
 
-echo "🏗  Fazendo build de produção..."
+echo "🧹 Limpando build antigo..."
+rm -rf .next
+
+echo "🏗  Build de produção..."
 npm run build
 
-echo "🚀 Reiniciando PM2..."
-pm2 restart ferramentas
+echo "🚀 (Re)iniciando PM2..."
+pm2 restart ferramentas || pm2 start "npm run start -- -p 3001" --name ferramentas
 pm2 save
 
 echo "✅ Atualização concluída!"
