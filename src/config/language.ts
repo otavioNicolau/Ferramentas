@@ -50,17 +50,8 @@ const isLanguage = (v: unknown): v is Language =>
 // Função para detectar idioma baseado no subdomínio da URL
 const detectLanguageFromURL = (): Language => {
   if (typeof window === 'undefined') {
-    // No servidor, tenta usar o header do middleware ou retorna pt-BR como padrão
-    try {
-      // Tenta acessar headers do Next.js (se disponível)
-      const { headers } = require('next/headers');
-      const detectedLang = headers().get('x-detected-language');
-      if (detectedLang && isLanguage(detectedLang)) {
-        return detectedLang;
-      }
-    } catch {
-      // Se não conseguir acessar headers, continua com o padrão
-    }
+    // No servidor, retorna pt-BR como padrão
+    // O header será verificado dinamicamente nas funções que precisam
     return 'pt-BR';
   }
   
@@ -373,6 +364,37 @@ const EN_TRANSLATIONS = {
     ],
     pdfOnlyAlert: 'Please select only PDF files.',
   },
+
+  // Dependencies Status
+  dependenciesStatusTitle: 'Dependencies Status',
+  dependenciesStatusDescription: 'Check the status of project dependencies and their versions.',
+  dependenciesStatus: {
+    pageTitle: 'Dependencies Status',
+    loading: 'Loading dependencies...',
+    error: 'Error loading dependencies',
+    retry: 'Retry',
+    filterByStatus: 'Filter by status',
+    filterByType: 'Filter by type',
+    allStatuses: 'All statuses',
+    allTypes: 'All types',
+    installed: 'Installed',
+    outdated: 'Outdated',
+    missing: 'Missing',
+    dependency: 'Dependency',
+    devDependency: 'Dev Dependency',
+    name: 'Name',
+    expectedVersion: 'Expected Version',
+    installedVersion: 'Installed Version',
+    status: 'Status',
+    type: 'Type',
+    summary: 'Summary',
+    totalDependencies: 'Total Dependencies',
+    installedCount: 'Installed',
+    outdatedCount: 'Outdated',
+    missingCount: 'Missing',
+    noResults: 'No dependencies found with the selected filters.',
+    clearFilters: 'Clear filters',
+  },
 };
 
 /* =======================
@@ -603,6 +625,52 @@ const PT_BR = {
       'Teste arquivos com nomes como "invalid.pdf" ou "warning.pdf" para ver diferentes resultados',
     ],
     pdfOnlyAlert: 'Por favor, selecione apenas arquivos PDF.',
+  },
+
+  // Status de Dependências
+  dependenciesStatusTitle: 'Status das Dependências',
+  dependenciesStatusDescription: 'Verifique o status das dependências do projeto e suas versões.',
+  dependenciesStatus: {
+    pageTitle: 'Status das Dependências',
+    loading: 'Carregando dependências...',
+    error: 'Erro ao carregar dependências',
+    retry: 'Tentar novamente',
+    filterByStatus: 'Filtrar por status',
+    filterByType: 'Filtrar por tipo',
+    statusOptions: {
+      all: 'Todos',
+      installed: 'Instalado',
+      outdated: 'Desatualizado',
+      missing: 'Ausente',
+    },
+    typeOptions: {
+      all: 'Todos',
+      dependencies: 'Dependências',
+      devDependencies: 'Dependências de Desenvolvimento',
+    },
+    columns: {
+      name: 'Nome',
+      currentVersion: 'Versão Atual',
+      requiredVersion: 'Versão Requerida',
+      latestVersion: 'Última Versão',
+      status: 'Status',
+      type: 'Tipo',
+    },
+    statusLabels: {
+      installed: 'Instalado',
+      outdated: 'Desatualizado',
+      missing: 'Ausente',
+    },
+    typeLabels: {
+      dependencies: 'Dependência',
+      devDependencies: 'Dev Dependência',
+    },
+    summary: {
+      total: 'Total de dependências',
+      installed: 'Instaladas',
+      outdated: 'Desatualizadas',
+      missing: 'Ausentes',
+    },
   },
 };
 

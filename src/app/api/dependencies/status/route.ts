@@ -53,34 +53,47 @@ export async function GET(request: NextRequest) {
     
     const dependencies: DependencyStatus[] = [];
     
-    // No ambiente Netlify, não podemos executar comandos do sistema
-    // Vamos verificar apenas se os pacotes estão listados no package.json
+    // Verificar se estamos em ambiente de desenvolvimento ou produção
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.NETLIFY;
+    const isDevelopment = !isProduction;
+    
     let installedPackages: NpmListOutput = {};
     
-    // Tentar ler node_modules para verificar pacotes instalados (se disponível)
-    try {
-      const nodeModulesPath = join(process.cwd(), 'node_modules');
-      // Em produção (Netlify), assumimos que todas as dependências estão instaladas
-      // pois o build não funcionaria sem elas
-      const isProduction = process.env.NODE_ENV === 'production' || process.env.NETLIFY;
-      
-      if (isProduction) {
-        // Em produção, assumimos que todas as dependências estão instaladas
-        installedPackages.dependencies = {};
+    // Em desenvolvimento, tentar verificar pacotes realmente instalados
+    if (isDevelopment) {
+      try {
+        const { execSync } = require('child_process');
+        const npmListOutput = execSync('npm list --json --depth=0', { 
+          encoding: 'utf8',
+          cwd: process.cwd(),
+          timeout: 10000 // 10 segundos timeout
+        });
+        installedPackages = JSON.parse(npmListOutput);
+      } catch (error) {
+        console.warn('Não foi possível executar npm list:', error);
+        // Fallback: assumir que nada está instalado
+        installedPackages = { dependencies: {} };
       }
-    } catch (error) {
-      console.warn('Não foi possível verificar node_modules:', error);
     }
     
     // Processar dependências principais
     if (packageJson.dependencies) {
       for (const [name, version] of Object.entries(packageJson.dependencies)) {
-        // Em produção (Netlify), assumimos que as dependências estão instaladas
-        const isProduction = process.env.NODE_ENV === 'production' || process.env.NETLIFY;
-        const installed = isProduction ? true : false;
-        const installedVersion = isProduction ? version.replace(/[^\d\.]/g, '') : undefined;
+        let installed = false;
+        let installedVersion: string | undefined = undefined;
+        let status: 'installed' | 'outdated' | 'missing' = 'missing';
         
-        let status: 'installed' | 'outdated' | 'missing' = isProduction ? 'installed' : 'missing';
+        if (isProduction) {
+          // Em produção, assumimos que as dependências estão instaladas
+          installed = true;
+          installedVersion = version.replace(/[^\d\.]/g, '');
+          status = 'installed';
+        } else if (isDevelopment && installedPackages.dependencies?.[name]) {
+          // Em desenvolvimento, verificar se realmente está instalado
+          installed = true;
+          installedVersion = installedPackages.dependencies[name].version;
+          status = compareVersions(version, installedVersion);
+        }
         
         dependencies.push({
           name,
@@ -96,12 +109,21 @@ export async function GET(request: NextRequest) {
     // Processar devDependencies
     if (packageJson.devDependencies) {
       for (const [name, version] of Object.entries(packageJson.devDependencies)) {
-        // Em produção (Netlify), assumimos que as devDependencies não estão instaladas
-        const isProduction = process.env.NODE_ENV === 'production' || process.env.NETLIFY;
-        const installed = false; // devDependencies geralmente não estão em produção
-        const installedVersion = undefined;
-        
+        let installed = false;
+        let installedVersion: string | undefined = undefined;
         let status: 'installed' | 'outdated' | 'missing' = 'missing';
+        
+        if (isProduction) {
+          // Em produção, devDependencies geralmente não estão instaladas
+          installed = false;
+          installedVersion = undefined;
+          status = 'missing';
+        } else if (isDevelopment && installedPackages.dependencies?.[name]) {
+          // Em desenvolvimento, verificar se realmente está instalado
+          installed = true;
+          installedVersion = installedPackages.dependencies[name].version;
+          status = compareVersions(version, installedVersion);
+        }
         
         dependencies.push({
           name,
