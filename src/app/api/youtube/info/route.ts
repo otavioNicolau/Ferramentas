@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import ytdl from '@distube/ytdl-core';
 import { generateMockDataForUrl } from './mock';
 
 export async function POST(request: NextRequest) {
   console.log('=== YouTube API Route Called ===');
   console.log('Request method:', request.method);
   console.log('Request headers:', Object.fromEntries(request.headers.entries()));
-  
+
   try {
+    // Evita que o @distube/ytdl-core tente verificar atualizações em ambiente sem internet
+    process.env.YTDL_NO_UPDATE = 'true';
+    const ytdl = (await import('@distube/ytdl-core')).default;
+
     // Verificar se há conteúdo no corpo da requisição
     const contentLength = request.headers.get('content-length');
     console.log('Content-Length:', contentLength);
@@ -137,11 +140,24 @@ export async function POST(request: NextRequest) {
       console.log('Error type:', typeof ytdlError);
       console.log('Error message:', ytdlError instanceof Error ? ytdlError.message : ytdlError);
       console.log('Error stack:', ytdlError instanceof Error ? ytdlError.stack : 'N/A');
+
+      // Erros de rede devem informar o usuário em vez de usar dados falsos
+      const code =
+        ytdlError && typeof ytdlError === 'object' && 'code' in ytdlError
+          ? String((ytdlError as NodeJS.ErrnoException).code)
+          : undefined;
+      if (code && ['ENOTFOUND', 'EAI_AGAIN', 'ENETUNREACH'].includes(code)) {
+        return NextResponse.json(
+          { error: 'Não foi possível conectar ao YouTube. Verifique sua conexão de rede.' },
+          { status: 503 }
+        );
+      }
+
       console.log('Using mock data instead');
-      
+
       // Se falhar, usar dados mock para demonstração
       const mockData = generateMockDataForUrl(cleanUrl);
-      
+
       return NextResponse.json({
         ...mockData,
         _isMockData: true,
