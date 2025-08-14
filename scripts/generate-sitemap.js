@@ -3,8 +3,31 @@
 const fs = require('fs')
 const path = require('path')
 
+// Determina a URL base do site.
+// Pode ser passada como primeiro argumento, via variáveis de ambiente
+// (NEXT_PUBLIC_SITE_URL ou VERCEL_URL) ou cai no localhost como fallback.
+function getSiteUrl() {
+  const argUrl = process.argv[2]
+  if (argUrl && argUrl.trim() !== '') {
+    return argUrl.replace(/\/$/, '')
+  }
+
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL
+  if (envUrl && envUrl.trim() !== '' && !envUrl.includes('localhost')) {
+    return envUrl.replace(/\/$/, '')
+  }
+
+  const vercelUrl = process.env.VERCEL_URL
+  if (vercelUrl && vercelUrl.trim() !== '') {
+    const normalized = vercelUrl.startsWith('http') ? vercelUrl : `https://${vercelUrl}`
+    return normalized.replace(/\/$/, '')
+  }
+
+  return 'http://localhost:3000'
+}
+
 // Configuração do sitemap com técnicas avançadas de SEO - MUILTOOLS
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+const SITE_URL = getSiteUrl()
 const currentDate = new Date().toISOString().split('T')[0]
 
 // Estrutura hierárquica para SEO otimizado
