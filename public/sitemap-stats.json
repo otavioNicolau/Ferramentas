@@ -1,16 +1,16 @@
 {
-  "totalRoutes": 66,
+  "totalRoutes": 67,
   "categoriesCount": 14,
   "priorityDistribution": {
     "1": 1,
     "0.9": 15,
     "0.8": 8,
-    "0.7": 20,
+    "0.7": 21,
     "0.6": 16,
     "0.5": 3,
     "0.3": 2,
     "0.2": 1
   },
   "siteUrl": "http://localhost:3000",
-  "generatedAt": "2025-08-12T01:45:51.061Z"
+  "generatedAt": "2025-08-14T00:48:35.089Z"
 }

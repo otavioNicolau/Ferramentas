@@ -14,7 +14,13 @@
     "sitemap:stats": "node scripts/generate-sitemap.js && cat public/sitemap-stats.json",
     "robots:generate": "node scripts/generate-robots.js",
     "seo:generate": "npm run sitemap:generate && npm run robots:generate",
-    "seo:validate": "npm run seo:generate && echo 'SEO files generated successfully!'"
+    "seo:validate": "npm run seo:generate && echo 'SEO files generated successfully!'",
+    "vps:diagnose": "node diagnose-vps.js",
+    "vps:install": "npm cache clean --force && rm -rf node_modules package-lock.json && npm install --legacy-peer-deps",
+    "vps:install-prod": "npm install --only=production --no-audit --no-fund --legacy-peer-deps",
+    "vps:install-dev": "npm install --only=development --no-audit --no-fund --legacy-peer-deps",
+    "vps:setup": "cp .npmrc-vps .npmrc && npm run vps:install",
+    "vps:build": "npm run vps:install-prod && npm run build"
   },
   "dependencies": {
     "@distube/ytdl-core": "^4.16.12",

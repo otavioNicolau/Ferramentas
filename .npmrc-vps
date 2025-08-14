@@ -1,0 +1,41 @@
+# Configuração npm otimizada para VPS
+# Copie este arquivo para .npmrc na raiz do projeto
+
+# Registry principal
+registry=https://registry.npmjs.org/
+
+# Timeouts aumentados para conexões lentas
+timeout=300000
+fetch-timeout=300000
+fetch-retry-mintimeout=20000
+fetch-retry-maxtimeout=120000
+fetch-retries=5
+
+# Desabilitar funcionalidades desnecessárias
+fund=false
+audit=false
+progress=false
+
+# Configurações de cache
+cache-max=86400000
+cache-min=10
+
+# Configurações de instalação
+legacy-peer-deps=true
+strict-ssl=true
+
+# Log level reduzido
+loglevel=error
+
+# Configurações de proxy (descomente se necessário)
+# proxy=http://proxy-server:port
+# https-proxy=http://proxy-server:port
+
+# Configurações de rede
+maxsockets=50
+
+# Evitar problemas com symlinks
+bin-links=false
+
+# Configurações para ambientes com pouca memória
+max_old_space_size=4096

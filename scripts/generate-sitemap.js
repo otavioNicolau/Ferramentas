@@ -114,6 +114,7 @@ const sitemapStructure = {
       '/encurtador-url',
       '/teste-velocidade',
       '/speech-to-text',
+      '/status-dependencies',
       '/contact'
     ]
   },
