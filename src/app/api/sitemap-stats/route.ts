@@ -51,13 +51,6 @@ function detectLanguageFromRequest(request: NextRequest): string {
 
 // Função para obter a URL base do request
 function getSiteUrl(request: NextRequest): string {
-  // Tentar obter da variável de ambiente primeiro
-  const envUrl = process.env.NEXT_PUBLIC_SITE_URL
-  if (envUrl && envUrl !== 'http://localhost:3000') {
-    return envUrl
-  }
-  
-  // Se não houver ou for localhost, usar a URL do request
   const url = new URL(request.url)
   return `${url.protocol}//${url.host}`
 }
