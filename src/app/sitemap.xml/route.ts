@@ -1,5 +1,58 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// Lista de idiomas suportados
+const supportedLanguages = [
+  'pt-BR', 'en', 'es', 'zh', 'hi', 'ar', 'bn', 'ru', 'ja', 'de', 'fr', 'it', 'ko', 'tr', 'pl', 'nl', 'sv', 'uk', 'vi', 'th'
+];
+
+// Mapeamento de subdomínios para códigos de idioma
+const subdomainToLanguage: Record<string, string> = {
+  'br': 'pt-BR',
+  'ko': 'ko',
+  'en': 'en',
+  'es': 'es',
+  'zh': 'zh',
+  'hi': 'hi',
+  'ar': 'ar',
+  'bn': 'bn',
+  'ru': 'ru',
+  'ja': 'ja',
+  'de': 'de',
+  'fr': 'fr',
+  'it': 'it',
+  'tr': 'tr',
+  'pl': 'pl',
+  'nl': 'nl',
+  'sv': 'sv',
+  'uk': 'uk',
+  'vi': 'vi',
+  'th': 'th'
+};
+
+// Função para detectar idioma baseado no subdomínio
+function detectLanguageFromRequest(request: NextRequest): string {
+  // Primeiro tenta obter do header Host (para testes e proxies)
+  const hostHeader = request.headers.get('host');
+  let hostname = hostHeader || request.nextUrl.hostname;
+  
+  // Remove a porta se presente
+  hostname = hostname.split(':')[0];
+  
+  // Extrai o subdomínio
+  const parts = hostname.split('.');
+  
+  // Se não há subdomínio (apenas muiltools.com ou localhost), usa pt-BR
+  if (parts.length <= 2) {
+    return 'pt-BR';
+  }
+  
+  // Pega o primeiro subdomínio
+  const subdomain = parts[0];
+  
+  // Retorna o idioma correspondente ou pt-BR como padrão
+  return subdomainToLanguage[subdomain] || 'pt-BR';
+}
+
 // Função para obter a URL base do request
 function getSiteUrl(request: NextRequest): string {
   // Sempre usar a URL do request para garantir URL dinâmica
@@ -195,6 +248,7 @@ const sitemapConfig = {
 export async function GET(request: NextRequest) {
   const currentDate = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
   const siteUrl = getSiteUrl(request)
+  const detectedLanguage = detectLanguageFromRequest(request)
   
   // Coletar todas as URLs e ordenar por prioridade
   const allUrls: Array<{
@@ -223,8 +277,11 @@ export async function GET(request: NextRequest) {
     return a.url.localeCompare(b.url)
   })
   
-  // Gerar XML do sitemap
+  // Gerar XML do sitemap com informações específicas do domínio/idioma
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sitemap dinâmico para ${siteUrl} -->
+<!-- Idioma detectado: ${detectedLanguage} -->
+<!-- Gerado em: ${new Date().toISOString()} -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
@@ -252,34 +309,59 @@ export async function GET(request: NextRequest) {
   return new NextResponse(xml, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      'X-Sitemap-Language': detectedLanguage,
+      'X-Sitemap-Domain': siteUrl
     }
   })
 }
 
-// Função auxiliar para obter estatísticas do sitemap
-export function getSitemapStats(siteUrl?: string) {
-  const totalRoutes = Object.values(sitemapConfig).reduce(
-    (total, config) => total + config.routes.length,
-    0
-  )
+// Função para obter estatísticas do sitemap (usada pela API)
+export function getSitemapStats(siteUrl?: string, language?: string) {
+  const fallbackUrl = siteUrl || FALLBACK_SITE_URL
+  const detectedLanguage = language || 'pt-BR'
   
+  // Coletar todas as URLs
+  const allUrls: Array<{
+    url: string
+    priority: number
+    changefreq: string
+    category: string
+  }> = []
+  
+  Object.entries(sitemapConfig).forEach(([categoryName, config]) => {
+    config.routes.forEach(route => {
+      allUrls.push({
+        url: `${fallbackUrl}${route}`,
+        priority: config.priority,
+        changefreq: config.changeFreq,
+        category: categoryName
+      })
+    })
+  })
+  
+  // Calcular estatísticas
+  const totalRoutes = allUrls.length
   const categoriesCount = Object.keys(sitemapConfig).length
   
-  const priorityDistribution = Object.values(sitemapConfig).reduce(
-    (acc, config) => {
-      const priority = config.priority.toString()
-      acc[priority] = (acc[priority] || 0) + config.routes.length
-      return acc
-    },
-    {} as Record<string, number>
-  )
+  // Distribuição de prioridades
+  const priorityDistribution: Record<string, number> = {}
+  allUrls.forEach(url => {
+    const priority = url.priority.toString()
+    priorityDistribution[priority] = (priorityDistribution[priority] || 0) + 1
+  })
+  
+  // Informações sobre idiomas disponíveis
+  const availableLanguages = supportedLanguages.length
   
   return {
     totalRoutes,
     categoriesCount,
     priorityDistribution,
-    siteUrl: siteUrl || FALLBACK_SITE_URL,
+    siteUrl: fallbackUrl,
+    detectedLanguage,
+    availableLanguages,
+    supportedLanguages,
     lastGenerated: new Date().toISOString()
   }
 }

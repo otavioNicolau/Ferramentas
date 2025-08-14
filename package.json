@@ -10,8 +10,7 @@
     "lint": "next lint",
     "export": "next export",
     "netlify-build": "npm run build",
-    "sitemap:generate": "node scripts/generate-sitemap.js",
-    "sitemap:stats": "node scripts/generate-sitemap.js && cat public/sitemap-stats.json",
+
     "robots:generate": "node scripts/generate-robots.js",
     "seo:generate": "echo 'SEO files are now generated dynamically'",
     "seo:validate": "npm run seo:generate && echo 'SEO files generated successfully!'",

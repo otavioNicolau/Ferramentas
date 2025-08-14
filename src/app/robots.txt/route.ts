@@ -1,5 +1,53 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// Mapeamento de subdomínios para códigos de idioma
+const subdomainToLanguage: Record<string, string> = {
+  'br': 'pt-BR',
+  'ko': 'ko',
+  'en': 'en',
+  'es': 'es',
+  'zh': 'zh',
+  'hi': 'hi',
+  'ar': 'ar',
+  'bn': 'bn',
+  'ru': 'ru',
+  'ja': 'ja',
+  'de': 'de',
+  'fr': 'fr',
+  'it': 'it',
+  'tr': 'tr',
+  'pl': 'pl',
+  'nl': 'nl',
+  'sv': 'sv',
+  'uk': 'uk',
+  'vi': 'vi',
+  'th': 'th'
+};
+
+// Função para detectar idioma baseado no subdomínio
+function detectLanguageFromRequest(request: NextRequest): string {
+  // Primeiro tenta obter do header Host (para testes e proxies)
+  const hostHeader = request.headers.get('host');
+  let hostname = hostHeader || request.nextUrl.hostname;
+  
+  // Remove a porta se presente
+  hostname = hostname.split(':')[0];
+  
+  // Extrai o subdomínio
+  const parts = hostname.split('.');
+  
+  // Se não há subdomínio (apenas muiltools.com ou localhost), usa pt-BR
+  if (parts.length <= 2) {
+    return 'pt-BR';
+  }
+  
+  // Pega o primeiro subdomínio
+  const subdomain = parts[0];
+  
+  // Retorna o idioma correspondente ou pt-BR como padrão
+  return subdomainToLanguage[subdomain] || 'pt-BR';
+}
+
 // Função para obter a URL base do request
 function getSiteUrl(request: NextRequest): string {
   // Sempre usar a URL do request para garantir URL dinâmica
@@ -17,10 +65,13 @@ function getSiteUrl(request: NextRequest): string {
 
 export async function GET(request: NextRequest) {
   const siteUrl = getSiteUrl(request)
+  const detectedLanguage = detectLanguageFromRequest(request)
   const hostUrl = siteUrl.replace(/^https?:\/\//, '')
   
   const robotsContent = `# Robots.txt otimizado para SEO - MUILTOOLS
 # Gerado dinamicamente em ${new Date().toISOString()}
+# Domínio: ${siteUrl}
+# Idioma detectado: ${detectedLanguage}
 
 # Configuração padrão para todos os bots
 User-agent: *
@@ -153,7 +204,9 @@ Allow: /
   return new NextResponse(robotsContent, {
     headers: {
       'Content-Type': 'text/plain',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600'
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      'X-Robots-Language': detectedLanguage,
+      'X-Robots-Domain': siteUrl
     }
   })
 }
