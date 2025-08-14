@@ -1,6 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+// Função para obter a URL base do request
+function getSiteUrl(request: NextRequest): string {
+  // Tentar obter da variável de ambiente primeiro
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL
+  if (envUrl && envUrl !== 'http://localhost:3000') {
+    return envUrl
+  }
+  
+  // Se não houver ou for localhost, usar a URL do request
+  const url = new URL(request.url)
+  return `${url.protocol}//${url.host}`
+}
+
+const FALLBACK_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
 // Configuração de prioridades e frequências para SEO otimizado
 const sitemapConfig = {
@@ -109,7 +122,8 @@ const sitemapConfig = {
       '/encurtador-url',
       '/teste-velocidade',
       '/speech-to-text',
-      '/contact'
+      '/contact',
+      '/status-dependencies'
     ]
   },
   
@@ -178,6 +192,7 @@ const sitemapConfig = {
 
 export async function GET(request: NextRequest) {
   const currentDate = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+  const siteUrl = getSiteUrl(request)
   
   // Coletar todas as URLs e ordenar por prioridade
   const allUrls: Array<{
@@ -190,7 +205,7 @@ export async function GET(request: NextRequest) {
   Object.entries(sitemapConfig).forEach(([categoryName, config]) => {
     config.routes.forEach(route => {
       allUrls.push({
-        url: `${SITE_URL}${route}`,
+        url: `${siteUrl}${route}`,
         priority: config.priority,
         changefreq: config.changeFreq,
         category: categoryName
@@ -241,7 +256,7 @@ export async function GET(request: NextRequest) {
 }
 
 // Função auxiliar para obter estatísticas do sitemap
-export function getSitemapStats() {
+export function getSitemapStats(siteUrl?: string) {
   const totalRoutes = Object.values(sitemapConfig).reduce(
     (total, config) => total + config.routes.length,
     0
@@ -262,6 +277,7 @@ export function getSitemapStats() {
     totalRoutes,
     categoriesCount,
     priorityDistribution,
-    siteUrl: SITE_URL
+    siteUrl: siteUrl || FALLBACK_SITE_URL,
+    lastGenerated: new Date().toISOString()
   }
 }

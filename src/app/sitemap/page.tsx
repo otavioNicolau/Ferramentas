@@ -115,6 +115,7 @@ const sitemapData: SitemapSection[] = [
       { url: "/extrair-texto-ocr", title: "OCR - Extrair Texto", description: "Extraia texto de imagens" },
       { url: "/extract-assets", title: "Extrair Assets", description: "Extraia recursos de arquivos" },
       { url: "/remove-assets", title: "Remover Assets", description: "Remova recursos desnecessários" },
+      { url: "/status-dependencies", title: "Status das Dependências", description: "Monitore o status das dependências do sistema" },
     ]
   },
   {
@@ -154,7 +155,7 @@ export default function SitemapPage() {
 
   // Carregar estatísticas do sitemap
   useEffect(() => {
-    fetch('/sitemap-stats.json')
+    fetch('/api/sitemap-stats')
       .then(res => res.json())
       .then(data => setSitemapStats(data))
       .catch(err => console.error('Erro ao carregar estatísticas:', err))
@@ -236,7 +237,9 @@ export default function SitemapPage() {
                 </div>
               </div>
               <div className="mt-4 text-xs text-gray-500 text-center">
-                Última atualização: {sitemapStats.generatedAt ? new Date(sitemapStats.generatedAt).toLocaleString('pt-BR') : 'N/A'}
+                Última atualização: {sitemapStats.lastGenerated ? new Date(sitemapStats.lastGenerated).toLocaleString('pt-BR') : 'N/A'}
+                <br />
+                URL Base: {sitemapStats.siteUrl}
               </div>
             </div>
           )}
