@@ -27,9 +27,9 @@ const subdomainToLanguage: Record<string, string> = {
 
 // Função para detectar idioma baseado no subdomínio
 function detectLanguageFromRequest(request: NextRequest): string {
-  // Primeiro tenta obter do header Host (para testes e proxies)
-  const hostHeader = request.headers.get('host');
-  let hostname = hostHeader || request.nextUrl.hostname;
+  // Primeiro tenta obter do header X-Forwarded-Host ou Host (para proxies)
+  const hostHeader = request.headers.get('x-forwarded-host') || request.headers.get('host')
+  let hostname = hostHeader || request.nextUrl.hostname
   
   // Remove a porta se presente
   hostname = hostname.split(':')[0];
@@ -52,7 +52,9 @@ function detectLanguageFromRequest(request: NextRequest): string {
 // Função para obter a URL base do request
 function getSiteUrl(request: NextRequest): string {
   const url = new URL(request.url)
-  return `${url.protocol}//${url.host}`
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || url.host
+  const protocol = request.headers.get('x-forwarded-proto') || url.protocol.replace(':', '')
+  return `${protocol}://${host}`
 }
 
 export async function GET(request: NextRequest) {
