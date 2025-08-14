@@ -58,9 +58,7 @@
     "tesseract.js": "^6.0.1",
     "tiktok-downloader": "^0.0.4",
     "xlsx": "^0.18.5",
-    "xml2js": "^0.6.2"
-  },
-  "devDependencies": {
+    "xml2js": "^0.6.2",
     "@eslint/eslintrc": "^3",
     "@netlify/plugin-nextjs": "^5.7.2",
     "@tailwindcss/postcss": "^4",
@@ -75,5 +73,6 @@
     "eslint-config-next": "15.4.5",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "devDependencies": {}
 }
