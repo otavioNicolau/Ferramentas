@@ -155,6 +155,7 @@ const EN_TRANSLATIONS = {
   privacyPolicy: 'Privacy Policy',
   termsOfUse: 'Terms of Use',
   sitemap: 'Sitemap',
+  languages: 'Languages',
 
   // Pages
   toolsPageTitle: 'Tools',
@@ -395,6 +396,15 @@ const EN_TRANSLATIONS = {
     noResults: 'No dependencies found with the selected filters.',
     clearFilters: 'Clear filters',
   },
+
+  // Languages Page
+  languagesPageTitle: 'Available Languages',
+  languagesPageDescription: 'Choose your preferred language to access the site in your native language.',
+  availableLanguages: 'Available Languages',
+  currentLanguage: 'Current Language',
+  copyUrl: 'Copy URL',
+  urlCopied: 'URL copied to clipboard!',
+  selectLanguage: 'Select Language',
 };
 
 /* =======================
@@ -405,7 +415,7 @@ const EN_TRANSLATIONS = {
 const PT_BR = {
   // Site Meta
   siteTitle: 'Ferramentas Online Gratuitas',
-  siteName: 'NICOLLAUTOOLS',
+  siteName: 'MUILTOOLS',
   siteDescription:
     'Acesse uma ampla coleção de ferramentas online gratuitas para editar PDFs, converter vídeos, processar imagens e gerar QR Codes. Converta, compacte e otimize arquivos com segurança direto no navegador.',
 
@@ -417,13 +427,14 @@ const PT_BR = {
   privacyPolicy: 'Política de Privacidade',
   termsOfUse: 'Termos de Uso',
   sitemap: 'Mapa do Site',
+  languages: 'Idiomas',
 
   // Páginas
   toolsPageTitle: 'Ferramentas',
   toolsPageDescription: 'Explore nossa lista de ferramentas online gratuitas.',
   toolsPageKeywords: ['ferramentas online', 'utilidades', 'ferramentas gratuitas'],
   aboutPageTitle: 'Sobre',
-  aboutPageDescription: 'Saiba mais sobre o NICOLLAUTOOLS.',
+  aboutPageDescription: 'Saiba mais sobre o MUILTOOLS.',
   aboutPageKeywords: ['sobre', 'ferramentas online', 'informações'],
 
   // Hero Section
@@ -672,6 +683,15 @@ const PT_BR = {
       missing: 'Ausentes',
     },
   },
+
+  // Página de Idiomas
+  languagesPageTitle: 'Idiomas Disponíveis',
+  languagesPageDescription: 'Escolha seu idioma preferido para navegar no site.',
+  availableLanguages: 'Idiomas Disponíveis',
+  currentLanguage: 'Idioma Atual',
+  copyUrl: 'Copiar URL',
+  urlCopied: 'URL copiada!',
+  selectLanguage: 'Selecionar Idioma',
 };
 
 // Demais idiomas: herdando EN + sobrescrevendo o essencial

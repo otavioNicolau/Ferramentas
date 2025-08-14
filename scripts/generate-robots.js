@@ -8,7 +8,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
 // Template do robots.txt otimizado
 function generateRobotsContent() {
-  return `# Robots.txt para NICOLLAUTOOLS - Ferramentas Online
+  return `# Robots.txt para MUILTOOLS - Ferramentas Online
 # Gerado automaticamente para máxima indexação
 # Site: ${SITE_URL}
 # Gerado em: ${new Date().toISOString()}

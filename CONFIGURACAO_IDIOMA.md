@@ -1,4 +1,4 @@
-# Sistema de Tradução por Subdomínio - NICOLLAUTOOLS
+# Sistema de Tradução por Subdomínio - MUILTOOLS
 
 Este projeto implementa um sistema de tradução baseado em subdomínios da URL, permitindo que diferentes idiomas sejam acessados através de subdomínios específicos.
 

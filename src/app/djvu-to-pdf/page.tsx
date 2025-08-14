@@ -143,7 +143,7 @@ export default function DjvuToPdfPage() {
       
       // Adicionar metadados
       pdfDoc.setTitle(`${file.name.replace(/\.(djvu|djv)$/i, '')} - Convertido`);
-      pdfDoc.setAuthor('NICOLLAUTOOLS - Conversão DjVu');
+      pdfDoc.setAuthor('MUILTOOLS - Conversão DjVu');
       pdfDoc.setSubject('Documento convertido de DjVu para PDF');
       pdfDoc.setCreator('DjVu to PDF Converter');
       pdfDoc.setProducer('PDF Tools');

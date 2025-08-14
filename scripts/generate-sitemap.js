@@ -3,7 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 
-// Configuração do sitemap com técnicas avançadas de SEO - NICOLLAUTOOLS
+// Configuração do sitemap com técnicas avançadas de SEO - MUILTOOLS
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 const currentDate = new Date().toISOString().split('T')[0]
 

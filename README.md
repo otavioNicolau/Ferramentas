@@ -1,6 +1,6 @@
-# NICOLLAUTOOLS 🛠️
+# MUILTOOLS 🛠️
 
-NICOLLAUTOOLS é uma ampla coleção de ferramentas online gratuitas para PDF, vídeo, imagem, QR Code e outras utilidades. Todas as ferramentas funcionam diretamente no navegador, permitindo converter, editar, compactar e otimizar arquivos com privacidade e segurança.
+MUILTOOLS é uma ampla coleção de ferramentas online gratuitas para PDF, vídeo, imagem, QR Code e outras utilidades. Todas as ferramentas funcionam diretamente no navegador, permitindo converter, editar, compactar e otimizar arquivos com privacidade e segurança.
 
 ## 🌟 Características
 

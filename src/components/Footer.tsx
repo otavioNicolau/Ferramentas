@@ -9,6 +9,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center space-y-4">
           <nav className="flex flex-wrap justify-center gap-4 text-sm">
+            <a href="https://muiltools.com/" className="text-gray-600 hover:text-gray-900" target="_blank" rel="noopener noreferrer">
+              {t.home}
+            </a>
             <Link href="/about" className="text-gray-600 hover:text-gray-900">
               {t.about}
             </Link>
@@ -23,6 +26,9 @@ export default function Footer() {
             </Link>
             <Link href="/sitemap.xml" className="text-gray-600 hover:text-gray-900">
               {t.sitemap}
+            </Link>
+            <Link href="/languages" className="text-gray-600 hover:text-gray-900">
+              {t.languages || 'Idiomas'}
             </Link>
           </nav>
           <p className="text-gray-600 text-sm">

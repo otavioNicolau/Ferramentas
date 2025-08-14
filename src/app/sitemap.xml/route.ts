@@ -2,15 +2,17 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // Função para obter a URL base do request
 function getSiteUrl(request: NextRequest): string {
-  // Tentar obter da variável de ambiente primeiro
+  // Sempre usar a URL do request para garantir URL dinâmica
+  const url = new URL(request.url)
+  const dynamicUrl = `${url.protocol}//${url.host}`
+  
+  // Só usar variável de ambiente se não for localhost e estiver definida
   const envUrl = process.env.NEXT_PUBLIC_SITE_URL
-  if (envUrl && envUrl !== 'http://localhost:3000') {
+  if (envUrl && envUrl.trim() !== '' && !envUrl.includes('localhost')) {
     return envUrl
   }
   
-  // Se não houver ou for localhost, usar a URL do request
-  const url = new URL(request.url)
-  return `${url.protocol}//${url.host}`
+  return dynamicUrl
 }
 
 const FALLBACK_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
