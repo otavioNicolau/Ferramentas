@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSitemapStats } from '../../sitemap.xml/route'
 
+export const dynamic = 'force-dynamic'
+
 // Mapeamento de subdomínios para códigos de idioma
 const subdomainToLanguage: Record<string, string> = {
   'br': 'pt-BR',
@@ -49,17 +51,18 @@ function detectLanguageFromRequest(request: NextRequest): string {
   return subdomainToLanguage[subdomain] || 'pt-BR';
 }
 
-// Função para obter a URL base do request
+// Função para obter a URL base do request respeitando proxies
 function getSiteUrl(request: NextRequest): string {
-  // Tentar obter da variável de ambiente primeiro
-  const envUrl = process.env.NEXT_PUBLIC_SITE_URL
-  if (envUrl && envUrl !== 'http://localhost:3000') {
-    return envUrl
-  }
-  
-  // Se não houver ou for localhost, usar a URL do request
-  const url = new URL(request.url)
-  return `${url.protocol}//${url.host}`
+  const host =
+    request.headers.get('x-forwarded-host') ??
+    request.headers.get('host') ??
+    request.nextUrl.host
+  const protocol =
+    request.headers.get('x-forwarded-proto') ??
+    request.nextUrl.protocol.split(':')[0]
+
+  const hostname = host.split(':')[0]
+  return `${protocol}://${hostname}`
 }
 
 export async function GET(request: NextRequest) {

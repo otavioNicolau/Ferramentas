@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // Lista de idiomas suportados
 const supportedLanguages = [
   'pt-BR', 'en', 'es', 'zh', 'hi', 'ar', 'bn', 'ru', 'ja', 'de', 'fr', 'it', 'ko', 'tr', 'pl', 'nl', 'sv', 'uk', 'vi', 'th'
@@ -53,22 +55,19 @@ function detectLanguageFromRequest(request: NextRequest): string {
   return subdomainToLanguage[subdomain] || 'pt-BR';
 }
 
-// Função para obter a URL base do request
+// Função para obter a URL base do request respeitando proxies
 function getSiteUrl(request: NextRequest): string {
-  // Sempre usar a URL do request para garantir URL dinâmica
-  const url = new URL(request.url)
-  const dynamicUrl = `${url.protocol}//${url.host}`
-  
-  // Só usar variável de ambiente se não for localhost e estiver definida
-  const envUrl = process.env.NEXT_PUBLIC_SITE_URL
-  if (envUrl && envUrl.trim() !== '' && !envUrl.includes('localhost')) {
-    return envUrl
-  }
-  
-  return dynamicUrl
-}
+  const host =
+    request.headers.get('x-forwarded-host') ??
+    request.headers.get('host') ??
+    request.nextUrl.host
+  const protocol =
+    request.headers.get('x-forwarded-proto') ??
+    request.nextUrl.protocol.split(':')[0]
 
-const FALLBACK_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const hostname = host.split(':')[0]
+  return `${protocol}://${hostname}`
+}
 
 // Configuração de prioridades e frequências para SEO otimizado
 const sitemapConfig = {
@@ -317,9 +316,8 @@ export async function GET(request: NextRequest) {
 }
 
 // Função para obter estatísticas do sitemap (usada pela API)
-export function getSitemapStats(siteUrl?: string, language?: string) {
-  const fallbackUrl = siteUrl || FALLBACK_SITE_URL
-  const detectedLanguage = language || 'pt-BR'
+export function getSitemapStats(siteUrl = 'http://localhost:3000', language = 'pt-BR') {
+  const detectedLanguage = language
   
   // Coletar todas as URLs
   const allUrls: Array<{
@@ -332,7 +330,7 @@ export function getSitemapStats(siteUrl?: string, language?: string) {
   Object.entries(sitemapConfig).forEach(([categoryName, config]) => {
     config.routes.forEach(route => {
       allUrls.push({
-        url: `${fallbackUrl}${route}`,
+        url: `${siteUrl}${route}`,
         priority: config.priority,
         changefreq: config.changeFreq,
         category: categoryName
@@ -358,7 +356,7 @@ export function getSitemapStats(siteUrl?: string, language?: string) {
     totalRoutes,
     categoriesCount,
     priorityDistribution,
-    siteUrl: fallbackUrl,
+    siteUrl,
     detectedLanguage,
     availableLanguages,
     supportedLanguages,
