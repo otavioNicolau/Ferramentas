@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { LucideIcon, ArrowRight, Sparkles } from 'lucide-react';
 import { useId, useMemo } from 'react';
+import { getTranslations } from '@/config/language';
 
 interface ToolCardProps {
   title: string;
@@ -48,6 +49,8 @@ const categoryStyles: Record<
 };
 
 export default function ToolCard({ title, description, href, icon: Icon, category }: ToolCardProps) {
+  const t = getTranslations();
+  const gradientId = useId();
   const canonical = useMemo(() => normalizeCategory(category), [category]);
   const colors = categoryStyles[canonical] ?? categoryStyles.utilities;
   const titleId = useId();
@@ -134,15 +137,15 @@ export default function ToolCard({ title, description, href, icon: Icon, categor
           {/* Footer CTA */}
           <div className="flex items-center justify-between border-t border-zinc-100 pt-4">
             <span className="text-[11px] font-medium uppercase tracking-wide text-zinc-500">
-              Usar Ferramenta
+              {t.useTool}
             </span>
             <span className="inline-flex items-center gap-1 text-blue-600 transition-colors group-hover:text-blue-700">
-              <span className="text-sm font-medium">Abrir</span>
+              <span className="text-sm font-medium">{t.open}</span>
               <ArrowRight
                 aria-hidden
                 className="h-4 w-4 transition-transform duration-300 motion-safe:group-hover:translate-x-1"
               />
-              <span className="sr-only">Abrir {title}</span>
+              <span className="sr-only">{t.open} {title}</span>
             </span>
           </div>
         </div>

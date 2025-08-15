@@ -93,33 +93,33 @@ export default function ValidatePdfaPage() {
 
       // Basic validation checks
       if (!title || title.trim() === '') {
-        warnings.push('Título do documento não definido');
+        warnings.push(t.pdfaValidator.documentTitleUndefined);
       }
 
       if (!creator || creator.trim() === '') {
-        warnings.push('Criador do documento não definido');
+        warnings.push(t.pdfaValidator.documentCreatorUndefined);
       }
 
       if (!producer || producer.trim() === '') {
-        warnings.push('Produtor do documento não definido');
+        warnings.push(t.pdfaValidator.documentProducerUndefined);
       }
 
       // Check if PDF/A metadata is present
       if (!pdfaLevel) {
         isValid = false;
-        issues.push('Metadados PDF/A não encontrados no documento');
-        issues.push('Documento não contém identificadores de conformidade PDF/A');
+        issues.push(t.pdfaValidator.pdfaMetadataNotFound);
+        issues.push(t.pdfaValidator.noComplianceIdentifiers);
       } else {
         // Additional checks for detected PDF/A level
         if (pdfaLevel === 'PDF/A-1B') {
           if (!keywords || !Array.isArray(keywords) || keywords.length === 0) {
-            warnings.push('Palavras-chave recomendadas para PDF/A-1B');
+            warnings.push(t.pdfaValidator.keywordsRecommendedPdfa1b);
           }
         }
         
         if (pdfaLevel === 'PDF/A-2B' || pdfaLevel === 'PDF/A-3B') {
           if (!subject || subject.trim() === '') {
-            warnings.push('Assunto recomendado para ' + pdfaLevel);
+            warnings.push(t.pdfaValidator.subjectRecommendedPdfa2b3b);
           }
         }
       }
@@ -128,7 +128,7 @@ export default function ValidatePdfaPage() {
       const pageCount = pdfDoc.getPageCount();
       if (pageCount === 0) {
         isValid = false;
-        issues.push('Documento PDF não contém páginas');
+        issues.push(t.pdfaValidator.noPagesFound);
       }
 
       console.log('Validation result:', { isValid, pdfaLevel, issues, warnings });
@@ -151,7 +151,7 @@ export default function ValidatePdfaPage() {
         fileSize: formatFileSize(file.size),
         isValid: false,
         pdfaLevel: null,
-        issues: ['Erro ao processar o arquivo PDF', 'Arquivo pode estar corrompido ou não ser um PDF válido'],
+        issues: [t.pdfaValidator.processingError, t.pdfaValidator.corruptedFileError],
         warnings: [],
         timestamp: new Date()
       };

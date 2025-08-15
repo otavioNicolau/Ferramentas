@@ -109,12 +109,12 @@ export default function WordToPdfPage() {
     ];
     
     if (!validTypes.includes(selectedFile.type) && !selectedFile.name.match(/\.(docx?|rtf)$/i)) {
-      alert('Por favor, selecione apenas arquivos Word (.docx, .doc, .rtf).');
+      alert(t.wordToPdf.invalidFileType);
       return;
     }
     
     if (selectedFile.size > 50 * 1024 * 1024) {
-      alert('Arquivo muito grande. Limite de 50MB.');
+      alert(t.wordToPdf.fileTooLarge);
       return;
     }
     
@@ -452,10 +452,10 @@ export default function WordToPdfPage() {
         >
           <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Selecione o documento Word
+            {t.wordToPdf.selectDocument}
           </h3>
           <p className="text-gray-600 mb-4">
-            Arraste e solte seu arquivo Word aqui ou clique para selecionar
+            {t.wordToPdf.dragDropText}
           </p>
           <input
             ref={fileInputRef}
@@ -469,7 +469,7 @@ export default function WordToPdfPage() {
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Upload className="inline-block w-5 h-5 mr-2" />
-            Selecionar Arquivo Word
+            {t.wordToPdf.selectFile}
           </button>
           
           {file && (
@@ -488,22 +488,22 @@ export default function WordToPdfPage() {
         {/* Document Metadata */}
         {documentMetadata && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Informações do Documento</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.wordToPdf.documentInfo}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium text-gray-700">Título:</span>
+                <span className="font-medium text-gray-700">{t.wordToPdf.title}:</span>
                 <span className="ml-2 text-gray-600">{documentMetadata.title}</span>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Autor:</span>
+                <span className="font-medium text-gray-700">{t.wordToPdf.author}:</span>
                 <span className="ml-2 text-gray-600">{documentMetadata.author}</span>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Palavras (est.):</span>
+                <span className="font-medium text-gray-700">{t.wordToPdf.wordCount}:</span>
                 <span className="ml-2 text-gray-600">{documentMetadata.wordCount.toLocaleString()}</span>
               </div>
               <div>
-                <span className="font-medium text-gray-700">Páginas (est.):</span>
+                <span className="font-medium text-gray-700">{t.wordToPdf.pageCount}:</span>
                 <span className="ml-2 text-gray-600">{documentMetadata.pageCount}</span>
               </div>
             </div>
@@ -514,53 +514,53 @@ export default function WordToPdfPage() {
         {file && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Configurações de Conversão</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.wordToPdf.conversionSettings}</h3>
               <button
                 onClick={() => setShowAdvanced(!showAdvanced)}
                 className="text-blue-600 hover:text-blue-700 flex items-center text-sm"
               >
                 <Settings className="w-4 h-4 mr-1" />
-                {showAdvanced ? 'Ocultar' : 'Mostrar'} Avançadas
+                {showAdvanced ? t.wordToPdf.hideAdvanced : t.wordToPdf.showAdvanced}
               </button>
             </div>
             
             {/* Basic Settings */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Tamanho da Página</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.wordToPdf.pageSize}</label>
                 <select
                   value={settings.pageSize}
                   onChange={(e) => setSettings(prev => ({ ...prev, pageSize: e.target.value as 'A4' | 'Letter' | 'Legal' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="A4">A4 (210 × 297 mm)</option>
-                  <option value="Letter">Letter (8.5 × 11 in)</option>
-                  <option value="Legal">Legal (8.5 × 14 in)</option>
+                  <option value="A4">{t.wordToPdf.pageSizeA4}</option>
+                  <option value="Letter">{t.wordToPdf.pageSizeLetter}</option>
+                  <option value="Legal">{t.wordToPdf.pageSizeLegal}</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Orientação</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.wordToPdf.orientation}</label>
                 <select
                   value={settings.orientation}
                   onChange={(e) => setSettings(prev => ({ ...prev, orientation: e.target.value as 'portrait' | 'landscape' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="portrait">Retrato</option>
-                  <option value="landscape">Paisagem</option>
+                  <option value="portrait">{t.wordToPdf.orientationPortrait}</option>
+                    <option value="landscape">{t.wordToPdf.orientationLandscape}</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Fonte</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">{t.wordToPdf.fontFamily}</label>
                 <select
                   value={settings.fontFamily}
                   onChange={(e) => setSettings(prev => ({ ...prev, fontFamily: e.target.value as 'Helvetica' | 'Times-Roman' | 'Courier' }))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="Helvetica">Helvetica</option>
-                  <option value="Times-Roman">Times Roman</option>
-                  <option value="Courier">Courier</option>
+                  <option value="Helvetica">{t.wordToPdf.fontHelvetica}</option>
+                    <option value="Times-Roman">{t.wordToPdf.fontTimesRoman}</option>
+                    <option value="Courier">{t.wordToPdf.fontCourier}</option>
                 </select>
               </div>
             </div>
@@ -570,7 +570,7 @@ export default function WordToPdfPage() {
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Tamanho da Fonte</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.wordToPdf.fontSize}</label>
                     <input
                       type="number"
                       min="8"
@@ -582,7 +582,7 @@ export default function WordToPdfPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Espaçamento de Linha</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t.wordToPdf.lineSpacing}</label>
                     <input
                       type="number"
                       min="1"
@@ -603,7 +603,7 @@ export default function WordToPdfPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, preserveFormatting: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Preservar formatação original</span>
+                    <span className="text-sm">{t.wordToPdf.preserveFormatting}</span>
                   </label>
                   
                   <label className="flex items-center">
@@ -613,7 +613,7 @@ export default function WordToPdfPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, includeImages: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Incluir imagens</span>
+                    <span className="text-sm">{t.wordToPdf.includeImages}</span>
                   </label>
                   
                   <label className="flex items-center">
@@ -623,7 +623,7 @@ export default function WordToPdfPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, includeHeaders: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Incluir cabeçalhos</span>
+                    <span className="text-sm">{t.wordToPdf.includeHeaders}</span>
                   </label>
                   
                   <label className="flex items-center">
@@ -633,7 +633,7 @@ export default function WordToPdfPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, includeFooters: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Incluir rodapés</span>
+                    <span className="text-sm">{t.wordToPdf.includeFooters}</span>
                   </label>
                   
                   <label className="flex items-center">
@@ -643,7 +643,7 @@ export default function WordToPdfPage() {
                       onChange={(e) => setSettings(prev => ({ ...prev, pageNumbers: e.target.checked }))}
                       className="mr-2"
                     />
-                    <span className="text-sm">Numerar páginas</span>
+                    <span className="text-sm">{t.wordToPdf.numberPages}</span>
                   </label>
                 </div>
               </div>
@@ -660,7 +660,7 @@ export default function WordToPdfPage() {
               className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 transition-colors flex items-center mx-auto"
             >
               <RefreshCw className={`w-5 h-5 mr-2 ${isProcessing ? 'animate-spin' : ''}`} />
-              {isProcessing ? 'Convertendo...' : 'Converter para PDF'}
+              {isProcessing ? t.wordToPdf.converting : t.wordToPdf.convertToPdf}
             </button>
           </div>
         )}
@@ -670,7 +670,7 @@ export default function WordToPdfPage() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-semibold text-blue-900">
-                Convertendo Word para PDF...
+                {t.wordToPdf.convertingWordToPdf}
               </span>
               <span className="text-sm font-bold text-blue-900">
                 {Math.round(progress)}%
@@ -709,19 +709,19 @@ export default function WordToPdfPage() {
               <>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Páginas</div>
+                    <div className="font-semibold text-gray-900">{t.wordToPdf.pagesCount}</div>
                     <div className="text-gray-600">{conversionResult.pageCount}</div>
                   </div>
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Palavras</div>
+                    <div className="font-semibold text-gray-900">{t.wordToPdf.wordsCount}</div>
                     <div className="text-gray-600">{conversionResult.wordCount.toLocaleString()}</div>
                   </div>
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Imagens</div>
+                    <div className="font-semibold text-gray-900">{t.wordToPdf.imagesCount}</div>
                     <div className="text-gray-600">{conversionResult.imagesExtracted}</div>
                   </div>
                   <div className="bg-white p-3 rounded border">
-                    <div className="font-semibold text-gray-900">Tempo</div>
+                    <div className="font-semibold text-gray-900">{t.wordToPdf.timeCount}</div>
                     <div className="text-gray-600">{conversionResult.processingTime.toFixed(1)}s</div>
                   </div>
                 </div>
@@ -733,14 +733,14 @@ export default function WordToPdfPage() {
                     className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors inline-flex items-center"
                   >
                     <Download className="w-5 h-5 mr-2" />
-                    Baixar PDF
+                    {t.wordToPdf.downloadPdf}
                   </a>
                   
                   <button
                     onClick={clearAll}
                     className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    Converter Outro Documento
+                    {t.wordToPdf.convertAnother}
                   </button>
                 </div>
               </>
@@ -750,25 +750,25 @@ export default function WordToPdfPage() {
 
         {/* Information */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">ℹ️ Sobre a Conversão Word para PDF</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">ℹ️ {t.wordToPdf.aboutConversion}</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Converte documentos .docx, .doc e .rtf para PDF</li>
-            <li>• Preserva formatação, imagens e estrutura do documento</li>
-            <li>• Configurações flexíveis de página e fonte</li>
-            <li>• Suporte a cabeçalhos, rodapés e numeração</li>
-            <li>• Ideal para arquivamento e compartilhamento</li>
+            <li>• {t.wordToPdf.aboutFeature1}</li>
+            <li>• {t.wordToPdf.aboutFeature2}</li>
+            <li>• {t.wordToPdf.aboutFeature3}</li>
+            <li>• {t.wordToPdf.aboutFeature4}</li>
+            <li>• {t.wordToPdf.aboutFeature5}</li>
           </ul>
         </div>
 
         {/* Tips */}
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <h4 className="font-semibold text-yellow-900 mb-2">💡 Dicas de Conversão</h4>
+          <h4 className="font-semibold text-yellow-900 mb-2">💡 {t.wordToPdf.conversionTips}</h4>
           <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• Use A4 para documentos padrão brasileiros</li>
-            <li>• Helvetica oferece melhor legibilidade em tela</li>
-            <li>• Preserve formatação para manter aparência original</li>
-            <li>• Inclua numeração para documentos longos</li>
-            <li>• Verifique margens para impressão adequada</li>
+            <li>• {t.wordToPdf.tip1}</li>
+            <li>• {t.wordToPdf.tip2}</li>
+            <li>• {t.wordToPdf.tip3}</li>
+            <li>• {t.wordToPdf.tip4}</li>
+            <li>• {t.wordToPdf.tip5}</li>
           </ul>
         </div>
       </div>
