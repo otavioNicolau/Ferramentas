@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { getTranslations, LANGUAGE_CONFIG, getCurrentLanguage } from '@/config/language';
 import { Globe, ExternalLink, Copy, Check } from 'lucide-react';
 import { copyToClipboard } from '@/lib/utils';
@@ -16,194 +16,206 @@ interface LanguageInfo {
 export default function LanguagesPage() {
   const t = getTranslations();
   const currentLanguage = getCurrentLanguage();
-  const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
-  // Função para gerar URL do idioma
-  const getLanguageUrl = (langCode: string) => {
-    const baseUrl = 'https://muiltools.com';
-    
-    // Se for português (padrão), usar domínio principal
-    if (langCode === 'pt-BR') {
-      return baseUrl;
-    }
-    
-    // Para outros idiomas, usar subdomínio
-    const subdomain = getSubdomainForLanguage(langCode);
-    return `https://${subdomain}.muiltools.com`;
-  };
+  // Domínio base (pode vir de env)
+  const baseDomain = process.env.NEXT_PUBLIC_BASE_DOMAIN || 'muiltools.com';
 
-  // Mapear código de idioma para subdomínio
+  // Mapear código -> subdomínio (fallback: o próprio código simplificado)
   const getSubdomainForLanguage = (langCode: string) => {
-    const subdomainMap: Record<string, string> = {
-      'en': 'en',
-      'es': 'es',
-      'zh': 'zh',
-      'hi': 'hi',
-      'ar': 'ar',
-      'bn': 'bn',
-      'ru': 'ru',
-      'ja': 'ja',
-      'de': 'de',
-      'fr': 'fr',
-      'it': 'it',
-      'ko': 'ko',
-      'tr': 'tr',
-      'pl': 'pl',
-      'nl': 'nl',
-      'sv': 'sv',
-      'uk': 'uk',
-      'vi': 'vi',
-      'th': 'th'
+    const map: Record<string, string> = {
+      en: 'en', es: 'es', zh: 'zh', hi: 'hi', ar: 'ar', bn: 'bn', ru: 'ru',
+      ja: 'ja', de: 'de', fr: 'fr', it: 'it', ko: 'ko', tr: 'tr', pl: 'pl',
+      nl: 'nl', sv: 'sv', uk: 'uk', vi: 'vi', th: 'th',
     };
-    return subdomainMap[langCode] || 'en';
+    // se não estiver no mapa, usa a parte antes do hífen (ex.: 'pt-BR' -> 'pt')
+    return map[langCode] || langCode.split('-')[0] || 'en';
   };
 
-  // Preparar lista de idiomas
-  const languages: LanguageInfo[] = Object.entries(LANGUAGE_CONFIG.availableLanguages).map(([code, info]) => ({
-    ...info,
-    url: getLanguageUrl(code),
-    isActive: code === currentLanguage
-  }));
+  // URL por idioma
+  const getLanguageUrl = (langCode: string) => {
+    if (langCode === 'pt-BR') return `https://${baseDomain}`;
+    const sub = getSubdomainForLanguage(langCode);
+    return `https://${sub}.${baseDomain}`;
+  };
 
-  // Copiar URL para clipboard
-  const handleCopyUrl = async (url: string, langCode: string) => {
-    const success = await copyToClipboard(url);
-    if (success) {
-      setCopiedUrl(langCode);
-      setTimeout(() => setCopiedUrl(null), 2000);
+  // Lista de idiomas (ordenada por nome exibido)
+  const languages: LanguageInfo[] = useMemo(() => {
+    const list = Object.entries(LANGUAGE_CONFIG.availableLanguages).map(([code, info]) => ({
+      ...info,
+      code,
+      url: getLanguageUrl(code),
+      isActive: code === currentLanguage,
+    }));
+    return list.sort((a, b) => a.name.localeCompare(b.name));
+  }, [currentLanguage]);
+
+  const handleCopyUrl = async (url: string, code: string) => {
+    const ok = await copyToClipboard(url);
+    if (ok) {
+      setCopiedCode(code);
+      setTimeout(() => setCopiedCode(null), 1800);
     }
   };
+
+  // Textos traduzidos (com fallbacks)
+  const pageTitle = t.languagesPageTitle || t.languages || 'Idiomas';
+  const pageDesc =
+    t.languagesPageDescription ||
+    'Acesse o site no seu idioma preferido. Todas as ferramentas estão disponíveis em múltiplos idiomas.';
+  const totalLanguagesLabel = t.totalLanguages || 'Idiomas Disponíveis';
+  const translationCoverageLabel = t.translationCoverage || 'Cobertura de Tradução';
+  const globalAccessLabel = t.globalAccess || 'Acesso Global';
+  const currentLanguageLabel = t.currentLanguage || 'Idioma Atual';
+  const visitSiteLabel = t.visitSite || 'Visitar Site';
+  const copiedLabel = t.copied || 'Copiado!';
+  const copyUrlLabel = t.copyUrl || 'Copiar URL';
+  const howItWorks = t.howItWorks || 'Como Funciona';
+  const automaticDetection = t.automaticDetection || 'Detecção Automática';
+  const automaticDetectionDesc =
+    t.automaticDetectionDesc ||
+    'O idioma é detectado automaticamente pelo subdomínio. Cada idioma tem sua própria URL única.';
+  const seoFriendly = t.seoFriendly || 'SEO Otimizado';
+  const seoFriendlyDesc =
+    t.seoFriendlyDesc ||
+    'Cada versão traduzida possui URL própria (hreflang), favorecendo indexação e compartilhamento.';
+  const languagesFooter =
+    t.languagesFooter ||
+    'Todas as ferramentas estão disponíveis em todos os idiomas listados acima.';
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900" style={{ background: '#ffffff !important' }}>
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-4">
-            <Globe className="w-12 h-12 text-blue-600 mr-3" />
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-              {t.languagesPageTitle || 'Idiomas Disponíveis'}
-            </h1>
+        <div className="mb-12 text-center">
+          <div className="mb-4 flex items-center justify-center">
+            <Globe className="mr-3 h-12 w-12 text-blue-600" />
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">{pageTitle}</h1>
           </div>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            {t.languagesPageDescription || 'Acesse o MUILTOOLS em seu idioma preferido. Todas as ferramentas estão disponíveis em 20 idiomas diferentes.'}
-          </p>
+          <p className="mx-auto max-w-3xl text-xl text-gray-600 dark:text-gray-300">{pageDesc}</p>
         </div>
 
         {/* Estatísticas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg text-center">
-            <div className="text-3xl font-bold text-blue-600 mb-2">{languages.length}</div>
-            <div className="text-gray-600 dark:text-gray-300">{t.totalLanguages || 'Idiomas Disponíveis'}</div>
+        <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="rounded-xl bg-white p-6 text-center shadow-lg dark:bg-gray-800">
+            <div className="mb-2 text-3xl font-bold text-blue-600">{languages.length}</div>
+            <div className="text-gray-600 dark:text-gray-300">{totalLanguagesLabel}</div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg text-center">
-            <div className="text-3xl font-bold text-green-600 mb-2">100%</div>
-            <div className="text-gray-600 dark:text-gray-300">{t.translationCoverage || 'Cobertura de Tradução'}</div>
+          <div className="rounded-xl bg-white p-6 text-center shadow-lg dark:bg-gray-800">
+            <div className="mb-2 text-3xl font-bold text-green-600">100%</div>
+            <div className="text-gray-600 dark:text-gray-300">{translationCoverageLabel}</div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg text-center">
-            <div className="text-3xl font-bold text-purple-600 mb-2">🌍</div>
-            <div className="text-gray-600 dark:text-gray-300">{t.globalAccess || 'Acesso Global'}</div>
+          <div className="rounded-xl bg-white p-6 text-center shadow-lg dark:bg-gray-800">
+            <div className="mb-2 text-3xl font-bold text-purple-600">🌍</div>
+            <div className="text-gray-600 dark:text-gray-300">{globalAccessLabel}</div>
           </div>
         </div>
 
-        {/* Lista de Idiomas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {languages.map((language) => (
+        {/* Lista */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {languages.map((lang) => (
             <div
-              key={language.code}
-              className={`bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 ${
-                language.isActive
+              key={lang.code}
+              className={`rounded-xl border-2 bg-white p-6 shadow-lg transition-all duration-300 dark:bg-gray-800 ${
+                lang.isActive
                   ? 'border-blue-500 ring-2 ring-blue-200 dark:ring-blue-800'
                   : 'border-transparent hover:border-blue-200 dark:hover:border-blue-700'
               }`}
             >
-              {/* Flag e Nome */}
-              <div className="text-center mb-4">
-                <div className="text-4xl mb-2">{language.flag}</div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                  {language.name}
+              <div className="mb-4 text-center">
+                <div className="mb-2 text-4xl">{lang.flag}</div>
+                <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                  {lang.name}
                 </h3>
-                <div className="text-sm text-gray-500 dark:text-gray-400 font-mono">
-                  {language.code}
-                </div>
-                {language.isActive && (
-                  <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 mt-2">
-                    {t.currentLanguage || 'Idioma Atual'}
+                <div className="font-mono text-sm text-gray-500 dark:text-gray-400">{lang.code}</div>
+                {lang.isActive && (
+                  <div className="mt-2 inline-flex items-center rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    {currentLanguageLabel}
                   </div>
                 )}
               </div>
 
-              {/* Ações */}
               <div className="space-y-2">
-                {/* Botão Visitar */}
                 <a
-                  href={language.url}
+                  href={lang.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
+                  className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors duration-200 hover:bg-blue-700"
                 >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  {t.visitSite || 'Visitar Site'}
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  {visitSiteLabel}
                 </a>
 
-                {/* Botão Copiar URL */}
                 <button
-                  onClick={() => handleCopyUrl(language.url, language.code)}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors duration-200"
+                  onClick={() => handleCopyUrl(lang.url, lang.code)}
+                  className="flex w-full items-center justify-center rounded-lg bg-gray-100 px-4 py-2 text-gray-700 transition-colors duration-200 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  aria-live="polite"
+                  aria-label={`${copyUrlLabel}: ${lang.code}`}
                 >
-                  {copiedUrl === language.code ? (
+                  {copiedCode === lang.code ? (
                     <>
-                      <Check className="w-4 h-4 mr-2 text-green-600" />
-                      {t.copied || 'Copiado!'}
+                      <Check className="mr-2 h-4 w-4 text-green-600" />
+                      {copiedLabel}
                     </>
                   ) : (
                     <>
-                      <Copy className="w-4 h-4 mr-2" />
-                      {t.copyUrl || 'Copiar URL'}
+                      <Copy className="mr-2 h-4 w-4" />
+                      {copyUrlLabel}
                     </>
                   )}
                 </button>
               </div>
 
-              {/* URL Preview */}
-              <div className="mt-3 p-2 bg-gray-50 dark:bg-gray-700 rounded text-xs text-gray-600 dark:text-gray-400 font-mono break-all">
-                {language.url}
+              <div className="mt-3 break-all rounded bg-gray-50 p-2 font-mono text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-400">
+                {lang.url}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Informações Adicionais */}
-        <div className="mt-12 bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            {t.howItWorks || 'Como Funciona'}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Info extra */}
+        <div className="mt-12 rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800">
+          <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">{howItWorks}</h2>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                {t.automaticDetection || 'Detecção Automática'}
+              <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
+                {automaticDetection}
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                {t.automaticDetectionDesc || 'O idioma é detectado automaticamente baseado no subdomínio da URL. Cada idioma tem sua própria URL única.'}
-              </p>
+              <p className="text-gray-600 dark:text-gray-300">{automaticDetectionDesc}</p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                {t.seoFriendly || 'SEO Otimizado'}
+              <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
+                {seoFriendly}
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                {t.seoFriendlyDesc || 'Cada versão traduzida tem sua própria URL, otimizada para mecanismos de busca e fácil compartilhamento.'}
-              </p>
+              <p className="text-gray-600 dark:text-gray-300">{seoFriendlyDesc}</p>
             </div>
           </div>
         </div>
 
-        {/* Rodapé */}
-        <div className="text-center mt-12">
-          <p className="text-gray-600 dark:text-gray-400">
-            {t.languagesFooter || 'Todas as ferramentas estão disponíveis em todos os idiomas listados acima.'}
-          </p>
+        {/* Footer */}
+        <div className="mt-12 text-center">
+          <p className="text-gray-600 dark:text-gray-400">{languagesFooter}</p>
         </div>
+
+        {/* JSON-LD simples para idiomas/URLs alternadas */}
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: t.siteName || 'Muiltools',
+              url: `https://${baseDomain}`,
+              inLanguage: languages.map((l) => l.code),
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: `https://${baseDomain}/search?q={query}`,
+                'query-input': 'required name=query',
+              },
+            }),
+          }}
+        />
       </div>
     </div>
   );

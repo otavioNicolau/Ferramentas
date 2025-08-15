@@ -1027,7 +1027,6 @@ const toolsData = {
 
 const categoriesData: Record<Language, string[]> = {
   'pt-BR': [
-    'Todos',
     'Áudio/Vídeo',
     'PDF',
     'Imagem',
@@ -1040,7 +1039,6 @@ const categoriesData: Record<Language, string[]> = {
     'Internet'
   ],
   en: [
-    'All',
     'Audio/Video',
     'PDF',
     'Image',
@@ -1053,7 +1051,6 @@ const categoriesData: Record<Language, string[]> = {
     'Internet'
   ],
   es: [
-    'Todos',
     'Audio/Video',
     'PDF',
     'Imagen',
@@ -1066,7 +1063,6 @@ const categoriesData: Record<Language, string[]> = {
     'Internet'
   ],
   zh: [
-    '全部',
     '音频/视频',
     'PDF',
     '图像',
@@ -1079,7 +1075,6 @@ const categoriesData: Record<Language, string[]> = {
     '互联网'
   ],
   hi: [
-    'सभी',
     'ऑडियो/वीडियो',
     'PDF',
     'छवि',
@@ -1092,7 +1087,6 @@ const categoriesData: Record<Language, string[]> = {
     'इंटरनेट'
   ],
   ar: [
-    'الكل',
     'صوت/فيديو',
     'PDF',
     'صورة',
@@ -1105,7 +1099,6 @@ const categoriesData: Record<Language, string[]> = {
     'إنترنت'
   ],
   bn: [
-    'সব',
     'অডিও/ভিডিও',
     'PDF',
     'চিত্র',
@@ -1118,7 +1111,6 @@ const categoriesData: Record<Language, string[]> = {
     'ইন্টারনেট'
   ],
   ru: [
-    'Все',
     'Аудио/Видео',
     'PDF',
     'Изображение',
@@ -1131,7 +1123,6 @@ const categoriesData: Record<Language, string[]> = {
     'Интернет'
   ],
   ja: [
-    'すべて',
     'オーディオ/ビデオ',
     'PDF',
     '画像',
@@ -1144,7 +1135,6 @@ const categoriesData: Record<Language, string[]> = {
     'インターネット'
   ],
   de: [
-    'Alle',
     'Audio/Video',
     'PDF',
     'Bild',
