@@ -26,9 +26,9 @@ const subdomainToLanguage: Record<string, string> = {
 
 // Função para detectar idioma baseado no subdomínio
 function detectLanguageFromRequest(request: NextRequest): string {
-  // Primeiro tenta obter do header Host (para testes e proxies)
-  const hostHeader = request.headers.get('host');
-  let hostname = hostHeader || request.nextUrl.hostname;
+  // Primeiro tenta obter do header X-Forwarded-Host ou Host (para proxies)
+  const hostHeader = request.headers.get('x-forwarded-host') || request.headers.get('host')
+  let hostname = hostHeader || request.nextUrl.hostname
   
   // Remove a porta se presente
   hostname = hostname.split(':')[0];
@@ -52,14 +52,16 @@ function detectLanguageFromRequest(request: NextRequest): string {
 function getSiteUrl(request: NextRequest): string {
   // Sempre usar a URL do request para garantir URL dinâmica
   const url = new URL(request.url)
-  const dynamicUrl = `${url.protocol}//${url.host}`
-  
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || url.host
+  const protocol = request.headers.get('x-forwarded-proto') || url.protocol.replace(':', '')
+  const dynamicUrl = `${protocol}://${host}`
+
   // Só usar variável de ambiente se não for localhost e estiver definida
   const envUrl = process.env.NEXT_PUBLIC_SITE_URL
   if (envUrl && envUrl.trim() !== '' && !envUrl.includes('localhost')) {
     return envUrl
   }
-  
+
   return dynamicUrl
 }
 
