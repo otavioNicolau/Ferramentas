@@ -1,5 +1,8 @@
 import { getDictionary, getRequestLang } from '@/i18n/server';
 
+// Forçar renderização dinâmica para usar headers/cookies
+export const dynamic = 'force-dynamic';
+
 export default async function PrivacyPolicyPage() {
   const lang = await getRequestLang();
   const t = await getDictionary(lang);

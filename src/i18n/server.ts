@@ -33,6 +33,13 @@ export async function getDictionary(lang: Lang): Promise<Record<string, string>>
 }
 
 export async function getRequestLang(): Promise<Lang> {
+  // Durante o build (static generation), não temos acesso a headers/cookies
+  // Verificar se estamos em contexto de build
+  if (typeof window === 'undefined' && !process.env.NEXT_RUNTIME) {
+    // Durante build time, retornar idioma padrão
+    return DEFAULT_LANG;
+  }
+  
   try {
     // Tentar ler do header x-lang primeiro (setado pelo middleware)
     const headersList = await headers();

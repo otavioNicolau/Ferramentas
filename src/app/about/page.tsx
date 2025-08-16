@@ -1,5 +1,8 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 import { getDictionary, getRequestLang } from '@/i18n/server';
+
+// Forçar renderização dinâmica para usar headers/cookies
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
   const lang = await getRequestLang();

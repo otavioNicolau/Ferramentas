@@ -2,6 +2,9 @@ import { tools, categories } from '@/data/tools';
 import { getRequestLang, getDictionary } from '@/i18n/server';
 import ToolsPageClient from '@/components/ToolsPageClient';
 
+// Forçar renderização dinâmica para usar headers/cookies
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const lang = await getRequestLang();
   const dict = await getDictionary(lang);

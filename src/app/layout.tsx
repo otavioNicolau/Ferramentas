@@ -7,6 +7,9 @@ import CookieBanner from "@/components/CookieBanner";
 import { getRequestLang, getDictionary } from "@/i18n/server";
 import { I18nProvider } from "@/i18n/client";
 
+// Forçar renderização dinâmica para usar headers/cookies
+export const dynamic = 'force-dynamic';
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
