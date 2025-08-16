@@ -4,10 +4,10 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { QrCode, Download } from 'lucide-react';
 import QRCode from 'qrcode';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 export default function GerarQrcodePage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [qrContent, setQrContent] = useState('');
   const [contentType, setContentType] = useState('text');
   const [qrCodeUrl, setQrCodeUrl] = useState('');

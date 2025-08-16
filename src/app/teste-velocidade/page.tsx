@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Wifi, Play, RotateCcw, Gauge } from 'lucide-react';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 interface SpeedTestResult {
   download: number;
@@ -21,7 +21,7 @@ interface ConnectionInfo {
 }
 
 export default function TesteVelocidadePage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [isTestingDownload, setIsTestingDownload] = useState(false);
   const [isTestingUpload, setIsTestingUpload] = useState(false);
   const [isTestingPing, setIsTestingPing] = useState(false);

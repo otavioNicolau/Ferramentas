@@ -4,7 +4,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Download, ExternalLink, AlertCircle, Check, Loader2, Play, Heart, MessageCircle, Share2, Eye, User, Music, Copy, Share } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { saveAs } from 'file-saver';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 interface VideoInfo {
   id: string;
@@ -32,7 +32,7 @@ interface DownloadItem {
 }
 
 export default function BaixarTikTok() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [urls, setUrls] = useState('');
   const [videoInfos, setVideoInfos] = useState<VideoInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);

@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 import { Upload, FileText, Minimize2 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
 export default function CompactarPDFPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [originalSize, setOriginalSize] = useState<number>(0);

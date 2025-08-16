@@ -1,9 +1,7 @@
-'use client';
-
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 export default function TermsOfUsePage() {
-  const { t } = useI18n();
+  const t = getTranslations();
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">

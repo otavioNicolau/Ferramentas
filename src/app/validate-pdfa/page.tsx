@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, FileText, CheckCircle, XCircle, AlertTriangle, Trash2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
-import { useI18n } from '@/i18n/client';
+import { getTranslations, getCurrentLanguage } from '@/config/language';
 
 interface ValidationResult {
   fileName: string;
@@ -17,7 +17,8 @@ interface ValidationResult {
 }
 
 export default function ValidatePdfaPage() {
-  const { t, currentLanguage } = useI18n();
+  const t = getTranslations();
+  const currentLang = getCurrentLanguage();
   const [, setSelectedFile] = useState<File | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [result, setResult] = useState<ValidationResult | null>(null);

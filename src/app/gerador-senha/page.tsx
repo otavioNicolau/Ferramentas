@@ -4,7 +4,7 @@ import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Copy, RefreshCw, Shield, Eye, EyeOff } from 'lucide-react';
 import { copyToClipboard } from '@/lib/utils';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 interface PasswordConfig {
   length: number;
@@ -16,7 +16,7 @@ interface PasswordConfig {
 }
 
 export default function GeradorSenhaPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [password, setPassword] = useState('Gx7$kP9#mL2qR8@nF4');
   const [copied, setCopied] = useState(false);
   const [config, setConfig] = useState<PasswordConfig>({

@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Timer, Play, Pause, RotateCcw } from 'lucide-react';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 export default function CronometroPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [time, setTime] = useState(0); // tempo em milissegundos
   const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState<number[]>([]);

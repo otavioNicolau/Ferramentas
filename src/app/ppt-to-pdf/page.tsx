@@ -6,7 +6,7 @@ import { Upload, Download, FileText, CheckCircle, AlertTriangle, Presentation, R
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import JSZip from 'jszip';
 import { parseString } from 'xml2js';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 interface ConversionSettings {
   quality: 'low' | 'medium' | 'high';
@@ -38,7 +38,7 @@ interface PresentationMetadata {
 }
 
 export default function PptToPdfPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [dragActive, setDragActive] = useState(false);

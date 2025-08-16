@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 import { Upload, FileText, Download, Image, Settings, X, Eye } from 'lucide-react';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
@@ -14,7 +14,7 @@ interface RenderedPage {
 }
 
 export default function PdfParaImagemPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);

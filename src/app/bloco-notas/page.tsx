@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { FileEdit, Save, Download, Trash2 } from 'lucide-react';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 export default function BlocoNotasPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [content, setContent] = useState('');
   const [saved, setSaved] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);

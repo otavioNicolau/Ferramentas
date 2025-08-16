@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, AlertTriangle, CheckCircle, Wrench, Trash2, Info, Shield } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 import { isPdfFile } from '@/lib/pdf';
 
 interface RepairResult {
@@ -26,7 +26,7 @@ interface Issue {
 }
 
 export default function RepairPdfPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isRepairing, setIsRepairing] = useState(false);
   const [repairResult, setRepairResult] = useState<RepairResult | null>(null);

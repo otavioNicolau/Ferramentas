@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, Shield, Lock, Eye, EyeOff, Trash2, AlertCircle } from 'lucide-react';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 interface ProtectedPdf {
   fileName: string;
@@ -31,7 +31,7 @@ interface SecuritySettings {
 }
 
 export default function ProtectPdfPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [protectedPdf, setProtectedPdf] = useState<ProtectedPdf | null>(null);

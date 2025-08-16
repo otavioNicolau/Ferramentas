@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 import { FileSpreadsheet, Download, FileText, X, Settings, AlertCircle } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
@@ -25,7 +25,7 @@ interface ConversionOptions {
 }
 
 export default function ExcelToPdfPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [sheets, setSheets] = useState<SheetData[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);

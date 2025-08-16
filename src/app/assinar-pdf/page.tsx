@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, PenTool, Type, Image as ImageIcon, Download, X } from 'lucide-react';
 import { saveAs } from 'file-saver';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 import Image from 'next/image';
 
 interface Signature {
@@ -27,7 +27,7 @@ interface PDFPage {
 }
 
 export default function AssinarPdfPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [pageCount, setPageCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);

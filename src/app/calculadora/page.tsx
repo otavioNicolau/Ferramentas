@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Delete } from 'lucide-react';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 export default function CalculadoraPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [display, setDisplay] = useState('0');
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);

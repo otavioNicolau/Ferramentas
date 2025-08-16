@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { FileText, Type, Hash, Minus } from 'lucide-react';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 interface TextStats {
   characters: number;
@@ -15,7 +15,7 @@ interface TextStats {
 }
 
 export default function ContadorCaracteresPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [text, setText] = useState('');
   const [stats, setStats] = useState<TextStats>({
     characters: 0,

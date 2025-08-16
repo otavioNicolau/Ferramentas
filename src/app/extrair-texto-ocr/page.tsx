@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Eye, Download, Copy, FileText, Image as ImageIcon, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { saveAs } from 'file-saver';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 interface OCRResult {
   text: string;
@@ -14,7 +14,7 @@ interface OCRResult {
 }
 
 export default function ExtrairTextoOcrPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [results, setResults] = useState<{ file: File; result: OCRResult | null; error?: string }[]>([]);
