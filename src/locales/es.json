@@ -38,6 +38,7 @@
   "common.delete": "Eliminar",
   "common.edit": "Editar",
   "common.close": "Cerrar",
+  "common.open": "Abrir",
   "hero.title": "Herramientas Online Gratuitas",
   "hero.subtitle": "Más de 50 herramientas útiles para PDF, convertidores, generadores y mucho más",
   "hero.description": "Todas las herramientas que necesitas en un solo lugar. Rápido, seguro y gratuito.",
@@ -50,10 +51,21 @@
   "footer.copyright": "© 2024 MuilTools. Todos los derechos reservados.",
   "footer.privacy": "Política de Privacidad",
   "footer.terms": "Términos de Uso",
+  "footer.languages": "Languages",
+  "footer.legal": "Legal",
+  "footer.sitemap": "Sitemap",
+  "footer.navigation": "Navigation",
+  "footer.followUs": "Follow us",
+  "footer.description": "Useful tools for everyday use — simple, fast and secure.",
+  "footer.privacyText": "We respect your privacy.",
+  "footer.madeWith": "Made with",
+  "footer.by": "by",
   "cookies.title": "Cookies",
   "cookies.message": "Utilizamos cookies para mejorar tu experiencia.",
   "cookies.accept": "Aceptar",
   "cookies.decline": "Rechazar",
+  "privacy.title": "🔒 Privacy Guaranteed",
+  "privacy.description": "All files are processed locally in your browser. Your information is not sent to our servers.",
   "categories": {
     "audio_video": "Audio/Video",
     "pdf": "PDF",
@@ -70,6 +82,5 @@
     "financeiro": "Financiero",
     "financial": "Financiero",
     "internet": "Internet"
-  },
-  "common.open": "Abrir"
+  }
 }
