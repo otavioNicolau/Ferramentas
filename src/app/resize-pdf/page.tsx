@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, Maximize, Trash2, Eye, AlertCircle, CheckCircle, RotateCw } from 'lucide-react';
 import { PDFDocument, PageSizes, degrees } from 'pdf-lib';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 interface PageSize {
   name: string;
@@ -37,7 +37,7 @@ interface ResizedPdf {
 }
 
 export default function ResizePdfPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [resizedPdf, setResizedPdf] = useState<ResizedPdf | null>(null);

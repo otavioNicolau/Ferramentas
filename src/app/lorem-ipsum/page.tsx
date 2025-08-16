@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Type, Copy, RotateCcw } from 'lucide-react';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 import { copyToClipboard as copyTextToClipboard } from '@/lib/utils';
 
 export default function LoremIpsumPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [paragraphs, setParagraphs] = useState(3);
   const [words, setWords] = useState(50);
   const [generationType, setGenerationType] = useState<'paragraphs' | 'words' | 'bytes'>('paragraphs');

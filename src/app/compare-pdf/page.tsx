@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, FileText, Eye, Trash2, AlertCircle, CheckCircle, GitCompare, ArrowRight } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 import { isPdfFile } from '@/lib/pdf';
 
 interface ComparisonResult {
@@ -30,7 +30,7 @@ interface PageComparison {
 }
 
 export default function ComparePdfPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [file1, setFile1] = useState<File | null>(null);
   const [file2, setFile2] = useState<File | null>(null);
   const [isComparing, setIsComparing] = useState(false);

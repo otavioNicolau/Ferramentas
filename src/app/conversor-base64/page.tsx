@@ -4,10 +4,10 @@ import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Copy, ArrowUpDown, FileText } from 'lucide-react';
 import { copyToClipboard } from '@/lib/utils';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 export default function ConversorBase64Page() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [text, setText] = useState('');
   const [base64, setBase64] = useState('');
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');

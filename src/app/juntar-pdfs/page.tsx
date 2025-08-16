@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 import { Upload, Plus, Trash2, FileText, Download, ArrowUp, ArrowDown } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
@@ -15,7 +15,7 @@ interface PdfFile {
 }
 
 export default function JuntarPdfsPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [selectedFiles, setSelectedFiles] = useState<PdfFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState<number>(0);

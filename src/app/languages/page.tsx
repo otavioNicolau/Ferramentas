@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { getTranslations, LANGUAGE_CONFIG, getCurrentLanguage } from '@/config/language';
+import { useI18n } from '@/i18n/client';
+import { LANGUAGE_CONFIG } from '@/config/language';
 import { Globe, ExternalLink, Copy, Check } from 'lucide-react';
 import { copyToClipboard } from '@/lib/utils';
 
@@ -14,8 +15,8 @@ interface LanguageInfo {
 }
 
 export default function LanguagesPage() {
-  const t = getTranslations();
-  const currentLanguage = getCurrentLanguage();
+  const { t, locale } = useI18n();
+  const currentLanguage = locale;
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   // Domínio base (pode vir de env)

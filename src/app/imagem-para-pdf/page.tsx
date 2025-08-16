@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 import { Upload, FileImage, Download, X, RotateCw, Move, Settings } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
@@ -27,7 +27,7 @@ const PAGE_SIZES: { [key: string]: PageSize } = {
 };
 
 export default function ImagemParaPdfPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [selectedImages, setSelectedImages] = useState<ImageFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);

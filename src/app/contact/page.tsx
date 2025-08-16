@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 import { Mail, Copy, CheckCircle2 } from 'lucide-react';
 
 export default function ContactPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
 
   // Texto via i18n (fallbacks seguros)

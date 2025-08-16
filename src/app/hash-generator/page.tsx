@@ -4,10 +4,10 @@ import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Copy, Hash } from 'lucide-react';
 import { copyToClipboard } from '@/lib/utils';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 export default function HashGeneratorPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [text, setText] = useState('');
   const [hashes, setHashes] = useState({
     md5: '',

@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, Unlock, Lock, Eye, EyeOff, Trash2, AlertCircle, CheckCircle } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 interface UnlockedPdf {
   fileName: string;
@@ -17,7 +17,7 @@ interface UnlockedPdf {
 }
 
 export default function UnlockPdfPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [unlockedPdf, setUnlockedPdf] = useState<UnlockedPdf | null>(null);

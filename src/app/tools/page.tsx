@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 import ToolCard from '@/components/ToolCard';
 import { tools, categories } from '@/data/tools';
 import { Search, Filter, Grid, List, Star, TrendingUp, X } from 'lucide-react';
@@ -18,7 +18,7 @@ const normalize = (s: string) =>
 const toKey = (label: string) => normalize(label).replace(/[^\w]+/g, '_') || 'other';
 
 export default function ToolsPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
 
   // Estado
   const [searchTerm, setSearchTerm] = useState('');

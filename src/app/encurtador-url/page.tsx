@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Link2, Copy, RotateCcw, ExternalLink, Clock } from 'lucide-react';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 interface ShortenedUrl {
   original: string;
@@ -13,7 +13,7 @@ interface ShortenedUrl {
 }
 
 export default function EncurtadorUrlPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [originalUrl, setOriginalUrl] = useState('');
   const [shortenedUrls, setShortenedUrls] = useState<ShortenedUrl[]>([]);
   const [copied, setCopied] = useState<string | null>(null);

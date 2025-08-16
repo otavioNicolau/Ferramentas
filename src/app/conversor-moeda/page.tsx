@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { DollarSign, ArrowLeftRight, TrendingUp, Clock } from 'lucide-react';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 interface Currency {
   code: string;
@@ -20,7 +20,7 @@ interface ExchangeRate {
 }
 
 export default function ConversorMoedaPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [amount, setAmount] = useState('100');
   const [fromCurrency, setFromCurrency] = useState('USD');
   const [toCurrency, setToCurrency] = useState('BRL');

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Copy, RefreshCw, Palette } from 'lucide-react';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 interface Color {
   hex: string;
@@ -12,7 +12,7 @@ interface Color {
 }
 
 export default function GeradorCoresPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [color, setColor] = useState<Color>({
     hex: '#3B82F6',
     rgb: 'rgb(59, 130, 246)',

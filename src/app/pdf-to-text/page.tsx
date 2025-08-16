@@ -5,7 +5,7 @@ import ToolLayout from '@/components/ToolLayout';
 import { Upload, FileText, Download, Copy, Trash2, Eye, Search, Type } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 // Configurar o worker do PDF.js
 if (typeof window !== 'undefined') {
@@ -30,7 +30,7 @@ interface PdfInfo {
 }
 
 export default function PdfToTextPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfInfo, setPdfInfo] = useState<PdfInfo | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
