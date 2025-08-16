@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 import { Upload, FileText, Download, Scissors, Trash2, Eye, AlertCircle } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 
@@ -23,7 +23,7 @@ interface PageRange {
 }
 
 export default function SplitPdfPage() {
-  const t = getTranslations();
+  const { t } = useI18n();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [splitResults, setSplitResults] = useState<SplitResult[]>([]);

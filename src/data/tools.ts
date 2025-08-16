@@ -32,7 +32,7 @@ import {
   Archive,
   Plus
 } from 'lucide-react';
-import { getCurrentLanguage, Language } from '@/config/language';
+import { Lang } from '@/i18n/config';
 
 // Dados das ferramentas movidos para toolsData abaixo
 
@@ -1025,7 +1025,7 @@ const toolsData = {
   }
 };
 
-const categoriesData: Record<Language, string[]> = {
+const categoriesData: Record<Lang, string[]> = {
   'pt-BR': [
     'Áudio/Vídeo',
     'PDF',
@@ -1148,17 +1148,15 @@ const categoriesData: Record<Language, string[]> = {
   ]
 };
 
-export function getTools() {
-  const language = getCurrentLanguage();
-  const langData = toolsData[language];
+export function getTools(lang: Lang = 'pt-BR') {
+  const langData = toolsData[lang];
   return langData ? langData.tools : toolsData['pt-BR'].tools;
 }
 
-export function getCategories() {
-  const language = getCurrentLanguage();
-  return categoriesData[language] || categoriesData['pt-BR'];
+export function getCategories(lang: Lang = 'pt-BR') {
+  return categoriesData[lang] || categoriesData['pt-BR'];
 }
 
-// Manter compatibilidade com código existente
+// Manter compatibilidade com código existente (usando idioma padrão)
 export const tools = getTools();
 export const categories = getCategories();

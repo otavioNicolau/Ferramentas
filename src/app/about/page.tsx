@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import { getTranslations } from '@/config/language';
+import { getDictionary, getRequestLang } from '@/i18n/server';
 
-export function generateMetadata(): Metadata {
-  const t = getTranslations();
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getRequestLang();
+  const t = await getDictionary(lang);
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 
   return {
@@ -15,8 +16,9 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function AboutPage() {
-  const t = getTranslations();
+export default async function AboutPage() {
+  const lang = await getRequestLang();
+  const t = await getDictionary(lang);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">

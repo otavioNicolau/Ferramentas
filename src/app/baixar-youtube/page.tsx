@@ -3,21 +3,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { Search, Download, Video, Music, AlertCircle, Loader2, X, Info, ExternalLink, Youtube } from 'lucide-react';
 import { saveAs } from 'file-saver';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 import useDownloadManager from '@/hooks/useDownloadManager';
 
-// Hook para evitar problemas de hidratação com traduções
-const useClientTranslations = () => {
-  const [translations, setTranslations] = useState<Record<string, string> | null>(null);
-  const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-    setTranslations(getTranslations());
-  }, []);
-
-  return { translations, isClient };
-};
 
 type VideoFormat = {
   itag: number;
@@ -41,7 +30,7 @@ type VideoInfo = {
 };
 
 export default function BaixarYoutubePage() {
-  const { translations: t, isClient } = useClientTranslations();
+  const { t } = useI18n();
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
