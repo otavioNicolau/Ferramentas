@@ -4,7 +4,6 @@ import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Download, Unlock, Lock, Eye, EyeOff, Trash2, AlertCircle, CheckCircle } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
-import { getTranslations } from '@/config/language';
 
 interface UnlockedPdf {
   fileName: string;
@@ -17,7 +16,6 @@ interface UnlockedPdf {
 }
 
 export default function UnlockPdfPage() {
-  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [unlockedPdf, setUnlockedPdf] = useState<UnlockedPdf | null>(null);
@@ -181,8 +179,8 @@ export default function UnlockPdfPage() {
 
   return (
     <ToolLayout
-      title={t.unlockPdf.title}
-      description={t.unlockPdf.description}
+      title="Unlock PDF"
+      description="Remova senhas e restrições de documentos PDF protegidos"
     >
       <div className="space-y-6">
         {/* Upload de Arquivo */}
@@ -202,7 +200,7 @@ export default function UnlockPdfPage() {
           >
             <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
             <p className="text-lg font-medium text-gray-900 mb-2">
-              {t.unlockPdf.dragDropText}
+              Arraste e solte seu arquivo PDF protegido aqui
             </p>
             <p className="text-gray-600 mb-4">ou</p>
             <input
@@ -216,7 +214,7 @@ export default function UnlockPdfPage() {
               onClick={() => fileInputRef.current?.click()}
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
             >
-              {t.unlockPdf.selectFileButton}
+              Selecionar Arquivo
             </button>
           </div>
         </div>
@@ -225,13 +223,13 @@ export default function UnlockPdfPage() {
         {file && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">{t.unlockPdf.selectedFile}</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Arquivo Selecionado</h3>
               <button
                 onClick={clearAll}
                 className="text-gray-600 hover:text-gray-800 flex items-center gap-1"
               >
                 <Trash2 size={16} />
-                {t.unlockPdf.clear}
+                Limpar
               </button>
             </div>
             
@@ -247,14 +245,14 @@ export default function UnlockPdfPage() {
             {needsPassword && (
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.unlockPdf.pdfPassword}
+                  Senha do PDF
                 </label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder={t.unlockPdf.enterPassword}
+                    placeholder="Digite a senha do PDF"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
                     onKeyPress={(e) => e.key === 'Enter' && unlockPdf()}
                   />
@@ -285,7 +283,7 @@ export default function UnlockPdfPage() {
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               <Unlock size={20} />
-              {isProcessing ? t.unlockPdf.unlocking : t.unlockPdf.unlockPdf}
+              {isProcessing ? 'Desbloqueando...' : 'Desbloquear PDF'}
             </button>
           </div>
         )}
@@ -294,13 +292,13 @@ export default function UnlockPdfPage() {
         {unlockedPdf && (
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">{t.unlockPdf.pdfUnlocked}</h3>
+              <h3 className="text-lg font-semibold text-gray-800">PDF Desbloqueado</h3>
               <button
                 onClick={clearAll}
                 className="text-gray-600 hover:text-gray-800 flex items-center gap-1"
               >
                 <Trash2 size={16} />
-                {t.unlockPdf.clear}
+                Limpar
               </button>
             </div>
             
@@ -308,28 +306,28 @@ export default function UnlockPdfPage() {
               <div className="flex items-center gap-2 mb-3">
                 <CheckCircle className="text-green-600" size={20} />
                 <span className="font-medium text-green-800">
-                  {unlockedPdf.wasProtected ? t.unlockPdf.unlockSuccess : t.unlockPdf.processedNotProtected}
+                  {unlockedPdf.wasProtected ? 'PDF desbloqueado com sucesso!' : 'PDF processado (não estava protegido)'}
                 </span>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-4">
                 <div>
-                  <span className="text-green-700 font-medium">{t.unlockPdf.fileName}:</span>
+                  <span className="text-green-700 font-medium">Arquivo:</span>
                   <p className="text-green-800">{unlockedPdf.fileName}</p>
                 </div>
                 <div>
-                  <span className="text-green-700 font-medium">{t.unlockPdf.fileSize}:</span>
+                  <span className="text-green-700 font-medium">Tamanho:</span>
                   <p className="text-green-800">{formatFileSize(unlockedPdf.fileSize)}</p>
                 </div>
                 <div>
-                  <span className="text-green-700 font-medium">{t.unlockPdf.pageCount}:</span>
+                  <span className="text-green-700 font-medium">Páginas:</span>
                   <p className="text-green-800">{unlockedPdf.pageCount}</p>
                 </div>
               </div>
               
               {unlockedPdf.wasProtected && unlockedPdf.removedRestrictions.length > 0 && (
                 <div>
-                  <span className="text-green-700 font-medium">{t.unlockPdf.restrictionsRemoved}:</span>
+                  <span className="text-green-700 font-medium">Restrições removidas:</span>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {unlockedPdf.removedRestrictions.map((restriction, index) => (
                       <span key={index} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
@@ -346,34 +344,34 @@ export default function UnlockPdfPage() {
               className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
             >
               <Download size={20} />
-              {t.unlockPdf.downloadUnlocked}
+              Baixar PDF Desbloqueado
             </button>
           </div>
         )}
 
         {/* Informações */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">🔓 {t.unlockPdf.howItWorks}:</h4>
+          <h4 className="font-semibold text-blue-900 mb-2">🔓 Como funciona:</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• {t.unlockPdf.feature1}</li>
-            <li>• {t.unlockPdf.feature2}</li>
-            <li>• {t.unlockPdf.feature3}</li>
-            <li>• {t.unlockPdf.feature4}</li>
-            <li>• {t.unlockPdf.feature5}</li>
+            <li>• Remove senhas de abertura de documentos PDF</li>
+            <li>• Elimina restrições de impressão, cópia e edição</li>
+            <li>• Cria uma nova versão do PDF sem proteções</li>
+            <li>• Mantém todo o conteúdo e formatação originais</li>
+            <li>• Processamento realizado localmente no navegador</li>
           </ul>
         </div>
 
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <h4 className="font-semibold text-yellow-900 mb-2 flex items-center gap-2">
             <AlertCircle size={16} />
-            ⚠️ {t.unlockPdf.important}
+            ⚠️ Importante
           </h4>
           <ul className="text-sm text-yellow-800 space-y-1">
-            <li>• {t.unlockPdf.warning1}</li>
-            <li>• {t.unlockPdf.warning2}</li>
-            <li>• {t.unlockPdf.warning3}</li>
-            <li>• {t.unlockPdf.warning4}</li>
-            <li>• {t.unlockPdf.warning5}</li>
+            <li>• Use apenas em PDFs que você possui ou tem autorização para desbloquear</li>
+            <li>• Respeite os direitos autorais e termos de uso dos documentos</li>
+            <li>• Alguns PDFs com criptografia avançada podem não ser desbloqueáveis</li>
+            <li>• A senha é necessária apenas para PDFs protegidos por senha</li>
+            <li>• Processamento seguro - senhas não são armazenadas</li>
           </ul>
         </div>
       </div>

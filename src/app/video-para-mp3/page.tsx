@@ -1,7 +1,5 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
 import { useState, useRef, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Music, Download, AlertCircle, CheckCircle, Loader2, X, Settings, FileVideo } from 'lucide-react';
@@ -25,23 +23,67 @@ export default function VideoParaMp3Page() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const ffmpegRef = useRef<FFmpeg | null>(null);
 
-  // const addLog = (message: string) => {
-  //   setLogMessages(prev => [...prev, message]);
-  // };
-  const addLog = (message: string) => {
-    // Temporariamente desabilitado
-  };
-
   // Carregar FFmpeg quando o componente montar
-  // useEffect(() => {
-  //   // Verificar se estamos no cliente
-  //   if (typeof window === 'undefined') {
-  //     return;
-  //   }
-  //   
-  //   // Temporariamente desabilitado para debug
-  //   console.log('FFmpeg loading disabled for build');
-  // }, []);
+  useEffect(() => {
+    const loadFFmpeg = async () => {
+      try {
+        setFfmpegLoading(true);
+        addLog('Carregando FFmpeg...');
+        
+        // Importar FFmpeg dinamicamente
+        const { FFmpeg } = await import('@ffmpeg/ffmpeg');
+        await import('@ffmpeg/util');
+        
+        // Criar instância do FFmpeg
+        const ffmpeg = new FFmpeg();
+        ffmpegRef.current = ffmpeg;
+        
+        // Configurar log
+        ffmpeg.on('log', ({ message }) => {
+          addLog(message);
+        });
+        
+        // Configurar progresso
+        ffmpeg.on('progress', ({ progress }) => {
+          setProgress(Math.round(progress * 100));
+        });
+        
+        // Carregar FFmpeg
+        await ffmpeg.load();
+        
+        addLog('FFmpeg carregado com sucesso!');
+        setFfmpegLoaded(true);
+      } catch (error) {
+        console.error('Erro ao carregar FFmpeg:', error);
+        setError('Não foi possível carregar o conversor. Tente recarregar a página.');
+        addLog(`Erro ao carregar FFmpeg: ${error instanceof Error ? error.message : String(error)}`);
+      } finally {
+        setFfmpegLoading(false);
+      }
+    };
+    
+    loadFFmpeg();
+    
+    // Limpar quando o componente desmontar
+    return () => {
+      if (ffmpegRef.current) {
+        try {
+          ffmpegRef.current.terminate();
+        } catch (e) {
+          console.error('Erro ao terminar FFmpeg:', e);
+        }
+      }
+      
+      // Limpar URLs de objeto
+      if (outputFile) {
+        URL.revokeObjectURL(outputFile.url);
+      }
+    };
+  }, []);
+  
+  const addLog = (message: string) => {
+    setLogMessages(prev => [...prev, message]);
+  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -55,7 +97,7 @@ export default function VideoParaMp3Page() {
         setError(null);
         addLog(`Arquivo selecionado: ${file.name} (${formatFileSize(file.size)})`);
       } else {
-        setError(t.videoToMp3.unsupportedFormat);
+        setError('Formato de arquivo não suportado. Por favor, selecione um vídeo válido.');
       }
     }
   };
@@ -73,7 +115,7 @@ export default function VideoParaMp3Page() {
         setError(null);
         addLog(`Arquivo arrastado: ${file.name} (${formatFileSize(file.size)})`);
       } else {
-        setError(t.videoToMp3.unsupportedFormat);
+        setError('Formato de arquivo não suportado. Por favor, selecione um vídeo válido.');
       }
     }
   };
@@ -110,13 +152,13 @@ export default function VideoParaMp3Page() {
         outputFileName
       ];
       
-      addLog(`${t.videoToMp3.executingCommand}: ffmpeg ${command.join(' ')}`);
+      addLog(`Executando comando: ffmpeg ${command.join(' ')}`);
       
       // Executar comando
       await ffmpeg.exec(command);
       
       // Ler arquivo de saída
-      addLog(t.videoToMp3.readingConvertedFile);
+      addLog('Lendo arquivo convertido...');
       const data = await ffmpeg.readFile(outputFileName);
       
       // Criar URL para download
@@ -128,11 +170,11 @@ export default function VideoParaMp3Page() {
       const outputName = originalName.replace(/\.[^\.]+$/, '.mp3');
       
       setOutputFile({ url, name: outputName });
-      addLog(t.videoToMp3.conversionSuccess);
+      addLog('Conversão concluída com sucesso!');
     } catch (error) {
       console.error('Erro na conversão:', error);
       setError(`Erro na conversão: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
-      addLog(`${t.videoToMp3.conversionError}: ${error instanceof Error ? error.message : String(error)}`);
+      addLog(`Erro na conversão: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setIsProcessing(false);
     }
@@ -141,7 +183,7 @@ export default function VideoParaMp3Page() {
   const downloadMp3 = () => {
     if (outputFile) {
       saveAs(outputFile.url, outputFile.name);
-      addLog(`${t.videoToMp3.downloadStarted}: ${outputFile.name}`);
+      addLog(`Download iniciado: ${outputFile.name}`);
     }
   };
 
@@ -164,7 +206,7 @@ export default function VideoParaMp3Page() {
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-    addLog(t.videoToMp3.converterRestarted);
+    addLog('Conversor reiniciado');
   };
 
   return (
@@ -182,10 +224,10 @@ export default function VideoParaMp3Page() {
         >
           <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            {t.videoToMp3.selectOrDragVideo}
+            Selecione ou arraste um vídeo
           </h3>
           <p className="text-gray-600 mb-4">
-            {t.videoToMp3.supportedFormats}
+            Formatos suportados: MP4, AVI, MOV, WEBM, MKV, FLV, WMV
           </p>
           <input
             ref={fileInputRef}
@@ -201,7 +243,7 @@ export default function VideoParaMp3Page() {
               fileInputRef.current?.click();
             }}
           >
-            {t.videoToMp3.chooseFile}
+            Escolher Arquivo
           </button>
         </div>
 
@@ -228,34 +270,34 @@ export default function VideoParaMp3Page() {
           <div className="bg-gray-50 rounded-lg p-6">
             <div className="flex items-center gap-2 mb-4">
               <Settings size={20} className="text-gray-700" />
-              <h3 className="text-lg font-semibold text-gray-800">{t.videoToMp3.conversionSettings}</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Configurações de Conversão</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.videoToMp3.audioQuality}
+                  Qualidade do Áudio
                 </label>
                 <select 
                   value={audioQuality}
                   onChange={(e) => setAudioQuality(e.target.value)}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="128">{t.videoToMp3.qualityStandard}</option>
-                    <option value="192">{t.videoToMp3.qualityHigh}</option>
-                    <option value="320">{t.videoToMp3.qualityMaximum}</option>
+                  <option value="128">128 kbps (Padrão)</option>
+                  <option value="192">192 kbps (Alta)</option>
+                  <option value="320">320 kbps (Máxima)</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.videoToMp3.sampleRate}
+                  Taxa de Amostragem
                 </label>
                 <select 
                   value={sampleRate}
                   onChange={(e) => setSampleRate(e.target.value)}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="44100">{t.videoToMp3.sampleRateStandard}</option>
-                    <option value="48000">{t.videoToMp3.sampleRateHigh}</option>
+                  <option value="44100">44.1 kHz (Padrão)</option>
+                  <option value="48000">48 kHz</option>
                 </select>
               </div>
             </div>
@@ -275,7 +317,7 @@ export default function VideoParaMp3Page() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm font-semibold text-blue-900">
-                {t.videoToMp3.convertingVideo}
+                Convertendo vídeo para MP3...
               </span>
               <span className="text-sm font-bold text-blue-900">
                 {progress}%
@@ -301,18 +343,18 @@ export default function VideoParaMp3Page() {
               {ffmpegLoading ? (
                 <>
                   <Loader2 size={20} className="animate-spin" />
-                  <span className="font-medium">{t.videoToMp3.loadingConverter}</span>
+                  <span className="font-medium">Carregando conversor...</span>
                 </>
               ) : (
                 <>
                   <Music size={20} />
-                  <span className="font-medium">{t.videoToMp3.convertToMp3}</span>
+                  <span className="font-medium">Converter para MP3</span>
                 </>
               )}
             </button>
             {ffmpegLoading && (
               <p className="text-sm text-gray-600 mt-2">
-                {t.videoToMp3.loadingConverterMessage}
+                Carregando o conversor, isso pode levar alguns segundos...
               </p>
             )}
           </div>
@@ -323,14 +365,14 @@ export default function VideoParaMp3Page() {
           <div className="bg-green-50 border border-green-200 rounded-lg p-6">
             <div className="flex items-center gap-2 mb-4">
               <CheckCircle size={20} className="text-green-600" />
-              <h3 className="text-lg font-semibold text-green-800">{t.videoToMp3.conversionCompleted}</h3>
+              <h3 className="text-lg font-semibold text-green-800">Conversão Concluída</h3>
             </div>
             <div className="bg-white border border-green-200 rounded-lg p-4 mb-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Music className="text-green-600" size={24} />
                 <div>
                   <h4 className="font-medium text-gray-900">{outputFile.name}</h4>
-                  <p className="text-sm text-gray-600">{t.videoToMp3.audioMp3} • {audioQuality} kbps</p>
+                  <p className="text-sm text-gray-600">Áudio MP3 • {audioQuality} kbps</p>
                 </div>
               </div>
               <button
@@ -338,7 +380,7 @@ export default function VideoParaMp3Page() {
                 className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors flex items-center gap-2"
               >
                 <Download size={16} />
-                {t.videoToMp3.downloadMp3}
+                Baixar MP3
               </button>
             </div>
             <div className="text-center">
@@ -346,7 +388,7 @@ export default function VideoParaMp3Page() {
                 onClick={resetConverter}
                 className="text-blue-600 hover:text-blue-800 font-medium"
               >
-                {t.videoToMp3.convertAnotherVideo}
+                Converter outro vídeo
               </button>
             </div>
           </div>
@@ -356,20 +398,20 @@ export default function VideoParaMp3Page() {
         {!selectedFile && !isProcessing && !outputFile && (
           <div className="text-center py-8 text-gray-600">
             <Music className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-            <p className="font-medium text-gray-700">{t.videoToMp3.noVideoSelected}</p>
-              <p className="text-sm mt-1 text-gray-500">{t.videoToMp3.selectVideoToExtract}</p>
+            <p className="font-medium text-gray-700">Nenhum vídeo selecionado</p>
+            <p className="text-sm mt-1 text-gray-500">Selecione um vídeo para extrair o áudio em formato MP3</p>
           </div>
         )}
 
         {/* Informações */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-2">💡 {t.videoToMp3.howItWorks}:</h4>
-              <ul className="text-sm text-blue-800 space-y-1">
-                <li>• {t.videoToMp3.localProcessing}</li>
-                <li>• {t.videoToMp3.noServerUpload}</li>
-                <li>• {t.videoToMp3.multipleFormats}</li>
-                <li>• {t.videoToMp3.adjustableQuality}</li>
-                <li>• {t.videoToMp3.fastSecureProcess}</li>
+          <h4 className="font-semibold text-blue-900 mb-2">💡 Como funciona:</h4>
+          <ul className="text-sm text-blue-800 space-y-1">
+            <li>• Todo o processamento é feito localmente no seu navegador</li>
+            <li>• Seus arquivos não são enviados para nenhum servidor</li>
+            <li>• Suporta vários formatos de vídeo populares</li>
+            <li>• Qualidade ajustável para diferentes necessidades</li>
+            <li>• Processo rápido e seguro para extrair áudio de vídeos</li>
           </ul>
         </div>
       </div>

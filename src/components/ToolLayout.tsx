@@ -12,8 +12,12 @@ export default function ToolLayout({ title, description, children }: ToolLayoutP
   const t = getTranslations();
 
   // Chaves de tradução com fallback
-  const privacyTitle = t.privacyNoticeTitle || '🔒 Privacidade Garantida';
-  const privacyBody = t.privacyNoticeBody || 'Todos os arquivos são processados localmente no seu navegador. Suas informações não são enviadas para nossos servidores.';
+  const privacyTitle =
+    t.privacyNoticeTitle || t.privacyTitle || '🔒 Privacidade garantida';
+  const privacyBody =
+    t.privacyNoticeBody ||
+    t.privacyText ||
+    'Todos os arquivos são processados localmente no seu navegador. Suas informações não são enviadas para nossos servidores.';
 
   return (
     <section className="min-h-screen pt-20 bg-gradient-to-b from-white to-gray-50">
