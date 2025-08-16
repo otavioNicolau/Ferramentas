@@ -38,14 +38,20 @@
   "followUs": "Följ oss",
   "navigation": "Navigation",
   "categories": {
+    "audio_video": "Ljud/Video",
     "pdf": "PDF",
+    "imagem": "Bild",
     "image": "Bild",
-    "video": "Video",
-    "audio": "Ljud",
-    "text": "Text",
+    "qr_code": "QR-kod",
+    "seguranca": "Säkerhet",
     "security": "Säkerhet",
     "web": "Webb",
+    "utilidades": "Verktyg",
     "utilities": "Verktyg",
-    "financial": "Finansiell"
+    "texto": "Text",
+    "text": "Text",
+    "financeiro": "Finansiell",
+    "financial": "Finansiell",
+    "internet": "Internet"
   }
 }

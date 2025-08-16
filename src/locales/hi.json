@@ -38,14 +38,20 @@
   "followUs": "हमें फॉलो करें",
   "navigation": "नेवीगेशन",
   "categories": {
+    "audio_video": "ऑडियो/वीडियो",
     "pdf": "PDF",
+    "imagem": "छवि",
     "image": "छवि",
-    "video": "वीडियो",
-    "audio": "ऑडियो",
-    "text": "टेक्स्ट",
+    "qr_code": "QR कोड",
+    "seguranca": "सुरक्षा",
     "security": "सुरक्षा",
     "web": "वेब",
+    "utilidades": "उपयोगिताएं",
     "utilities": "उपयोगिताएं",
-    "financial": "वित्तीय"
+    "texto": "टेक्स्ट",
+    "text": "टेक्स्ट",
+    "financeiro": "वित्तीय",
+    "financial": "वित्तीय",
+    "internet": "इंटरनेट"
   }
 }

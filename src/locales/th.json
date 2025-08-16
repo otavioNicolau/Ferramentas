@@ -38,14 +38,20 @@
   "followUs": "ติดตามเรา",
   "navigation": "การนำทาง",
   "categories": {
+    "audio_video": "เสียง/วิดีโอ",
     "pdf": "PDF",
+    "imagem": "รูปภาพ",
     "image": "รูปภาพ",
-    "video": "วิดีโอ",
-    "audio": "เสียง",
-    "text": "ข้อความ",
+    "qr_code": "รหัส QR",
+    "seguranca": "ความปลอดภัย",
     "security": "ความปลอดภัย",
     "web": "เว็บ",
+    "utilidades": "ยูทิลิตี้",
     "utilities": "ยูทิลิตี้",
-    "financial": "การเงิน"
+    "texto": "ข้อความ",
+    "text": "ข้อความ",
+    "financeiro": "การเงิน",
+    "financial": "การเงิน",
+    "internet": "อินเทอร์เน็ต"
   }
 }

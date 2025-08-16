@@ -38,14 +38,20 @@
   "followUs": "Theo dõi chúng tôi",
   "navigation": "Điều hướng",
   "categories": {
+    "audio_video": "Âm thanh/Video",
     "pdf": "PDF",
+    "imagem": "Hình ảnh",
     "image": "Hình ảnh",
-    "video": "Video",
-    "audio": "Âm thanh",
-    "text": "Văn bản",
+    "qr_code": "Mã QR",
+    "seguranca": "Bảo mật",
     "security": "Bảo mật",
     "web": "Web",
+    "utilidades": "Tiện ích",
     "utilities": "Tiện ích",
-    "financial": "Tài chính"
+    "texto": "Văn bản",
+    "text": "Văn bản",
+    "financeiro": "Tài chính",
+    "financial": "Tài chính",
+    "internet": "Internet"
   }
 }

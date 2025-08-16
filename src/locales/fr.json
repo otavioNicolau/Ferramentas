@@ -38,14 +38,20 @@
   "followUs": "Suivez-nous",
   "navigation": "Navigation",
   "categories": {
+    "audio_video": "Audio/Vidéo",
     "pdf": "PDF",
+    "imagem": "Image",
     "image": "Image",
-    "video": "Vidéo",
-    "audio": "Audio",
-    "text": "Texte",
+    "qr_code": "Code QR",
+    "seguranca": "Sécurité",
     "security": "Sécurité",
     "web": "Web",
+    "utilidades": "Utilitaires",
     "utilities": "Utilitaires",
-    "financial": "Financier"
+    "texto": "Texte",
+    "text": "Texte",
+    "financeiro": "Financier",
+    "financial": "Financier",
+    "internet": "Internet"
   }
 }

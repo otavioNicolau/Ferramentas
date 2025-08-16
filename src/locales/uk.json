@@ -38,14 +38,20 @@
   "followUs": "Підписуйтесь",
   "navigation": "Навігація",
   "categories": {
+    "audio_video": "Аудіо/Відео",
     "pdf": "PDF",
+    "imagem": "Зображення",
     "image": "Зображення",
-    "video": "Відео",
-    "audio": "Аудіо",
-    "text": "Текст",
+    "qr_code": "QR-код",
+    "seguranca": "Безпека",
     "security": "Безпека",
     "web": "Веб",
+    "utilidades": "Утиліти",
     "utilities": "Утиліти",
-    "financial": "Фінансові"
+    "texto": "Текст",
+    "text": "Текст",
+    "financeiro": "Фінансові",
+    "financial": "Фінансові",
+    "internet": "Інтернет"
   }
 }

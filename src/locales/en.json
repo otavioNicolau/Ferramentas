@@ -45,5 +45,22 @@
   "tools.generator.description": "Generate QR codes, passwords and much more",
   "footer.copyright": "© 2024 MuilTools. All rights reserved.",
   "footer.privacy": "Privacy Policy",
-  "footer.terms": "Terms of Use"
+  "footer.terms": "Terms of Use",
+  "categories": {
+    "audio_video": "Audio/Video",
+    "pdf": "PDF",
+    "imagem": "Image",
+    "image": "Image",
+    "qr_code": "QR Code",
+    "seguranca": "Security",
+    "security": "Security",
+    "web": "Web",
+    "utilidades": "Utilities",
+    "utilities": "Utilities",
+    "texto": "Text",
+    "text": "Text",
+    "financeiro": "Financial",
+    "financial": "Financial",
+    "internet": "Internet"
+  }
 }

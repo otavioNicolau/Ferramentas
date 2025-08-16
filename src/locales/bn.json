@@ -38,14 +38,20 @@
   "followUs": "আমাদের অনুসরণ করুন",
   "navigation": "নেভিগেশন",
   "categories": {
+    "audio_video": "অডিও/ভিডিও",
     "pdf": "PDF",
+    "imagem": "ছবি",
     "image": "ছবি",
-    "video": "ভিডিও",
-    "audio": "অডিও",
-    "text": "টেক্সট",
+    "qr_code": "QR কোড",
+    "seguranca": "নিরাপত্তা",
     "security": "নিরাপত্তা",
     "web": "ওয়েব",
+    "utilidades": "ইউটিলিটি",
     "utilities": "ইউটিলিটি",
-    "financial": "আর্থিক"
+    "texto": "টেক্সট",
+    "text": "টেক্সট",
+    "financeiro": "আর্থিক",
+    "financial": "আর্থিক",
+    "internet": "ইন্টারনেট"
   }
 }

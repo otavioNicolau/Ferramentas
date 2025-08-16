@@ -38,14 +38,20 @@
   "followUs": "フォローする",
   "navigation": "ナビゲーション",
   "categories": {
+    "audio_video": "音声/動画",
     "pdf": "PDF",
+    "imagem": "画像",
     "image": "画像",
-    "video": "動画",
-    "audio": "音声",
-    "text": "テキスト",
+    "qr_code": "QRコード",
+    "seguranca": "セキュリティ",
     "security": "セキュリティ",
     "web": "ウェブ",
+    "utilidades": "ユーティリティ",
     "utilities": "ユーティリティ",
-    "financial": "金融"
+    "texto": "テキスト",
+    "text": "テキスト",
+    "financeiro": "金融",
+    "financial": "金融",
+    "internet": "インターネット"
   }
 }

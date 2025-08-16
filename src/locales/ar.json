@@ -38,14 +38,20 @@
   "followUs": "تابعنا",
   "navigation": "التنقل",
   "categories": {
+    "audio_video": "صوت/فيديو",
     "pdf": "PDF",
+    "imagem": "صورة",
     "image": "صورة",
-    "video": "فيديو",
-    "audio": "صوت",
-    "text": "نص",
+    "qr_code": "رمز QR",
+    "seguranca": "أمان",
     "security": "أمان",
     "web": "ويب",
+    "utilidades": "مرافق",
     "utilities": "مرافق",
-    "financial": "مالي"
+    "texto": "نص",
+    "text": "نص",
+    "financeiro": "مالي",
+    "financial": "مالي",
+    "internet": "إنترنت"
   }
 }

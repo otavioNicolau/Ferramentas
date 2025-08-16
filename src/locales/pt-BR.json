@@ -45,5 +45,22 @@
   "tools.generator.description": "Gerar QR codes, senhas e muito mais",
   "footer.copyright": "© 2024 MuilTools. Todos os direitos reservados.",
   "footer.privacy": "Política de Privacidade",
-  "footer.terms": "Termos de Uso"
+  "footer.terms": "Termos de Uso",
+  "categories": {
+    "audio_video": "Áudio/Vídeo",
+    "pdf": "PDF",
+    "imagem": "Imagem",
+    "image": "Imagem",
+    "qr_code": "QR Code",
+    "seguranca": "Segurança",
+    "security": "Segurança",
+    "web": "Web",
+    "utilidades": "Utilidades",
+    "utilities": "Utilidades",
+    "texto": "Texto",
+    "text": "Texto",
+    "financeiro": "Financeiro",
+    "financial": "Financeiro",
+    "internet": "Internet"
+  }
 }
