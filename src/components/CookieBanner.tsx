@@ -3,12 +3,12 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 type Consent = 'accepted' | 'declined' | null;
 
 export default function CookieBanner() {
-  const { t } = useI18n();
+  const t = getTranslations();
 
   // null = ainda não verificou; 'accepted' | 'declined' = já decidiu
   const [consent, setConsent] = useState<Consent>(null);
@@ -46,12 +46,15 @@ export default function CookieBanner() {
 
   if (!open) return null;
 
-  // Traduções
-  const cookieTitle = t('cookies.title', { fallback: 'Cookies' });
-  const cookieMessage = t('cookies.message', { fallback: 'Usamos cookies para melhorar sua experiência.' });
-  const acceptLabel = t('cookies.accept', { fallback: 'Aceitar' });
-  const declineLabel = t('cookies.decline', { fallback: 'Recusar' });
-  const learnMoreLabel = t('cta.learnMore', { fallback: 'Saiba mais' });
+  // Traduções (respeita suas chaves existentes e usa fallbacks quando disponíveis)
+  const cookieTitle = t.cookieTitle || t.privacyNoticeTitle || 'Cookies';
+  const cookieMessage =
+    t.cookieMessage ||
+    t.privacyText ||
+    'Usamos cookies para melhorar sua experiência.';
+  const acceptLabel = t.acceptCookies || t.accept || 'Aceitar';
+  const declineLabel = t.declineCookies || t.onlyNecessary || 'Recusar';
+  const learnMoreLabel = t.learnMore || t.privacyPolicy || 'Saiba mais';
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 p-4 md:p-6">

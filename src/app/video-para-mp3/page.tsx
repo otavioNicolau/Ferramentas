@@ -6,11 +6,11 @@ import { useState, useRef, useEffect } from 'react';
 import ToolLayout from '@/components/ToolLayout';
 import { Upload, Music, Download, AlertCircle, CheckCircle, Loader2, X, Settings, FileVideo } from 'lucide-react';
 import { saveAs } from 'file-saver';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 import type { FFmpeg } from '@ffmpeg/ffmpeg';
 
 export default function VideoParaMp3Page() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);

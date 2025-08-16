@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 import { Upload, Download, FileText, CheckCircle, AlertTriangle, RefreshCw, Settings } from 'lucide-react';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
@@ -51,7 +51,7 @@ interface DocumentMetadata {
 }
 
 export default function WordToPdfPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [dragActive, setDragActive] = useState(false);

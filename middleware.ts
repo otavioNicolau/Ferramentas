@@ -1,88 +1,62 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const SUBDOMAIN_TO_LANG = {
-  br: 'pt-BR',
-  pt: 'pt-BR', // aceitar 'pt' também
-  en: 'en',
-  es: 'es',
-  ko: 'ko',
-  zh: 'zh',
-  hi: 'hi',
-  ar: 'ar',
-  bn: 'bn',
-  ru: 'ru',
-  ja: 'ja',
-  de: 'de',
-  fr: 'fr',
-  it: 'it',
-  tr: 'tr',
-  pl: 'pl',
-  nl: 'nl',
-  sv: 'sv',
-  uk: 'uk',
-  vi: 'vi',
-  th: 'th'
-} as const;
+// Lista de idiomas suportados
+const supportedLanguages = [
+  'pt-BR', 'en', 'es', 'zh', 'hi', 'ar', 'bn', 'ru', 'ja', 'de', 'fr', 'it', 'ko', 'tr', 'pl', 'nl', 'sv', 'uk', 'vi', 'th'
+];
 
-const DEFAULT_LANG = 'pt-BR';
-
-type Lang = typeof SUBDOMAIN_TO_LANG[keyof typeof SUBDOMAIN_TO_LANG];
-
-function resolveLangFromHost(host: string): Lang {
-  // Extrair subdomínio do host
-  const parts = host.split('.');
-  
-  // Se não há subdomínio (ex: muiltools.com), usar DEFAULT_LANG
-  if (parts.length <= 2) {
-    return DEFAULT_LANG;
-  }
-  
-  const subdomain = parts[0];
-  
-  // Mapear subdomínio para idioma
-  const lang = SUBDOMAIN_TO_LANG[subdomain as keyof typeof SUBDOMAIN_TO_LANG];
-  
-  return lang || DEFAULT_LANG;
-}
+// Mapeamento de subdomínios para códigos de idioma
+const subdomainToLanguage: Record<string, string> = {
+  'br': 'pt-BR',
+  'ko': 'ko',
+  'en': 'en',
+  'es': 'es',
+  'zh': 'zh',
+  'hi': 'hi',
+  'ar': 'ar',
+  'bn': 'bn',
+  'ru': 'ru',
+  'ja': 'ja',
+  'de': 'de',
+  'fr': 'fr',
+  'it': 'it',
+  'tr': 'tr',
+  'pl': 'pl',
+  'nl': 'nl',
+  'sv': 'sv',
+  'uk': 'uk',
+  'vi': 'vi',
+  'th': 'th'
+};
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const hostname = request.nextUrl.hostname;
+  const pathname = request.nextUrl.pathname;
   
-  // Ignorar assets estáticos e rotas de API
-  if (
-    pathname.startsWith('/_next/') ||
-    pathname.startsWith('/api/') ||
-    pathname.includes('.') || // arquivos estáticos (favicon.ico, robots.txt, etc.)
-    pathname.startsWith('/favicon') ||
-    pathname.startsWith('/robots') ||
-    pathname.startsWith('/sitemap')
-  ) {
+  // Extrai o subdomínio
+  const parts = hostname.split('.');
+  
+  // Se não há subdomínio (apenas muiltools.com), continua normalmente (será pt-BR)
+  if (parts.length <= 2) {
     return NextResponse.next();
   }
   
-  // Obter host (priorizar x-forwarded-host para produção com proxy/CDN)
-  const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || '';
+  // Pega o primeiro subdomínio
+  const subdomain = parts[0];
   
-  // Resolver idioma baseado no host
-  const lang = resolveLangFromHost(host);
+  // Verifica se o subdomínio corresponde a um idioma suportado
+  if (subdomainToLanguage[subdomain]) {
+    // Adiciona um header personalizado com o idioma detectado
+    const response = NextResponse.next();
+    response.headers.set('x-detected-language', subdomainToLanguage[subdomain]);
+    return response;
+  }
   
-  // Criar response
-  const response = NextResponse.next();
-  
-  // Adicionar header x-lang
-  response.headers.set('x-lang', lang);
-  
-  // Setar cookie lang (HttpOnly=false para acesso no cliente)
-  response.cookies.set('lang', lang, {
-    httpOnly: false,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 365, // 1 ano
-  });
-  
-  return response;
+  // Se o subdomínio não é reconhecido, continua normalmente
+  return NextResponse.next();
 }
 
+// Configuração do matcher para aplicar o middleware a todas as rotas
 export const config = {
   matcher: [
     /*

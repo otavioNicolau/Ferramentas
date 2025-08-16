@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useI18n } from '@/i18n/client';
+import { getTranslations, LANGUAGE_CONFIG, getCurrentLanguage } from '@/config/language';
 import { useRouter } from 'next/navigation';
 
 function GitHubIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -36,22 +36,23 @@ function YouTubeIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export default function Footer() {
-  const { t, lang } = useI18n();
+  const t = getTranslations();
   const year = new Date().getFullYear();
   const router = useRouter();
+  const currentLanguage = getCurrentLanguage();
 
   const primaryLinks = [
-    { href: 'https://muiltools.com/', label: t('nav.home'), external: true },
-    { href: '/about', label: t('nav.about', { fallback: 'Sobre' }) },
-    { href: '/contact', label: t('nav.contact', { fallback: 'Contato' }) },
-    { href: '/languages', label: t('footer.languages', { fallback: 'Idiomas' }) },
+    { href: 'https://muiltools.com/', label: t.home, external: true },
+    { href: '/about', label: t.about },
+    { href: '/contact', label: t.contact },
+    { href: '/languages', label: t.languages || 'Idiomas' },
   ];
 
   const legalLinks = [
-    { href: '/legal', label: t('footer.legal', { fallback: 'Legal' }) },
-    { href: '/privacy-policy', label: t('footer.privacy') },
-    { href: '/terms-of-use', label: t('footer.terms') },
-    { href: '/sitemap.xml', label: t('footer.sitemap', { fallback: 'Sitemap' }) },
+    { href: '/legal', label: t.legal },
+    { href: '/privacy-policy', label: t.privacyPolicy },
+    { href: '/terms-of-use', label: t.termsOfUse },
+    { href: '/sitemap.xml', label: t.sitemap },
   ];
 
   return (
@@ -69,18 +70,19 @@ export default function Footer() {
             <Link
               href="/"
               className="inline-flex items-center gap-3 group"
-              aria-label={t('app.title')}
+              aria-label={t.siteName || 'Muiltools'}
             >
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-zinc-900 text-white shadow-sm ring-1 ring-black/5 transition-transform group-hover:scale-105">
                 {/* logomarca simples */}
                 <span className="text-sm font-bold">M</span>
               </span>
               <span className="text-lg font-semibold tracking-tight text-zinc-900">
-                {t('app.title')}
+                {t.siteName || 'Muiltools'}
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-zinc-600">
-              {t('footer.description', { fallback: 'Ferramentas úteis para o dia a dia — simples, rápidas e seguras.' })}
+              {t.footerText ||
+                'Ferramentas úteis para o dia a dia — simples, rápidas e seguras.'}
             </p>
           </div>
 
@@ -91,7 +93,7 @@ export default function Footer() {
           >
             <div>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                {t('footer.navigation', { fallback: 'Navegação' })}
+                {t.navigation || 'Navegação'}
               </h3>
               <ul className="mt-3 space-y-2">
                 {primaryLinks.map((link) => (
@@ -120,7 +122,7 @@ export default function Footer() {
 
             <div>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                {t('footer.legal', { fallback: 'Legal' })}
+                {t.legal || 'Legal'}
               </h3>
               <ul className="mt-3 space-y-2">
                 {legalLinks.map((link) => (
@@ -138,7 +140,7 @@ export default function Footer() {
 
             <div className="col-span-2 sm:col-span-1">
               <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                {t('footer.followUs', { fallback: 'Siga-nos' })}
+                {t.followUs || 'Siga-nos'}
               </h3>
               <div className="mt-3 flex items-center gap-3">
                 <a
@@ -169,11 +171,11 @@ export default function Footer() {
               <div className="mt-4">
                 <div className="space-y-2">
                   <label htmlFor="language-select" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                    🌐 {t('nav.selectLanguage', { fallback: 'Selecionar Idioma' })}
+                    🌐 {t.selectLanguage || 'Selecionar Idioma'}
                   </label>
                   <select
                      id="language-select"
-                     value={lang}
+                     value={currentLanguage}
                      onChange={(e) => {
                        const newLang = e.target.value;
                        const currentPath = window.location.pathname;
@@ -208,26 +210,11 @@ export default function Footer() {
                      }}
                     className="w-full px-3 py-2 text-sm bg-white border border-zinc-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-zinc-300 transition-colors"
                   >
-                    <option value="pt-BR">🇧🇷 Português</option>
-                    <option value="en">🇺🇸 English</option>
-                    <option value="es">🇪🇸 Español</option>
-                    <option value="zh">🇨🇳 中文</option>
-                    <option value="hi">🇮🇳 हिन्दी</option>
-                    <option value="ar">🇸🇦 العربية</option>
-                    <option value="bn">🇧🇩 বাংলা</option>
-                    <option value="ru">🇷🇺 Русский</option>
-                    <option value="ja">🇯🇵 日本語</option>
-                    <option value="de">🇩🇪 Deutsch</option>
-                    <option value="fr">🇫🇷 Français</option>
-                    <option value="it">🇮🇹 Italiano</option>
-                    <option value="ko">🇰🇷 한국어</option>
-                    <option value="tr">🇹🇷 Türkçe</option>
-                    <option value="pl">🇵🇱 Polski</option>
-                    <option value="nl">🇳🇱 Nederlands</option>
-                    <option value="sv">🇸🇪 Svenska</option>
-                    <option value="uk">🇺🇦 Українська</option>
-                    <option value="vi">🇻🇳 Tiếng Việt</option>
-                    <option value="th">🇹🇭 ไทย</option>
+                    {Object.entries(LANGUAGE_CONFIG.availableLanguages).map(([code, config]) => (
+                      <option key={code} value={code}>
+                        {config.flag} {config.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -241,12 +228,12 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-xs text-zinc-500">
-            © {year} {t('app.title')}. {t('footer.privacyText', { fallback: 'Respeitamos sua privacidade.' })}
+            © {year} {t.siteName || 'Muiltools'}. {t.privacyText || 'Respeitamos sua privacidade.'}
           </p>
 
           <p className="text-xs text-zinc-500">
-            {t('footer.madeWith', { fallback: 'Feito com' })} <span aria-hidden>❤️</span>{' '}
-            {t('footer.by', { fallback: 'por' })} {t('app.title')}.
+            {t.madeWith || 'Feito com'} <span aria-hidden>❤️</span>{' '}
+            {t.by || 'por'} {t.siteName || 'Muiltools'}.
           </p>
         </div>
       </div>

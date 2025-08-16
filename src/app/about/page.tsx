@@ -1,12 +1,8 @@
-import { Metadata } from 'next';
-import { getDictionary, getRequestLang } from '@/i18n/server';
+import type { Metadata } from 'next';
+import { getTranslations } from '@/config/language';
 
-// Forçar renderização dinâmica para usar headers/cookies
-export const dynamic = 'force-dynamic';
-
-export async function generateMetadata(): Promise<Metadata> {
-  const lang = await getRequestLang();
-  const t = await getDictionary(lang);
+export function generateMetadata(): Metadata {
+  const t = getTranslations();
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 
   return {
@@ -19,9 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function AboutPage() {
-  const lang = await getRequestLang();
-  const t = await getDictionary(lang);
+export default function AboutPage() {
+  const t = getTranslations();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">

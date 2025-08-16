@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 import { Upload, FileText, Download, Table, Trash2, Eye, Settings, AlertCircle } from 'lucide-react';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import * as XLSX from 'xlsx';
@@ -29,7 +29,7 @@ interface PdfInfo {
 }
 
 export default function PdfToExcelPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfInfo, setPdfInfo] = useState<PdfInfo | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);

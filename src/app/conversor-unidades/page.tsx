@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import ToolLayout from '@/components/ToolLayout';
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 
 export default function ConversorUnidadesPage() {
-  const { t } = useI18n();
+  const t = getTranslations();
   const [fromValue, setFromValue] = useState('');
   const [toValue, setToValue] = useState('');
   const [fromUnit, setFromUnit] = useState('m');

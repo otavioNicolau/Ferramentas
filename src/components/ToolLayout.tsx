@@ -1,6 +1,4 @@
-'use client';
-
-import { useI18n } from '@/i18n/client';
+import { getTranslations } from '@/config/language';
 import { ShieldCheck } from 'lucide-react';
 import React from 'react';
 
@@ -11,11 +9,11 @@ interface ToolLayoutProps {
 }
 
 export default function ToolLayout({ title, description, children }: ToolLayoutProps) {
-  const { t } = useI18n();
+  const t = getTranslations();
 
-  // Chaves de tradução
-  const privacyTitle = t('privacy.title', { fallback: '🔒 Privacidade Garantida' });
-  const privacyBody = t('privacy.description', { fallback: 'Todos os arquivos são processados localmente no seu navegador. Suas informações não são enviadas para nossos servidores.' });
+  // Chaves de tradução com fallback
+  const privacyTitle = t.privacyNoticeTitle || '🔒 Privacidade Garantida';
+  const privacyBody = t.privacyNoticeBody || 'Todos os arquivos são processados localmente no seu navegador. Suas informações não são enviadas para nossos servidores.';
 
   return (
     <section className="min-h-screen pt-20 bg-gradient-to-b from-white to-gray-50">
