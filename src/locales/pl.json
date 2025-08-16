@@ -18,10 +18,18 @@
   "search": "Szukaj",
   "toolsPageTitle": "Narzędzia",
   "toolsPageDescription": "Poznaj naszą kolekcję darmowych narzędzi online.",
-  "toolsPageKeywords": ["narzędzia online", "narzędzia", "darmowe narzędzia"],
+  "toolsPageKeywords": [
+    "narzędzia online",
+    "narzędzia",
+    "darmowe narzędzia"
+  ],
   "aboutPageTitle": "O nas",
   "aboutPageDescription": "Dowiedz się więcej o Narzędziach online.",
-  "aboutPageKeywords": ["o nas", "narzędzia online", "informacje"],
+  "aboutPageKeywords": [
+    "o nas",
+    "narzędzia online",
+    "informacje"
+  ],
   "heroTitle": "Darmowe narzędzia online",
   "heroSubtitle": "Wszystko czego potrzebujesz w jednym miejscu",
   "heroDescription": "Uzyskaj dostęp do kompleksowej kolekcji darmowych narzędzi online, aby ułatwić swoją pracę i zwiększyć produktywność.",
@@ -37,6 +45,10 @@
   "by": "przez",
   "followUs": "Śledź nas",
   "navigation": "Nawigacja",
+  "cookies.title": "Pliki cookie",
+  "cookies.message": "Używamy plików cookie, aby poprawić Twoje doświadczenia.",
+  "cookies.accept": "Akceptuj",
+  "cookies.decline": "Odrzuć",
   "categories": {
     "audio_video": "Audio/Wideo",
     "pdf": "PDF",
@@ -53,5 +65,6 @@
     "financeiro": "Finansowe",
     "financial": "Finansowe",
     "internet": "Internet"
-  }
+  },
+  "common.open": "Otwórz"
 }

@@ -18,10 +18,18 @@
   "search": "بحث",
   "toolsPageTitle": "الأدوات",
   "toolsPageDescription": "استكشف مجموعتنا من الأدوات المجانية عبر الإنترنت.",
-  "toolsPageKeywords": ["أدوات عبر الإنترنت", "مرافق", "أدوات مجانية"],
+  "toolsPageKeywords": [
+    "أدوات عبر الإنترنت",
+    "مرافق",
+    "أدوات مجانية"
+  ],
   "aboutPageTitle": "حول",
   "aboutPageDescription": "تعرف على المزيد حول الأدوات عبر الإنترنت.",
-  "aboutPageKeywords": ["حول", "أدوات عبر الإنترنت", "معلومات"],
+  "aboutPageKeywords": [
+    "حول",
+    "أدوات عبر الإنترنت",
+    "معلومات"
+  ],
   "heroTitle": "أدوات مجانية عبر الإنترنت",
   "heroSubtitle": "كل ما تحتاجه في مكان واحد",
   "heroDescription": "الوصول إلى مجموعة شاملة من الأدوات المجانية عبر الإنترنت لتسهيل عملك وزيادة إنتاجيتك.",
@@ -37,6 +45,10 @@
   "by": "بواسطة",
   "followUs": "تابعنا",
   "navigation": "التنقل",
+  "cookies.title": "ملفات تعريف الارتباط",
+  "cookies.message": "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك.",
+  "cookies.accept": "قبول",
+  "cookies.decline": "رفض",
   "categories": {
     "audio_video": "صوت/فيديو",
     "pdf": "PDF",
@@ -53,5 +65,6 @@
     "financeiro": "مالي",
     "financial": "مالي",
     "internet": "إنترنت"
-  }
+  },
+  "common.open": "فتح"
 }

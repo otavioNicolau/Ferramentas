@@ -5,6 +5,10 @@
   "nav.tools": "Herramientas",
   "nav.about": "Acerca de",
   "nav.contact": "Contacto",
+  "nav.skipToContent": "Saltar al contenido",
+  "nav.selectLanguage": "Seleccionar idioma",
+  "nav.openMenu": "Abrir menú",
+  "nav.closeMenu": "Cerrar menú",
   "cta.tryNow": "Pruébalo ahora",
   "cta.learnMore": "Saber más",
   "cta.getStarted": "Empezar ahora",
@@ -46,6 +50,10 @@
   "footer.copyright": "© 2024 MuilTools. Todos los derechos reservados.",
   "footer.privacy": "Política de Privacidad",
   "footer.terms": "Términos de Uso",
+  "cookies.title": "Cookies",
+  "cookies.message": "Utilizamos cookies para mejorar tu experiencia.",
+  "cookies.accept": "Aceptar",
+  "cookies.decline": "Rechazar",
   "categories": {
     "audio_video": "Audio/Video",
     "pdf": "PDF",
@@ -62,5 +70,6 @@
     "financeiro": "Financiero",
     "financial": "Financiero",
     "internet": "Internet"
-  }
+  },
+  "common.open": "Abrir"
 }

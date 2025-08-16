@@ -1,13 +1,16 @@
+'use client';
+
 import Link from 'next/link';
 import { LucideIcon, ArrowRight, Sparkles } from 'lucide-react';
 import { useId, useMemo } from 'react';
-import { getTranslations } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 interface ToolCardProps {
+  id: string;
   title: string;
   description: string;
   href: string;
-  icon: LucideIcon;
+  icon: string; // Nome do ícone como string
   category: string;
 }
 
@@ -48,13 +51,24 @@ const categoryStyles: Record<
   financial:  { bg: 'bg-emerald-50',  text: 'text-emerald-600', icon: 'text-emerald-500', hover: 'hover:bg-emerald-50/60', badgeBorder: 'border-emerald-200' },
 };
 
-export default function ToolCard({ title, description, href, icon: Icon, category }: ToolCardProps) {
-  const t = getTranslations();
+export default function ToolCard({ id, title, description, href, icon, category }: ToolCardProps) {
+  const { t } = useI18n();
   const gradientId = useId();
   const canonical = useMemo(() => normalizeCategory(category), [category]);
   const colors = categoryStyles[canonical] ?? categoryStyles.utilities;
   const titleId = useId();
   const descId = useId();
+  
+  // Importar dinamicamente o ícone
+  const IconComponent = useMemo(() => {
+    try {
+      const lucideIcons = require('lucide-react');
+      return lucideIcons[icon] || lucideIcons.DollarSign;
+    } catch {
+      const lucideIcons = require('lucide-react');
+      return lucideIcons.DollarSign;
+    }
+  }, [icon]);
 
   return (
     <Link
@@ -96,7 +110,7 @@ export default function ToolCard({ title, description, href, icon: Icon, categor
                 'motion-safe:group-hover:scale-110',
               ].join(' ')}
             >
-              <Icon
+              <IconComponent
                 aria-hidden
                 className={['h-7 w-7 transition-transform duration-300', colors.icon, 'motion-safe:group-hover:rotate-12'].join(' ')}
               />
@@ -137,15 +151,15 @@ export default function ToolCard({ title, description, href, icon: Icon, categor
           {/* Footer CTA */}
           <div className="flex items-center justify-between border-t border-zinc-100 pt-4">
             <span className="text-[11px] font-medium uppercase tracking-wide text-zinc-500">
-              {t.useTool}
+              {t('cta.tryNow')}
             </span>
             <span className="inline-flex items-center gap-1 text-blue-600 transition-colors group-hover:text-blue-700">
-              <span className="text-sm font-medium">{t.open}</span>
+              <span className="text-sm font-medium">{t('common.open', { fallback: 'Abrir' })}</span>
               <ArrowRight
                 aria-hidden
                 className="h-4 w-4 transition-transform duration-300 motion-safe:group-hover:translate-x-1"
               />
-              <span className="sr-only">{t.open} {title}</span>
+              <span className="sr-only">{t('common.open', { fallback: 'Abrir' })} {title}</span>
             </span>
           </div>
         </div>

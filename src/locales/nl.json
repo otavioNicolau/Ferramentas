@@ -18,10 +18,18 @@
   "search": "Zoeken",
   "toolsPageTitle": "Tools",
   "toolsPageDescription": "Verken onze collectie van gratis online tools.",
-  "toolsPageKeywords": ["online tools", "hulpprogramma's", "gratis tools"],
+  "toolsPageKeywords": [
+    "online tools",
+    "hulpprogramma's",
+    "gratis tools"
+  ],
   "aboutPageTitle": "Over ons",
   "aboutPageDescription": "Leer meer over Online Tools.",
-  "aboutPageKeywords": ["over ons", "online tools", "informatie"],
+  "aboutPageKeywords": [
+    "over ons",
+    "online tools",
+    "informatie"
+  ],
   "heroTitle": "Gratis online tools",
   "heroSubtitle": "Alles wat je nodig hebt op één plek",
   "heroDescription": "Krijg toegang tot een uitgebreide collectie van gratis online tools om uw werk te vergemakkelijken en uw productiviteit te verhogen.",
@@ -37,6 +45,10 @@
   "by": "door",
   "followUs": "Volg ons",
   "navigation": "Navigatie",
+  "cookies.title": "Cookies",
+  "cookies.message": "We gebruiken cookies om uw ervaring te verbeteren.",
+  "cookies.accept": "Accepteren",
+  "cookies.decline": "Weigeren",
   "categories": {
     "audio_video": "Audio/Video",
     "pdf": "PDF",
@@ -53,5 +65,6 @@
     "financeiro": "Financieel",
     "financial": "Financieel",
     "internet": "Internet"
-  }
+  },
+  "common.open": "Openen"
 }

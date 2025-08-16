@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Menu, X, Globe } from 'lucide-react';
-import { getTranslations, LANGUAGE_CONFIG, getCurrentLanguage } from '@/config/language';
+import { useI18n } from '@/i18n/client';
 
 function NavLink({
   href,
@@ -38,8 +38,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const t = getTranslations();
-  const currentLanguage = getCurrentLanguage();
+  const { t, lang } = useI18n();
 
   const handleLanguageChange = (newLang: string) => {
     const currentPath = window.location.pathname;
@@ -129,7 +128,7 @@ export default function Header() {
             href="#main"
             className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50"
           >
-            {t.skipToContent}
+            {t('nav.skipToContent', { fallback: 'Pular para o conteúdo' })}
           </a>
 
           {/* Logo */}
@@ -139,17 +138,17 @@ export default function Header() {
                 <span className="text-white font-bold text-sm">F</span>
               </div>
               <span className="text-xl font-bold text-zinc-900">
-                {t.siteName}
+                {t('app.title')}
               </span>
             </Link>
           </div>
 
           {/* Desktop Nav */}
           <nav aria-label="Primary" className="hidden md:flex items-center gap-1">
-            <NavLink href="/">{t.home}</NavLink>
-            <NavLink href="/tools">{t.tools}</NavLink>
-            <NavLink href="/about">{t.about}</NavLink>
-            <NavLink href="/contact">{t.contact}</NavLink>
+            <NavLink href="/">{t('nav.home')}</NavLink>
+            <NavLink href="/tools">{t('nav.tools', { fallback: 'Ferramentas' })}</NavLink>
+            <NavLink href="/about">{t('nav.about', { fallback: 'Sobre' })}</NavLink>
+            <NavLink href="/contact">{t('nav.contact', { fallback: 'Contato' })}</NavLink>
           </nav>
 
           {/* Right side */}
@@ -157,16 +156,31 @@ export default function Header() {
             {/* Language Selector - Desktop */}
             <div className="hidden sm:block relative">
               <select
-                value={currentLanguage}
+                value={lang}
                 onChange={(e) => handleLanguageChange(e.target.value)}
                 className="h-9 pl-8 pr-3 text-sm bg-white border border-zinc-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-zinc-300 transition-colors appearance-none cursor-pointer"
-                aria-label={t.selectLanguage || 'Selecionar Idioma'}
+                aria-label={t('nav.selectLanguage', { fallback: 'Selecionar Idioma' })}
               >
-                {Object.entries(LANGUAGE_CONFIG.availableLanguages).map(([code, config]) => (
-                  <option key={code} value={code}>
-                    {config.flag} {config.name}
-                  </option>
-                ))}
+                <option value="pt-BR">🇧🇷 Português</option>
+                <option value="en">🇺🇸 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="zh">🇨🇳 中文</option>
+                <option value="hi">🇮🇳 हिन्दी</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="bn">🇧🇩 বাংলা</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="tr">🇹🇷 Türkçe</option>
+                <option value="pl">🇵🇱 Polski</option>
+                <option value="nl">🇳🇱 Nederlands</option>
+                <option value="sv">🇸🇪 Svenska</option>
+                <option value="uk">🇺🇦 Українська</option>
+                <option value="vi">🇻🇳 Tiếng Việt</option>
+                <option value="th">🇹🇭 ไทย</option>
               </select>
               <Globe size={16} className="absolute left-2 top-1/2 transform -translate-y-1/2 text-zinc-500 pointer-events-none" />
             </div>
@@ -177,7 +191,7 @@ export default function Header() {
               className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md text-zinc-700 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               aria-expanded={isMenuOpen}
               aria-controls="mobile-menu"
-              aria-label={isMenuOpen ? (t.closeMenu || 'Fechar menu') : (t.openMenu || 'Abrir menu')}
+              aria-label={isMenuOpen ? t('nav.closeMenu', { fallback: 'Fechar menu' }) : t('nav.openMenu', { fallback: 'Abrir menu' })}
               type="button"
             >
               {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -205,33 +219,48 @@ export default function Header() {
         >
           <nav aria-label="Mobile" className="space-y-1">
             <NavLink href="/" onClick={() => setIsMenuOpen(false)}>
-              {t.home}
+              {t('nav.home')}
             </NavLink>
             <NavLink href="/tools" onClick={() => setIsMenuOpen(false)}>
-              {t.tools}
+              {t('nav.tools', { fallback: 'Ferramentas' })}
             </NavLink>
             <NavLink href="/about" onClick={() => setIsMenuOpen(false)}>
-              {t.about}
+              {t('nav.about', { fallback: 'Sobre' })}
             </NavLink>
             <NavLink href="/contact" onClick={() => setIsMenuOpen(false)}>
-              {t.contact}
+              {t('nav.contact', { fallback: 'Contato' })}
             </NavLink>
             <div className="mt-2">
               <div className="relative">
                 <select
-                  value={currentLanguage}
+                  value={lang}
                   onChange={(e) => {
                     handleLanguageChange(e.target.value);
                     setIsMenuOpen(false);
                   }}
                   className="w-full pl-8 pr-3 py-2 text-sm bg-white border border-zinc-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-zinc-300 transition-colors appearance-none cursor-pointer"
-                  aria-label={t.selectLanguage || 'Selecionar Idioma'}
+                  aria-label={t('nav.selectLanguage', { fallback: 'Selecionar Idioma' })}
                 >
-                  {Object.entries(LANGUAGE_CONFIG.availableLanguages).map(([code, config]) => (
-                    <option key={code} value={code}>
-                      {config.flag} {config.name}
-                    </option>
-                  ))}
+                  <option value="pt-BR">🇧🇷 Português</option>
+                  <option value="en">🇺🇸 English</option>
+                  <option value="es">🇪🇸 Español</option>
+                  <option value="zh">🇨🇳 中文</option>
+                  <option value="hi">🇮🇳 हिन्दी</option>
+                  <option value="ar">🇸🇦 العربية</option>
+                  <option value="bn">🇧🇩 বাংলা</option>
+                  <option value="ru">🇷🇺 Русский</option>
+                  <option value="ja">🇯🇵 日本語</option>
+                  <option value="de">🇩🇪 Deutsch</option>
+                  <option value="fr">🇫🇷 Français</option>
+                  <option value="it">🇮🇹 Italiano</option>
+                  <option value="ko">🇰🇷 한국어</option>
+                  <option value="tr">🇹🇷 Türkçe</option>
+                  <option value="pl">🇵🇱 Polski</option>
+                  <option value="nl">🇳🇱 Nederlands</option>
+                  <option value="sv">🇸🇪 Svenska</option>
+                  <option value="uk">🇺🇦 Українська</option>
+                  <option value="vi">🇻🇳 Tiếng Việt</option>
+                  <option value="th">🇹🇭 ไทย</option>
                 </select>
                 <Globe size={16} className="absolute left-2 top-1/2 transform -translate-y-1/2 text-zinc-500 pointer-events-none" />
               </div>

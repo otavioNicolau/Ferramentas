@@ -18,10 +18,18 @@
   "search": "Sök",
   "toolsPageTitle": "Verktyg",
   "toolsPageDescription": "Utforska vår samling av gratis onlineverktyg.",
-  "toolsPageKeywords": ["onlineverktyg", "verktyg", "gratis verktyg"],
+  "toolsPageKeywords": [
+    "onlineverktyg",
+    "verktyg",
+    "gratis verktyg"
+  ],
   "aboutPageTitle": "Om oss",
   "aboutPageDescription": "Lär dig mer om Onlineverktyg.",
-  "aboutPageKeywords": ["om oss", "onlineverktyg", "information"],
+  "aboutPageKeywords": [
+    "om oss",
+    "onlineverktyg",
+    "information"
+  ],
   "heroTitle": "Gratis onlineverktyg",
   "heroSubtitle": "Allt du behöver på ett ställe",
   "heroDescription": "Få tillgång till en omfattande samling av gratis onlineverktyg för att underlätta ditt arbete och öka din produktivitet.",
@@ -37,6 +45,10 @@
   "by": "av",
   "followUs": "Följ oss",
   "navigation": "Navigation",
+  "cookies.title": "Cookies",
+  "cookies.message": "Vi använder cookies för att förbättra din upplevelse.",
+  "cookies.accept": "Acceptera",
+  "cookies.decline": "Avvisa",
   "categories": {
     "audio_video": "Ljud/Video",
     "pdf": "PDF",
@@ -53,5 +65,6 @@
     "financeiro": "Finansiell",
     "financial": "Finansiell",
     "internet": "Internet"
-  }
+  },
+  "common.open": "Öppna"
 }

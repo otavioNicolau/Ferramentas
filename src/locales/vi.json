@@ -18,10 +18,18 @@
   "search": "Tìm kiếm",
   "toolsPageTitle": "Công cụ",
   "toolsPageDescription": "Khám phá bộ sưu tập công cụ trực tuyến miễn phí của chúng tôi.",
-  "toolsPageKeywords": ["công cụ trực tuyến", "tiện ích", "công cụ miễn phí"],
+  "toolsPageKeywords": [
+    "công cụ trực tuyến",
+    "tiện ích",
+    "công cụ miễn phí"
+  ],
   "aboutPageTitle": "Giới thiệu",
   "aboutPageDescription": "Tìm hiểu thêm về Công cụ trực tuyến.",
-  "aboutPageKeywords": ["giới thiệu", "công cụ trực tuyến", "thông tin"],
+  "aboutPageKeywords": [
+    "giới thiệu",
+    "công cụ trực tuyến",
+    "thông tin"
+  ],
   "heroTitle": "Công cụ trực tuyến miễn phí",
   "heroSubtitle": "Mọi thứ bạn cần ở một nơi",
   "heroDescription": "Truy cập bộ sưu tập toàn diện các công cụ trực tuyến miễn phí để làm cho công việc của bạn dễ dàng hơn và tăng năng suất.",
@@ -37,6 +45,10 @@
   "by": "bởi",
   "followUs": "Theo dõi chúng tôi",
   "navigation": "Điều hướng",
+  "cookies.title": "Cookie",
+  "cookies.message": "Chúng tôi sử dụng cookie để cải thiện trải nghiệm của bạn.",
+  "cookies.accept": "Chấp nhận",
+  "cookies.decline": "Từ chối",
   "categories": {
     "audio_video": "Âm thanh/Video",
     "pdf": "PDF",
@@ -53,5 +65,6 @@
     "financeiro": "Tài chính",
     "financial": "Tài chính",
     "internet": "Internet"
-  }
+  },
+  "common.open": "Mở"
 }

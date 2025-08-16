@@ -18,10 +18,18 @@
   "search": "搜索",
   "toolsPageTitle": "工具",
   "toolsPageDescription": "探索我们的免费在线工具集合。",
-  "toolsPageKeywords": ["在线工具", "实用程序", "免费工具"],
+  "toolsPageKeywords": [
+    "在线工具",
+    "实用程序",
+    "免费工具"
+  ],
   "aboutPageTitle": "关于",
   "aboutPageDescription": "了解更多关于在线工具的信息。",
-  "aboutPageKeywords": ["关于", "在线工具", "信息"],
+  "aboutPageKeywords": [
+    "关于",
+    "在线工具",
+    "信息"
+  ],
   "heroTitle": "免费在线工具",
   "heroSubtitle": "您需要的一切都在一个地方",
   "heroDescription": "访问完整的免费在线工具集合，让您的工作更轻松，提高您的生产力。",
@@ -37,6 +45,10 @@
   "by": "由",
   "followUs": "关注我们",
   "navigation": "导航",
+  "cookies.title": "Cookie",
+  "cookies.message": "我们使用Cookie来改善您的体验。",
+  "cookies.accept": "接受",
+  "cookies.decline": "拒绝",
   "categories": {
     "audio_video": "音频/视频",
     "pdf": "PDF",
@@ -53,5 +65,6 @@
     "financeiro": "金融",
     "financial": "金融",
     "internet": "互联网"
-  }
+  },
+  "common.open": "打开"
 }

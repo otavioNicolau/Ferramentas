@@ -6,7 +6,7 @@ import { Lang } from './config';
 interface I18nContextType {
   lang: Lang;
   dict: Record<string, string>;
-  t: (key: string, vars?: Record<string, string>) => string;
+  t: (key: string, options?: { fallback?: string; vars?: Record<string, string> }) => string;
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
@@ -18,12 +18,12 @@ interface I18nProviderProps {
 }
 
 export function I18nProvider({ lang, dict, children }: I18nProviderProps) {
-  const t = (key: string, vars?: Record<string, string>): string => {
-    let translation = dict[key] || key;
+  const t = (key: string, options?: { fallback?: string; vars?: Record<string, string> }): string => {
+    let translation = dict[key] || options?.fallback || key;
     
     // Implementar interpolação simples: Hello {name}
-    if (vars) {
-      Object.entries(vars).forEach(([varKey, varValue]) => {
+    if (options?.vars) {
+      Object.entries(options.vars).forEach(([varKey, varValue]) => {
         const placeholder = `{${varKey}}`;
         translation = translation.replace(new RegExp(placeholder, 'g'), varValue);
       });

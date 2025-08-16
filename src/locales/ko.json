@@ -18,10 +18,18 @@
   "search": "검색",
   "toolsPageTitle": "도구",
   "toolsPageDescription": "무료 온라인 도구 컬렉션을 탐색하세요.",
-  "toolsPageKeywords": ["온라인 도구", "유틸리티", "무료 도구"],
+  "toolsPageKeywords": [
+    "온라인 도구",
+    "유틸리티",
+    "무료 도구"
+  ],
   "aboutPageTitle": "소개",
   "aboutPageDescription": "온라인 도구에 대해 자세히 알아보세요.",
-  "aboutPageKeywords": ["소개", "온라인 도구", "정보"],
+  "aboutPageKeywords": [
+    "소개",
+    "온라인 도구",
+    "정보"
+  ],
   "heroTitle": "무료 온라인 도구",
   "heroSubtitle": "필요한 모든 것이 한 곳에",
   "heroDescription": "작업을 쉽게 하고 생산성을 높이는 포괄적인 무료 온라인 도구 컬렉션에 액세스하세요.",
@@ -37,6 +45,10 @@
   "by": "개발자",
   "followUs": "팔로우",
   "navigation": "내비게이션",
+  "cookies.title": "쿠키",
+  "cookies.message": "사용자 경험 개선을 위해 쿠키를 사용합니다.",
+  "cookies.accept": "동의",
+  "cookies.decline": "거부",
   "categories": {
     "audio_video": "오디오/비디오",
     "pdf": "PDF",
@@ -53,5 +65,6 @@
     "financeiro": "금융",
     "financial": "금융",
     "internet": "인터넷"
-  }
+  },
+  "common.open": "열기"
 }

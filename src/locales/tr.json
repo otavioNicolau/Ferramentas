@@ -18,10 +18,18 @@
   "search": "Ara",
   "toolsPageTitle": "Araçlar",
   "toolsPageDescription": "Ücretsiz çevrimiçi araç koleksiyonumuzu keşfedin.",
-  "toolsPageKeywords": ["çevrimiçi araçlar", "yardımcı programlar", "ücretsiz araçlar"],
+  "toolsPageKeywords": [
+    "çevrimiçi araçlar",
+    "yardımcı programlar",
+    "ücretsiz araçlar"
+  ],
   "aboutPageTitle": "Hakkında",
   "aboutPageDescription": "Çevrimiçi Araçlar hakkında daha fazla bilgi edinin.",
-  "aboutPageKeywords": ["hakkında", "çevrimiçi araçlar", "bilgi"],
+  "aboutPageKeywords": [
+    "hakkında",
+    "çevrimiçi araçlar",
+    "bilgi"
+  ],
   "heroTitle": "Ücretsiz Çevrimiçi Araçlar",
   "heroSubtitle": "İhtiyacınız olan her şey tek yerde",
   "heroDescription": "İşinizi kolaylaştırmak ve üretkenliğinizi artırmak için kapsamlı ücretsiz çevrimiçi araç koleksiyonuna erişin.",
@@ -37,6 +45,10 @@
   "by": "tarafından",
   "followUs": "Bizi takip edin",
   "navigation": "Navigasyon",
+  "cookies.title": "Çerezler",
+  "cookies.message": "Deneyiminizi iyileştirmek için çerezler kullanıyoruz.",
+  "cookies.accept": "Kabul Et",
+  "cookies.decline": "Reddet",
   "categories": {
     "audio_video": "Ses/Video",
     "pdf": "PDF",
@@ -53,5 +65,6 @@
     "financeiro": "Finansal",
     "financial": "Finansal",
     "internet": "İnternet"
-  }
+  },
+  "common.open": "Aç"
 }

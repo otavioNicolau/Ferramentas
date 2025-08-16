@@ -16,7 +16,7 @@ const adsenseAccount = process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT;
 
 // Metadata será gerada dinamicamente no generateMetadata
 export async function generateMetadata(): Promise<Metadata> {
-  const lang = getRequestLang();
+  const lang = await getRequestLang();
   const dict = await getDictionary(lang);
   
   return {

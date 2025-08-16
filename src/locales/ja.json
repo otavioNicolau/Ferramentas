@@ -18,10 +18,18 @@
   "search": "検索",
   "toolsPageTitle": "ツール",
   "toolsPageDescription": "無料オンラインツールのコレクションを探索してください。",
-  "toolsPageKeywords": ["オンラインツール", "ユーティリティ", "無料ツール"],
+  "toolsPageKeywords": [
+    "オンラインツール",
+    "ユーティリティ",
+    "無料ツール"
+  ],
   "aboutPageTitle": "について",
   "aboutPageDescription": "オンラインツールについて詳しく学んでください。",
-  "aboutPageKeywords": ["について", "オンラインツール", "情報"],
+  "aboutPageKeywords": [
+    "について",
+    "オンラインツール",
+    "情報"
+  ],
   "heroTitle": "無料オンラインツール",
   "heroSubtitle": "必要なものすべてが一箇所に",
   "heroDescription": "作業を簡単にし、生産性を向上させる包括的な無料オンラインツールのコレクションにアクセスしてください。",
@@ -37,6 +45,10 @@
   "by": "による",
   "followUs": "フォローする",
   "navigation": "ナビゲーション",
+  "cookies.title": "クッキー",
+  "cookies.message": "お客様の体験を向上させるためにクッキーを使用しています。",
+  "cookies.accept": "同意する",
+  "cookies.decline": "拒否する",
   "categories": {
     "audio_video": "音声/動画",
     "pdf": "PDF",
@@ -53,5 +65,6 @@
     "financeiro": "金融",
     "financial": "金融",
     "internet": "インターネット"
-  }
+  },
+  "common.open": "開く"
 }
